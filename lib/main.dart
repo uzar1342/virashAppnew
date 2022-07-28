@@ -1,6 +1,12 @@
 import 'dart:async';
+import 'package:camera/camera.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:homescreen/shared_prefs_keys.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'fitness_app_home_screen.dart';
+import 'globals.dart';
 import 'login.dart';
 import 'mark_attendence.dart';
 void main() {
@@ -22,24 +28,33 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
+
 class MyHomePage extends StatefulWidget {
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 class _MyHomePageState extends State<MyHomePage> {
+  bool isUserLoggedIn = false;
+  getUserLogginStatus() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isUserLoggedIn = _prefs.getBool(isUserLoggedInKey) ?? false;
+      userId = _prefs.getString(userIdKey) ?? '';
+      print("IS USER LOGGED IN: $isUserLoggedIn");
+      print(" USER ID: $userId");
 
+    });
+  }
   @override
   void initState() {
+    getUserLogginStatus();
+    WidgetsFlutterBinding.ensureInitialized();
     super.initState();
-    Timer(Duration(seconds: 3),
-            ()=>Navigator.pushReplacement(context,
-            MaterialPageRoute(builder:
-                (context) =>
-                //HomePage()
-                TakePictureScreen(camera: null,)
-                )
-        )
-    );
+    timer();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -47,6 +62,74 @@ class _MyHomePageState extends State<MyHomePage> {
         color: Colors.white,
         child:Image.asset("assets/logo-withoutBG.png")
     );
+  }
+
+  acess()
+  async {
+    Dio dio=new Dio();
+    var formData = FormData.fromMap({
+      'emp_id': userId,
+    });
+    var response = await dio.post('http://training.virash.in/check_access', data: formData);
+    if(response.statusCode==200)
+      {
+        String jsonsDataString = response.data.toString();
+        List as=jsonsDataString.split(",");
+        String sucess=as[0].toString().split(":").last.toString();
+        print(sucess);
+        if(sucess.trim()=="1")
+          {
+            check();
+          }
+        else
+          {
+            Fluttertoast.showToast(msg: "Acess Dineid");
+          }
+
+      }
+    }
+
+  check()
+  {
+
+    if(isUserLoggedIn)
+      {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder:
+          (context) =>
+              FitnessAppHomeScreen()
+              ));
+      }
+      else
+        {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder:
+                  (context) =>
+                      HomePage()));
+        }
+  }
+
+
+  Future<void> timer() async {
+    final cameras = await availableCameras();
+    final firstCamera = cameras.last;
+    Timer(Duration(seconds: 2),
+            (){
+              if(userId!="")
+                {
+                  acess();
+                }
+              else
+                {
+                  check();
+                }
+
+            }
+
+           // TakePictureScreen(camera: firstCamera,)
+
+    );
+
   }
 }
 

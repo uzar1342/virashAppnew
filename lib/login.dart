@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:homescreen/shared_prefs_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'fitness_app_home_screen.dart';
 class HomePage extends StatefulWidget {
@@ -8,16 +13,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-@override
-  Future<void> initState() async {
-    // TODO: implement initState
-  SharedPreferences _prefs = await SharedPreferences.getInstance();
 
-  super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController Emailcon=TextEditingController();
+    TextEditingController passcon=TextEditingController();
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -107,6 +110,7 @@ class _HomePageState extends State<HomePage> {
                                   border: Border(bottom: BorderSide(color: Colors.grey))
                               ),
                               child: TextField(
+                                controller: Emailcon,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: "Email or Phone number",
@@ -117,6 +121,7 @@ class _HomePageState extends State<HomePage> {
                             Container(
                               padding: EdgeInsets.all(8.0),
                               child: TextField(
+                                controller: passcon,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: "Password",
@@ -130,12 +135,16 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(height: 30,),
                       InkWell(
                         onTap: () {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder:
-                                  (context) =>
-                                  FitnessAppHomeScreen()
-                              )
-                          );
+                          if(Emailcon.value.text!=""&&passcon.value.text!="")
+                            {
+                              login(Emailcon.value.text,passcon.value.text);
+                            }
+                          else
+                            {
+                              Fluttertoast.showToast(msg: "Fill credincel");
+                            }
+
+
                         } ,
                         child: Container(
                           height: 50,
@@ -163,5 +172,48 @@ class _HomePageState extends State<HomePage> {
           ),
         )
     );
+  }
+
+  Future<void> login(String Email, String pass) async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    Dio dio=new Dio();
+    var formData = FormData.fromMap({
+      'username': Email,
+      'password': pass,
+    });
+    print(formData.fields);
+    var response = await dio.post('http://training.virash.in/auth-user', data: formData);
+    if(response.statusCode==200)
+      {
+        String jsonsDataString = response.data.toString();
+        List as=jsonsDataString.split(",");
+        print(as[0].toString().split(":").last.toString());
+        String sucess=as[0].toString().split(":").last.toString();
+       // print(as[2].toString().split(":").last.toString());
+        if(sucess.trim()=="1")
+          {
+           _prefs.setString(userIdKey,as[2].toString().split(":").last.toString());
+           _prefs.setBool(isUserLoggedInKey,true);
+           Navigator.pushReplacement(context,
+               MaterialPageRoute(builder:
+                   (context) =>
+                   FitnessAppHomeScreen()
+               )
+           );
+          }
+        else{
+          Fluttertoast.showToast(msg: "Login Fail");
+        }
+
+
+      }
+    else
+      {
+
+
+
+        print(response.statusCode);
+      }
+
   }
 }
