@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:homescreen/shared_prefs_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'fitness_app_home_screen.dart';
@@ -17,7 +18,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Splash Screen',
       theme: ThemeData(
         primarySwatch: Colors.green,
@@ -43,15 +44,16 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       isUserLoggedIn = _prefs.getBool(isUserLoggedInKey) ?? false;
       userId = _prefs.getString(userIdKey) ?? '';
+      attendence=_prefs.getBool(Userattendence) ?? false;
       print("IS USER LOGGED IN: $isUserLoggedIn");
       print(" USER ID: $userId");
+      print(" Attendence: $attendence");
 
     });
   }
   @override
   void initState() {
     getUserLogginStatus();
-    WidgetsFlutterBinding.ensureInitialized();
     super.initState();
     timer();
 
@@ -66,11 +68,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   acess()
   async {
-    Dio dio=new Dio();
+    Dio dio=Dio();
     var formData = FormData.fromMap({
       'emp_id': userId,
     });
-    var response = await dio.post('http://training.virash.in/check_access', data: formData);
+    final url = Uri.parse('http://training.virash.in/check_access');
+    var response = await dio.post(url.toString(), data: formData);
     if(response.statusCode==200)
       {
         String jsonsDataString = response.data.toString();
@@ -111,8 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
   Future<void> timer() async {
-    final cameras = await availableCameras();
-    final firstCamera = cameras.last;
+
     Timer(Duration(seconds: 2),
             (){
               if(userId!="")

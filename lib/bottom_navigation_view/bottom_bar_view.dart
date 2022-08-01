@@ -1,18 +1,27 @@
 import 'dart:math' as math;
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
+import '../fitness_app_home_screen.dart';
 import '../fitness_app_theme.dart';
+import '../globals.dart';
+import '../mark_attendence.dart';
 import '../models/tabIcon_data.dart';
+import '../shared_prefs_keys.dart';
 
 class BottomBarView extends StatefulWidget {
-  const BottomBarView(
+   BottomBarView(
       {Key? key, this.tabIconsList, this.changeIndex, this.addClick})
       : super(key: key);
 
   final Function(int index)? changeIndex;
   final Function()? addClick;
   final List<TabIconData>? tabIconsList;
+
   @override
   _BottomBarViewState createState() => _BottomBarViewState();
 }
@@ -20,9 +29,11 @@ class BottomBarView extends StatefulWidget {
 class _BottomBarViewState extends State<BottomBarView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
+  bool isLoading = false;
 
   @override
   void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -33,7 +44,20 @@ class _BottomBarViewState extends State<BottomBarView>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return isLoading ? Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(
+            color: primaryColor,
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Text("Loading...")
+        ],
+      ),
+    ):Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: <Widget>[
         AnimatedBuilder(
@@ -163,9 +187,16 @@ class _BottomBarViewState extends State<BottomBarView>
                           splashColor: Colors.white.withOpacity(0.1),
                           highlightColor: Colors.transparent,
                           focusColor: Colors.transparent,
-                          onTap: widget.addClick,
-                          child: Icon(
-                            Icons.add,
+                          onTap: ()=>{
+                            camra(),
+                            widget.addClick?.call(),
+                          },
+                          child: attendence?Icon(
+                            Icons.logout,
+                            color: FitnessAppTheme.white,
+                            size: 32,
+                          ):Icon(
+                            Icons.login,
                             color: FitnessAppTheme.white,
                             size: 32,
                           ),
@@ -180,6 +211,45 @@ class _BottomBarViewState extends State<BottomBarView>
         ),
       ],
     );
+  }
+
+
+
+
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
+
+
+  Future<void> camra()
+  async {
+    final cameras = await availableCameras();
+    final firstCamera = cameras.last;
+    Position position = await _getGeoLocationPosition();
+    Get.offAll(() => (TakePictureScreen(camera: firstCamera,latitude: position.latitude.toString(),longitude: position.longitude.toString())));
   }
 
   void setRemoveAllSelection(TabIconData? tabIconData) {

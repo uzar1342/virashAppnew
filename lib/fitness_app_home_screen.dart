@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:homescreen/training/training_screen.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'fitness_app_theme.dart';
+import 'globals.dart';
 import 'models/tabIcon_data.dart';
 import 'my_diary/my_diary_screen.dart';
 
 class FitnessAppHomeScreen extends StatefulWidget {
+  bool isLoading = false;
   @override
   _FitnessAppHomeScreenState createState() => _FitnessAppHomeScreenState();
 }
@@ -15,7 +17,6 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
   AnimationController? animationController;
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
-
   Widget tabBody = Container(
     color: FitnessAppTheme.background,
   );
@@ -44,7 +45,20 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
       color: FitnessAppTheme.background,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: FutureBuilder<bool>(
+        body: widget.isLoading?Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                color: primaryColor,
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text("Loading...")
+            ],
+          ),
+        ):FutureBuilder<bool>(
           future: getData(),
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (!snapshot.hasData) {
@@ -76,7 +90,11 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
         ),
         BottomBarView(
           tabIconsList: tabIconsList,
-          addClick: () {},
+          addClick: () {
+            setState(() {
+            widget.isLoading=true;
+          });
+            },
           changeIndex: (int index) {
             if (index == 0 || index == 2) {
               animationController?.reverse().then<dynamic>((data) {

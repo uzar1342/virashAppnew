@@ -1,18 +1,20 @@
-import 'dart:convert';
-
+import 'package:dio/dio.dart'as di;
 import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:homescreen/shared_prefs_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'fitness_app_home_screen.dart';
+import 'globals.dart';
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
+  bool isLoading = false;
 
 
 
@@ -133,10 +135,25 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       SizedBox(height: 30,),
-                      InkWell(
+                      isLoading ?Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(
+                              color: primaryColor,
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                          ],
+                        ),
+                      ):InkWell(
                         onTap: () {
                           if(Emailcon.value.text!=""&&passcon.value.text!="")
                             {
+                              setState(() {
+                                isLoading=true;
+                              });
                               login(Emailcon.value.text,passcon.value.text);
                             }
                           else
@@ -175,14 +192,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> login(String Email, String pass) async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    Dio dio=new Dio();
-    var formData = FormData.fromMap({
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Dio dio=Dio();
+    var formData = di.FormData.fromMap({
       'username': Email,
       'password': pass,
     });
     print(formData.fields);
-    var response = await dio.post('http://training.virash.in/auth-user', data: formData);
+    var response = await dio.post('http://training.virash.in/auth-user', data:formData);
     if(response.statusCode==200)
       {
         String jsonsDataString = response.data.toString();
@@ -192,8 +209,11 @@ class _HomePageState extends State<HomePage> {
        // print(as[2].toString().split(":").last.toString());
         if(sucess.trim()=="1")
           {
-           _prefs.setString(userIdKey,as[2].toString().split(":").last.toString());
-           _prefs.setBool(isUserLoggedInKey,true);
+            setState(() {
+              isLoading=false;
+            });
+           prefs.setString(userIdKey,as[2].toString().split(":").last.toString());
+           prefs.setBool(isUserLoggedInKey,true);
            Navigator.pushReplacement(context,
                MaterialPageRoute(builder:
                    (context) =>
@@ -202,6 +222,9 @@ class _HomePageState extends State<HomePage> {
            );
           }
         else{
+          setState(() {
+            isLoading=false;
+          });
           Fluttertoast.showToast(msg: "Login Fail");
         }
 
@@ -209,10 +232,10 @@ class _HomePageState extends State<HomePage> {
       }
     else
       {
-
-
-
-        print(response.statusCode);
+        setState(() {
+          isLoading=false;
+        });
+        print(response.headers.printError);
       }
 
   }
