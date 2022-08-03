@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../main.dart';
 import '../CalendarPage.dart';
 import '../fitness_app_theme.dart';
@@ -56,7 +55,7 @@ class _MealsListViewState extends State<MealsListView>
               child: ListView.builder(
                 padding: const EdgeInsets.only(
                     top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: mealsListData.length,
+                itemCount: 2,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   final int count =
@@ -70,6 +69,7 @@ class _MealsListViewState extends State<MealsListView>
                   animationController?.forward();
 
                   return MealsView(
+                    position: index,
                     mealsListData: mealsListData[index],
                     animation: animation,
                     animationController: animationController!,
@@ -86,9 +86,10 @@ class _MealsListViewState extends State<MealsListView>
 
 class MealsView extends StatelessWidget {
   const MealsView(
-      {Key? key, this.mealsListData, this.animationController, this.animation})
+      {Key? key, this.mealsListData, this.animationController, this.animation,required this.position})
       : super(key: key);
 
+  final int position;
   final MealsListData? mealsListData;
   final AnimationController? animationController;
   final Animation<double>? animation;
@@ -136,12 +137,19 @@ class MealsView extends StatelessWidget {
                       ),
                       child: InkWell(
                           onTap: ()=>{
-                            Navigator.push(context,
-                                MaterialPageRoute(builder:
-                                    (context) =>
-                                    CalendarPage()
+                            if(position==0)
+                              {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder:
+                                        (context) =>
+                                        CalendarPage()
+                                    )
                                 )
-                            )
+                              }
+                           else if(position==1)
+                             {
+                               print("12354")
+                             }
                           },
                         child: Padding(
                           padding: const EdgeInsets.only(

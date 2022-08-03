@@ -1,7 +1,6 @@
 import 'package:analog_clock/analog_clock.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-
 import '../../main.dart';
 import '../fitness_app_theme.dart';
 
@@ -333,9 +332,7 @@ class MediterranesnDietView extends StatelessWidget {
                           //     ),
                           //   ),
                           // )
-
-
-          AnalogClock(
+                          AnalogClock(
           decoration: BoxDecoration(
           border: Border.all(width: 2.0, color: Colors.black),
             color: Colors.transparent,
@@ -352,7 +349,7 @@ class MediterranesnDietView extends StatelessWidget {
         textScaleFactor: 1.4,
         showTicks: true,
         showDigitalClock: true,
-        datetime: DateTime(2019, 1, 1, 9, 12, 15),
+        datetime: DateTime.now(),
         )
                         ],
                       ),

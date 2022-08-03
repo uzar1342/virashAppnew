@@ -1,10 +1,11 @@
+import 'package:Virash/shared_prefs_keys.dart';
 import 'package:dio/dio.dart'as di;
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:homescreen/shared_prefs_keys.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'fitness_app_home_screen.dart';
 import 'globals.dart';
@@ -15,9 +16,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isLoading = false;
+  bool net = false;
 
-
-
+  checkinternet() async {
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result == true) {
+      net=true;
+    } else {
+      net=false;
+      Fluttertoast.showToast(msg: "No Internet");
+    }
+  }
+@override
+  void initState() {
+    checkinternet();
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     TextEditingController Emailcon=TextEditingController();
@@ -123,6 +138,7 @@ class _HomePageState extends State<HomePage> {
                             Container(
                               padding: EdgeInsets.all(8.0),
                               child: TextField(
+                                obscureText: true,
                                 controller: passcon,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
@@ -149,18 +165,25 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ):InkWell(
                         onTap: () {
-                          if(Emailcon.value.text!=""&&passcon.value.text!="")
+                          if(net==true)
                             {
-                              setState(() {
-                                isLoading=true;
-                              });
-                              login(Emailcon.value.text,passcon.value.text);
+                              if(Emailcon.value.text!=""&&passcon.value.text!="")
+                              {
+                                setState(() {
+                                  isLoading=true;
+                                });
+                                login(Emailcon.value.text,passcon.value.text);
+                              }
+                              else
+                              {
+                                Fluttertoast.showToast(msg: "Fill credincel");
+                              }
+
                             }
                           else
                             {
-                              Fluttertoast.showToast(msg: "Fill credincel");
+                              Fluttertoast.showToast(msg: "No Internet");
                             }
-
 
                         } ,
                         child: Container(
@@ -202,18 +225,22 @@ class _HomePageState extends State<HomePage> {
     var response = await dio.post('http://training.virash.in/auth-user', data:formData);
     if(response.statusCode==200)
       {
+        print(response.data["data"]["employee_id"]);
         String jsonsDataString = response.data.toString();
-        List as=jsonsDataString.split(",");
-        print(as[0].toString().split(":").last.toString());
-        String sucess=as[0].toString().split(":").last.toString();
-       // print(as[2].toString().split(":").last.toString());
-        if(sucess.trim()=="1")
+        if(response.data["success"].trim()=="1")
           {
             setState(() {
               isLoading=false;
             });
-           prefs.setString(userIdKey,as[2].toString().split(":").last.toString());
+        //   prefs.setString(userIdKey,data2);
+           prefs.setString(Username,response.data["data"]["employee_name"].toString());
+           prefs.setString(Userrole,response.data["data"]["employee_role"]);
+           prefs.setString(userIdKey,response.data["data"]["employee_id"].toString());
            prefs.setBool(isUserLoggedInKey,true);
+            employee_role=prefs.getString(Userrole) ?? "";
+            employee_name=prefs.getString(Username) ?? "";
+            userId = prefs.getString(userIdKey) ?? '';
+
            Navigator.pushReplacement(context,
                MaterialPageRoute(builder:
                    (context) =>

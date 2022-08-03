@@ -1,9 +1,8 @@
+import 'package:Virash/shared_prefs_keys.dart';
 import 'package:flutter/material.dart';
-import 'package:homescreen/my_diary/water_view.dart';
 import 'package:intl/intl.dart';
 import '../fitness_app_theme.dart';
-import '../ui_view/body_measurement.dart';
-import '../ui_view/glass_view.dart';
+import '../globals.dart';
 import '../ui_view/mediterranean_diet_view.dart';
 import '../ui_view/title_view.dart';
 import 'meals_list_view.dart';
@@ -19,7 +18,6 @@ class MyDiaryScreen extends StatefulWidget {
 class _MyDiaryScreenState extends State<MyDiaryScreen>
     with TickerProviderStateMixin {
   Animation<double>? topBarAnimation;
-
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
@@ -198,7 +196,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  'Welcome Vipeen',
+                                  'Welcome '+employee_name,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontFamily: FitnessAppTheme.fontName,

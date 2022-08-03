@@ -1,12 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'empolidetail.dart';
+import 'globals.dart';
 import 'googlemap.dart';
 
 
@@ -18,12 +22,26 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  CalendarFormat calendarFormat = CalendarFormat.twoWeeks;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
-
+  int year=DateTime.now().year;
+  int day=DateTime.now().day;
+  int month=DateTime.now().day;
   final DateFormat formatter = DateFormat('dd-MM-yyy');
   bool isLoading = true;
+
+  bool net = false;
+
+  checkinternet() async {
+
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result == true) {
+      net=true;
+    } else {
+      net=false;
+      Fluttertoast.showToast(msg: "No Internet");
+    }
+  }
 
   List<dynamic> calevents = [];
   Map<String, List<dynamic>> events = {};
@@ -49,6 +67,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   void initState() {
+    checkinternet();
     final selectedDayFormattedDate = formatter.format(selectedDay);
     _selectedEvents = ValueNotifier(
         _getEventsForDay(formatter.parse(selectedDayFormattedDate)));
@@ -61,12 +80,14 @@ class _CalendarPageState extends State<CalendarPage> {
   async {
     Dio dio=new Dio();
     var formData = FormData.fromMap({
-      'year': "2022",
-      'month': "07",
-      "day" :   "29"
+      'year': year.toString(),
+      'month': month>=10?month.toString():"0"+month.toString(),
+      "day" :   day>=10?day.toString():"0"+day.toString(),
+      "role":   employee_role,
+      "emp_id":  userId
     });
     print(formData.fields);
-    var response = await dio.post('http://training.virash.in/allEmployeesAttendanceDetails', data: formData);
+      var response = await dio.post('http://training.virash.in/allEmployeesAttendanceDetails', data: formData);
     if(response.statusCode==200)
     {
       print(response.data);
@@ -81,26 +102,24 @@ class _CalendarPageState extends State<CalendarPage> {
   }
   parse(data,h,w)
   {
+
     Color primaryColor = const Color(0xff1f7396);
-    final data2 = [...data["data"]];
-    print(data["success"]);
     return ListView.builder(
-      itemCount: data2.length,
+      itemCount: data["data"].length,
       itemBuilder: (context, position) {
          return InkWell(
            onTap:()=>{
              Navigator.push(context, MaterialPageRoute(builder: (context) =>
                  Googlem(center: LatLng(
-                     double.parse(data2[position]["in_latitude"]),
-                     double.parse(data2[position]["in_longitude"])))),),
-           }
+                     double.parse(data["data"][position]["in_latitude"]),
+                     double.parse(data["data"][position]["in_longitude"])))),),
+            }
           ,
              child: Container(
                child: ValueListenableBuilder<List<dynamic>>(
                  valueListenable: _selectedEvents,
                  builder: (context, value, _) {
                    return
-
                             Container(
                              width: w,
                              margin: const EdgeInsets.all(5.0),
@@ -130,8 +149,8 @@ class _CalendarPageState extends State<CalendarPage> {
                                                SizedBox(
                                                  width: w * 0.02,
                                                ),
-                                               const Text(
-                                                 "Django Framework",
+                                                Text(
+                                                  data["data"][0]["status"],
                                                  style: TextStyle(
                                                      color: Colors
                                                          .black54,
@@ -284,7 +303,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                ),
                                                Text(
 
-                                                   'start_time',
+                                                   data["data"][0]["in_time"],
                                                    style: const TextStyle(
                                                        color: Colors
                                                            .black54)),
@@ -311,7 +330,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                ),
                                                Text(
 
-                                                   'end_time',
+                                                   data["data"][0]["out_time"],
                                                    style: const TextStyle(
                                                        color: Colors
                                                            .black54)),
@@ -461,7 +480,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       TableCalendar(
                         focusedDay: focusedDay,
                         firstDay: DateTime.utc(2018),
-                        lastDay: DateTime.utc(2030),
+                        lastDay: DateTime.now(),
                         rowHeight: 60,
                         eventLoader: _getEventsForDay,
                         startingDayOfWeek: StartingDayOfWeek.monday,
@@ -481,11 +500,11 @@ class _CalendarPageState extends State<CalendarPage> {
                               borderRadius: BorderRadius.circular(10)),
                           weekendDecoration: BoxDecoration(
                               shape: BoxShape.rectangle,
-                              color: Colors.white,
+                              color: Color(0xffd9d9d9),
                               borderRadius: BorderRadius.circular(10)),
                           disabledDecoration: BoxDecoration(
                               shape: BoxShape.rectangle,
-                              color: Colors.grey,
+                              color: Color(0xffd8d8db),
                               borderRadius: BorderRadius.circular(10)),
                           holidayDecoration: BoxDecoration(
                               shape: BoxShape.rectangle,
@@ -517,8 +536,10 @@ class _CalendarPageState extends State<CalendarPage> {
                         onDaySelected: (DateTime selectday, DateTime focusDay) {
                           print(selectday.day);
                           setState(() {
+                            day=selectday.day;
+                            month=selectday.month;
+                            year=selectday.year;
                             selectedDay = selectday;
-
                             focusedDay = focusDay;
                           });
                           _selectedEvents.value = _getEventsForDay(selectday);
@@ -563,12 +584,7 @@ class _CalendarPageState extends State<CalendarPage> {
                           focusedDay = focusedDay;
                         },
                         //Format of Calendar week month 2weeks
-                        calendarFormat: calendarFormat,
-                        onFormatChanged: (CalendarFormat format) {
-                          setState(() {
-                            calendarFormat = format;
-                          });
-                        },
+                        calendarFormat: CalendarFormat.week,
                       ),
 
                     Expanded(
@@ -581,7 +597,6 @@ class _CalendarPageState extends State<CalendarPage> {
                             if (snapshot.hasError)
                             return SafeArea(child:Text('Error: ${snapshot.error}'));
                             else {
-              // var list=snapshot as List;
                             return parse(snapshot.data,h,w);
             }
         }

@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'package:Virash/shared_prefs_keys.dart';
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:homescreen/shared_prefs_keys.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'fitness_app_home_screen.dart';
 import 'globals.dart';
@@ -39,23 +40,37 @@ class MyHomePage extends StatefulWidget {
 }
 class _MyHomePageState extends State<MyHomePage> {
   bool isUserLoggedIn = false;
+checkinternet() async {
+  bool result = await InternetConnectionChecker().hasConnection;
+  if (result == true) {
+    getUserLogginStatus();
+    timer();
+  } else {
+    Fluttertoast.showToast(msg: "No Internet");
+  }
+}
   getUserLogginStatus() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     setState(() {
       isUserLoggedIn = _prefs.getBool(isUserLoggedInKey) ?? false;
       userId = _prefs.getString(userIdKey) ?? '';
       attendence=_prefs.getBool(Userattendence) ?? false;
+      employee_role=_prefs.getString(Userrole) ?? "";
+      employee_name=_prefs.getString(Username) ?? "";
       print("IS USER LOGGED IN: $isUserLoggedIn");
       print(" USER ID: $userId");
       print(" Attendence: $attendence");
+      print(" role: $employee_role");
+
 
     });
   }
   @override
   void initState() {
-    getUserLogginStatus();
+
+    checkinternet();
     super.initState();
-    timer();
+
 
   }
   @override
