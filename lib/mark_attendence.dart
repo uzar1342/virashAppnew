@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:ui';
 import 'dart:io';
 import 'package:Virash/shared_prefs_keys.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/utils.dart';
 import 'package:http/http.dart' as http;
@@ -18,14 +19,15 @@ import 'fitness_app_home_screen.dart';
 import 'globals.dart';
 class TakePictureScreen extends StatefulWidget {
    TakePictureScreen({
-    super.key, required this.camera,required this.latitude,required this.longitude,required this.title,required this.address
+    super.key, required this.camera,required this.latitude,required this.longitude,required this.title,required this.position
   });
 
-  final String address;
   final CameraDescription camera;
+  final Position position;
   final String title;
   final String latitude;
   final String longitude;
+  bool camraloader=true;
  late SharedPreferences _prefs ;
   @override
   TakePictureScreenState createState() => TakePictureScreenState();
@@ -35,7 +37,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   bool net = false;
-
+  late String Address;
+    XFile? image=null;
+  late Image camerraImage;
   Future<bool> _onWillPop() async {
     return (await showDialog(
       context: context,
@@ -56,11 +60,18 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     )) ?? false;
   }
 
+  GetAddressFromLatLong(Position position)async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+    print(placemarks);
+    Placemark place = placemarks[0];
+     Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
 
+  }
 
   @override
   void initState() {
     super.initState();
+    GetAddressFromLatLong(widget.position);
     checkinternet();
     _controller = CameraController(
       widget.camera,
@@ -76,7 +87,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
   @override
   void dispose() {
-
     _controller.dispose();
     super.dispose();
   }
@@ -103,7 +113,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
           children: [
             Expanded(
               flex: 6,
-              child: FutureBuilder<void>(
+              child: widget.camraloader?
+              FutureBuilder<void>(
                 future: _initializeControllerFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
@@ -114,7 +125,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                     return const Center(child: CircularProgressIndicator());
                   }
                 },
-              ),
+              ): Image.file(File(image!.path)),
             ),
             SizedBox(height: 20),
              Expanded(
@@ -138,37 +149,47 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                               await _initializeControllerFuture;
                               // Attempt to take a picture and get the file `image`
                               // where it was saved.
-                              final image = await _controller.takePicture();
+                              image = await _controller.takePicture();
 
                               if (!mounted) return;
                               // If the picture was taken, display it on a new screen.
+
+                            setState(() {
+                              widget.camraloader=false;
+                            });
+
                               if(attendence)
                               {
                                 return showDialog(
+                                  barrierDismissible: false,
                                   context: context,
-                                  builder: (context) => new AlertDialog(
-                                    title:  Text('Are you sure?'),
-                                    content:  Text('Do you want Logout'),
+                                  builder: (context) => AlertDialog(
+                                    title:  const Text('Are you sure?'),
+                                    content:  const Text('Do you want Logout'),
                                     actions: <Widget>[
                                       TextButton(
-                                        onPressed: () => Navigator.of(context).pop(false),
-                                        child:  Text('No'),
+                                        onPressed: () =>
+                                        {
+                                        setState(() {
+                                        widget.camraloader=true;
+                                        }),
+
+                                          Navigator.of(context).pop(false)},
+                                        child:  const Text('No'),
                                       ),
                                       TextButton(
                                         onPressed: () =>
                                             {
                                               if(net)
                                                 {
-                                                Logout_attendence(image),
+                                                  Logout_attendence(image!),
                                                 }
                                               else
                                                 {
                                                 Fluttertoast.showToast(msg: "No Internet")
                                                 }
-
                                             },
-
-                                            child:  Text('Yes'),
+                                            child:  const Text('Yes'),
                                       ),
                                     ],
                                   ),
@@ -178,20 +199,25 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                               else
                               {
                                 return showDialog(
+                                  barrierDismissible: false,
                                   context: context,
-                                  builder: (context) => new AlertDialog(
-                                    title: new Text('Are you sure?'),
-                                    content: new Text('Do you want Login'),
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('Are you sure?'),
+                                    content: const Text('Do you want Login'),
                                     actions: <Widget>[
                                       TextButton(
-                                        onPressed: () => Navigator.of(context).pop(false),
-                                        child: new Text('No'),
+                                        onPressed: () =>
+                                        {setState(() {
+                                          widget.camraloader=true;
+                                        }),
+                                          Navigator.of(context).pop(false)},
+                                        child:  const Text('No'),
                                       ),
                                       TextButton(
                                         onPressed: () =>  {
                               if(net)
                               {
-                              Login_attendence(image),
+                                Login_attendence(image!),
                               }
                               else
                               {
@@ -199,7 +225,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                               }
 
                               },
-                                        child: new Text('Yes'),
+                                        child:  const Text('Yes'),
                                       ),
                                     ],
                                   ),
@@ -211,7 +237,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                               print(e);
                             }
                           }
-                          , child: Text(widget.title,style: TextStyle(fontSize: 25),)),
+                          , child: Text(widget.title,style: const TextStyle(fontSize: 25),)),
                     )))
 
           ],
@@ -226,7 +252,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     var request = MultipartRequest("POST", url);
     request.fields['in_latitude'] = widget.latitude;
     request.fields['in_longitude'] = widget.latitude;
-    request.fields['in_location'] = widget.address;
+    request.fields['in_location'] = Address;
     request.fields['emp_id'] = userId;
     File file = File(imagePath.path);
     var multiPartFile =
@@ -255,18 +281,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     var w=context.width;
     Navigator.of(context).pop(false);
     print("logout");
-    final url = Uri.parse('http://training.virash.in/emp_attendance');
-    var request = MultipartRequest("POST", url);
-    request.fields['out_longitude'] = widget.longitude;
-    request.fields['out_latitude'] = widget.latitude;
-    request.fields['out_location'] = widget.address;
-    request.fields['out_location'] = widget.address;
-    request.fields['emp_id'] = userId;
-    File file = File(imagePath.path);
-    var multiPartFile =
-    await http.MultipartFile.fromPath("out_image", file.path);
-    request.files.add(multiPartFile);
-    print(request.fields);
 
     showDialog(
         context: context,
@@ -279,7 +293,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
           ),
           content: Expanded(
             child: Container(
-              height: context.height * 0.3,
+              height: context.height * 0.4,
               child: SingleChildScrollView(
                 child: Form(
                   child: Column(
@@ -292,11 +306,12 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                         height: h * 0.01,
                       ),
                       Container(
-                        height: h * 0.07,
+                      //  height: h * 0.07,
                         width: w * 0.95,
                         child: Card(
                           elevation: 3.0,
                           child: TextFormField(
+                            maxLines: 8,
                             controller: remark,
                             onChanged: (text) {
                               setState(() {});
@@ -316,6 +331,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(
+                                  gapPadding: 9,
                                   borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.all(
                                       Radius.circular(12.0)),
@@ -352,7 +368,19 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                             onTap: () async {
                             if(remark.value.text!="")
                               {
-                                request.fields['task'] = widget.address;
+                                final url = Uri.parse('http://training.virash.in/emp_attendance');
+                                var request = MultipartRequest("POST", url);
+                                request.fields['out_longitude'] = widget.longitude;
+                                request.fields['out_latitude'] = widget.latitude;
+                                request.fields['out_location'] =Address;
+                                request.fields['emp_id'] = userId;
+                                File file = File(imagePath.path);
+                                var multiPartFile =
+                                await http.MultipartFile.fromPath("out_image", file.path);
+                                request.files.add(multiPartFile);
+                                print(request.fields);
+                                request.fields['task'] = remark.value.text;
+                                print(request.fields);
                                 var response = await request.send();
                                 response.stream.transform(utf8.decoder).listen((value) {
                                   if(response.statusCode==200)
@@ -410,25 +438,4 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 }
 
 
-// A widget that displays the picture taken by the user.
-class DisplayPictureScreen extends StatelessWidget {
-  final String imagePath;
 
-
-  const DisplayPictureScreen(
-      {super.key, required this.imagePath});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Display the Picture')),
-      body: Column(
-        children: [
-          Image.file(File(imagePath)),
-        ],
-      ),
-    );
-  }
-
-
-}

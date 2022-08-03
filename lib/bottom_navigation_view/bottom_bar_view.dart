@@ -6,6 +6,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
@@ -267,27 +268,20 @@ class _BottomBarViewState extends State<BottomBarView>
   }
 
 
-  Future<void> GetAddressFromLatLong(Position position)async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemarks);
-    Placemark place = placemarks[0];
-    Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
 
-  }
 
   Future<void> camra()
   async {
     final cameras = await availableCameras();
     final firstCamera = cameras.last;
     Position position = await _getGeoLocationPosition();
-    GetAddressFromLatLong(position);
     if(!attendence)
       {
-        Get.offAll(() => (TakePictureScreen(camera: firstCamera,latitude: position.latitude.toString(),longitude: position.longitude.toString(),title: "Mark Intime",address: Address,)));
+        Get.offAll(() => (TakePictureScreen(camera: firstCamera,latitude: position.latitude.toString(),longitude: position.longitude.toString(),title: "Mark Intime",position: position)));
       }
     else
       {
-        Get.offAll(() => (TakePictureScreen(camera: firstCamera,latitude: position.latitude.toString(),longitude: position.longitude.toString(),title: "Mark Outtime",address: Address)));
+        Get.offAll(() => (TakePictureScreen(camera: firstCamera,latitude: position.latitude.toString(),longitude: position.longitude.toString(),title: "Mark Outtime",position:position)));
       }
     }
 
