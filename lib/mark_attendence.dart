@@ -291,139 +291,137 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                 color: primaryColor,
                 fontWeight: FontWeight.bold),
           ),
-          content: Expanded(
-            child: Container(
-              height: context.height * 0.4,
-              child: SingleChildScrollView(
-                child: Form(
-                  child: Column(
-                    children: [
-                      Text("Please fill today's Task",
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold)),
-                      SizedBox(
-                        height: h * 0.01,
-                      ),
-                      Container(
-                      //  height: h * 0.07,
-                        width: w * 0.95,
-                        child: Card(
-                          elevation: 3.0,
-                          child: TextFormField(
-                            maxLines: 8,
-                            controller: remark,
-                            onChanged: (text) {
-                              setState(() {});
-                            },
-                            cursorColor: primaryColor,
-                            decoration: InputDecoration(
-                                suffixIcon: Icon(
-                                  Icons.assignment,
-                                  color: Colors.red.shade200,
-                                ),
-                                hintText: "Remark",
-                                hintStyle: TextStyle(
-                                  color: Colors.black26,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14.0,
-                                ),
-                                filled: true,
-                                fillColor: Colors.white,
-                                border: OutlineInputBorder(
-                                  gapPadding: 9,
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(12.0)),
-                                ),
-                                contentPadding:
-                                EdgeInsets.symmetric(
-                                    horizontal: 20.0,
-                                    vertical: 16.0)),
-                          ),
+          content: Container(
+            height: context.height * 0.4,
+            child: SingleChildScrollView(
+              child: Form(
+                child: Column(
+                  children: [
+                    Text("Please fill today's Task",
+                        style: TextStyle(
+                            color: Colors.black54,
+                            fontWeight: FontWeight.bold)),
+                    SizedBox(
+                      height: h * 0.01,
+                    ),
+                    Container(
+                    //  height: h * 0.07,
+                      width: w * 0.95,
+                      child: Card(
+                        elevation: 3.0,
+                        child: TextFormField(
+                          maxLines: 8,
+                          controller: remark,
+                          onChanged: (text) {
+                            setState(() {});
+                          },
+                          cursorColor: primaryColor,
+                          decoration: InputDecoration(
+                              suffixIcon: Icon(
+                                Icons.assignment,
+                                color: Colors.red.shade200,
+                              ),
+                              hintText: "Remark",
+                              hintStyle: TextStyle(
+                                color: Colors.black26,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14.0,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                gapPadding: 9,
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(12.0)),
+                              ),
+                              contentPadding:
+                              EdgeInsets.symmetric(
+                                  horizontal: 20.0,
+                                  vertical: 16.0)),
                         ),
                       ),
-                      SizedBox(
-                        height: h * 0.04,
-                      ),
-                      Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              "Cancel",
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontWeight: FontWeight.bold,
-                                decoration:
-                                TextDecoration.underline,
-                              ),
+                    ),
+                    SizedBox(
+                      height: h * 0.04,
+                    ),
+                    Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              decoration:
+                              TextDecoration.underline,
                             ),
                           ),
-                          InkWell(
-                            onTap: () async {
-                            if(remark.value.text!="")
-                              {
-                                final url = Uri.parse('http://training.virash.in/emp_attendance');
-                                var request = MultipartRequest("POST", url);
-                                request.fields['out_longitude'] = widget.longitude;
-                                request.fields['out_latitude'] = widget.latitude;
-                                request.fields['out_location'] =Address;
-                                request.fields['emp_id'] = userId;
-                                File file = File(imagePath.path);
-                                var multiPartFile =
-                                await http.MultipartFile.fromPath("out_image", file.path);
-                                request.files.add(multiPartFile);
-                                print(request.fields);
-                                request.fields['task'] = remark.value.text;
-                                print(request.fields);
-                                var response = await request.send();
-                                response.stream.transform(utf8.decoder).listen((value) {
-                                  if(response.statusCode==200)
-                                  {
-                                    attendence=false;
-                                    widget._prefs.setBool(Userattendence,false);
-                                    Get.offAll(() => FitnessAppHomeScreen()) ;
-                                  }
-                                  else
-                                  {
-                                    Fluttertoast.showToast(msg:value.toString(),toastLength: Toast.LENGTH_LONG);
-                                  }
+                        ),
+                        InkWell(
+                          onTap: () async {
+                          if(remark.value.text!="")
+                            {
+                              final url = Uri.parse('http://training.virash.in/emp_attendance');
+                              var request = MultipartRequest("POST", url);
+                              request.fields['out_longitude'] = widget.longitude;
+                              request.fields['out_latitude'] = widget.latitude;
+                              request.fields['out_location'] =Address;
+                              request.fields['emp_id'] = userId;
+                              File file = File(imagePath.path);
+                              var multiPartFile =
+                              await http.MultipartFile.fromPath("out_image", file.path);
+                              request.files.add(multiPartFile);
+                              print(request.fields);
+                              request.fields['task'] = remark.value.text;
+                              print(request.fields);
+                              var response = await request.send();
+                              response.stream.transform(utf8.decoder).listen((value) {
+                                if(response.statusCode==200)
+                                {
+                                  attendence=false;
+                                  widget._prefs.setBool(Userattendence,false);
+                                  Get.offAll(() => FitnessAppHomeScreen()) ;
                                 }
-                                );
+                                else
+                                {
+                                  Fluttertoast.showToast(msg:value.toString(),toastLength: Toast.LENGTH_LONG);
+                                }
                               }
-                            else
-                              Fluttertoast.showToast(msg: "fill Task");
+                              );
+                            }
+                          else
+                            Fluttertoast.showToast(msg: "fill Task");
 
-                            },
-                            child: Container(
-                              height: h * 0.04,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10.0),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(6.0),
-                                  ),
-                                  color: primaryColor),
-                              child: Center(
-                                child: Text(
-                                  "Apply",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15.0),
+                          },
+                          child: Container(
+                            height: h * 0.04,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(6.0),
                                 ),
+                                color: primaryColor),
+                            child: Center(
+                              child: Text(
+                                "Apply",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15.0),
                               ),
                             ),
                           ),
-                        ],
-                      )
-                    ],
-                  ),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),

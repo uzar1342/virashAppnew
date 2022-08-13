@@ -1,4 +1,3 @@
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,14 +11,5 @@ AppBar buildAppBar(BuildContext context) {
     leading: BackButton(),
     backgroundColor: Colors.transparent,
     elevation: 0,
-    actions: [
-      ThemeSwitcher(
-        builder: (context) => IconButton(
-          icon: Icon(icon),
-          onPressed: () {
-          },
-        ),
-      ),
-    ],
   );
 }

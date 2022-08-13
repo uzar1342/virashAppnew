@@ -1,3 +1,4 @@
+import 'package:Virash/viewimage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -102,7 +103,8 @@ class _CalendarPageState extends State<CalendarPage> {
   {
 
     Color primaryColor = const Color(0xff1f7396);
-    return ListView.builder(
+
+    return data["data"]!=null?ListView.builder(
       itemCount: data["data"].length,
       itemBuilder: (context, position) {
          return InkWell(
@@ -148,7 +150,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                  width: w * 0.02,
                                                ),
                                                 Text(
-                                                  data["data"][0]["status"],
+                                                  data["data"][position]["emp_name"].toString(),
                                                  style: TextStyle(
                                                      color: Colors
                                                          .black54,
@@ -184,8 +186,8 @@ class _CalendarPageState extends State<CalendarPage> {
                                                    width:
                                                    w * 0.01,
                                                  ),
-                                                 const Text(
-                                                   "Online",
+                                                  Text(
+                                                   data["data"][position]["Presentee"].toString(),
                                                    style: TextStyle(
                                                        color: Colors
                                                            .white,
@@ -197,89 +199,6 @@ class _CalendarPageState extends State<CalendarPage> {
                                              ),
                                            )
 
-                                         ],
-                                       ),
-                                       const Divider(),
-                                       Row(
-                                         children: [
-                                           const Text(
-                                             "Chapter : ",
-                                             style: TextStyle(
-                                                 color: Colors.black54,
-                                                 fontSize: 13.0,
-                                                 fontWeight:
-                                                 FontWeight.bold),
-                                           ),
-                                           Text(
-                                             "Learning the basic",
-                                             style: TextStyle(
-                                                 color: primaryColor,
-                                                 fontSize: 15.0,
-                                                 fontWeight:
-                                                 FontWeight.bold),
-                                           )
-                                         ],
-                                       ),
-                                       const Divider(),
-                                       Row(
-                                         mainAxisAlignment:
-                                         MainAxisAlignment
-                                             .spaceBetween,
-                                         children: [
-                                           Row(
-                                             children: [
-                                               const Text(
-                                                 "Batch : ",
-                                                 style: TextStyle(
-                                                     color: Colors
-                                                         .black54,
-                                                     fontSize: 13.0,
-                                                     fontWeight:
-                                                     FontWeight
-                                                         .bold),
-                                               ),
-                                               Text(
-                                                 "Batch - 5",
-                                                 style: TextStyle(
-                                                     color:
-                                                     primaryColor,
-                                                     fontSize: 15.0,
-                                                     fontWeight:
-                                                     FontWeight
-                                                         .bold),
-                                               )
-                                             ],
-                                           ),
-                                         ],
-                                       ),
-                                       const Divider(),
-                                       Row(
-                                         mainAxisAlignment:
-                                         MainAxisAlignment
-                                             .spaceBetween,
-                                         children: [
-                                           Row(
-                                             children: [
-                                               Icon(
-                                                 Icons.date_range,
-                                                 color: Colors
-                                                     .purple.shade200,
-                                               ),
-                                               SizedBox(
-                                                 width: w * 0.02,
-                                               ),
-                                               Text(
-                                                 "day'lecture_date'",
-                                                 style: const TextStyle(
-                                                     color: Colors
-                                                         .black54,
-                                                     fontSize: 16.0,
-                                                     fontWeight:
-                                                     FontWeight
-                                                         .bold),
-                                               )
-                                             ],
-                                           ),
                                          ],
                                        ),
                                        const Divider(),
@@ -301,7 +220,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                ),
                                                Text(
 
-                                                   data["data"][0]["in_time"],
+                                                   data["data"][position]["in_time"],
                                                    style: const TextStyle(
                                                        color: Colors
                                                            .black54)),
@@ -328,7 +247,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                ),
                                                Text(
 
-                                                   data["data"][0]["out_time"],
+                                                   data["data"][position]["out_time"],
                                                    style: const TextStyle(
                                                        color: Colors
                                                            .black54)),
@@ -338,17 +257,37 @@ class _CalendarPageState extends State<CalendarPage> {
                                        ),
                                        Divider(),
                                        Row(
+                                         children: [
+                                           Icon(
+                                             Icons
+                                             .assignment,
+                                             color: Colors
+                                                 .red.shade200,
+                                           ),
+                                           SizedBox(
+                                             width: w * 0.01,
+                                           ),
+                                           Text(
+
+                                               data["data"][position]["task"]!=null?data["data"][position]["task"].toString():"",
+                                               style: const TextStyle(
+                                                   color: Colors
+                                                       .black54)),
+                                         ],
+                                       ),
+                                       Divider(),
+                                       Row(
                                          mainAxisAlignment:
                                          MainAxisAlignment.end,
                                          children: [
                                            InkWell(
                                              onTap: () {
-// Navigator.push(
-//     context,
-//     MaterialPageRoute(
-//         builder:
-//             (context) =>
-//             StudentAttendance()));
+Navigator.push(
+    context,
+    MaterialPageRoute(
+        builder:
+            (context) =>
+            viewimage(inimage: data["data"][position]["in_image"], outimage: data["data"][position]["out_image"],)));
                                              },
                                              child: Container(
                                                padding:
@@ -371,7 +310,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                    width: 5.0,
                                                  ),
                                                  Text(
-                                                   "Attendance",
+                                                   "View Image",
                                                    style: TextStyle(
                                                        color: Colors
                                                            .white,
@@ -401,7 +340,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
 
       },
-    );
+    ):Image.asset("assets/no_data.png");
 
 
   }

@@ -3,6 +3,7 @@ import '../../main.dart';
 import '../CalendarPage.dart';
 import '../fitness_app_theme.dart';
 import '../models/meals_list_data.dart';
+import '../taskadd.dart';
 
 class MealsListView extends StatefulWidget {
   const MealsListView(
@@ -148,7 +149,12 @@ class MealsView extends StatelessWidget {
                               }
                            else if(position==1)
                              {
-                               print("12354")
+                               Navigator.push(context,
+                                   MaterialPageRoute(builder:
+                                       (context) =>
+                                           Taskadd()
+                                   )
+                               )
                              }
                           },
                         child: Padding(
