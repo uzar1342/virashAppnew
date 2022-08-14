@@ -23,9 +23,9 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
-  int year=DateTime.now().year;
-  int day=DateTime.now().day;
-  int month=DateTime.now().day;
+  late int year;
+  late int day;
+  late int month;
   final DateFormat formatter = DateFormat('dd-MM-yyy');
   bool isLoading = true;
 
@@ -66,6 +66,9 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   void initState() {
+    year=DateTime.now().year;
+    day=DateTime.now().day;
+    month=DateTime.now().month;
     checkinternet();
     final selectedDayFormattedDate = formatter.format(selectedDay);
     _selectedEvents = ValueNotifier(
@@ -99,254 +102,6 @@ class _CalendarPageState extends State<CalendarPage> {
     }
 
   }
-  parse(data,h,w)
-  {
-
-    Color primaryColor = const Color(0xff1f7396);
-
-    return data["data"]!=null?ListView.builder(
-      itemCount: data["data"].length,
-      itemBuilder: (context, position) {
-         return InkWell(
-           onTap:()=>{
-             Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                 Googlem(center: LatLng(
-                     double.parse(data["data"][position]["in_latitude"]),
-                     double.parse(data["data"][position]["in_longitude"])))),),
-            }
-          ,
-             child: Container(
-               child: ValueListenableBuilder<List<dynamic>>(
-                 valueListenable: _selectedEvents,
-                 builder: (context, value, _) {
-                   return
-                            Container(
-                             width: w,
-                             margin: const EdgeInsets.all(5.0),
-                             child: Card(
-                               elevation: 3.0,
-                               shape: const RoundedRectangleBorder(
-                                   borderRadius: BorderRadius.all(
-                                       Radius.circular(14.0))),
-                               child:            Column(
-                                     mainAxisAlignment:
-                                     MainAxisAlignment.spaceEvenly,
-                                     children: [
-                                       Row(
-                                         mainAxisAlignment:
-                                         MainAxisAlignment
-                                             .spaceBetween,
-                                         children: [
-                                           Row(
-                                             crossAxisAlignment:
-                                             CrossAxisAlignment
-                                                 .center,
-                                             mainAxisAlignment:
-                                             MainAxisAlignment
-                                                 .start,
-                                             children: [
-
-                                               SizedBox(
-                                                 width: w * 0.02,
-                                               ),
-                                                Text(
-                                                  data["data"][position]["emp_name"].toString(),
-                                                 style: TextStyle(
-                                                     color: Colors
-                                                         .black54,
-                                                     fontWeight:
-                                                     FontWeight
-                                                         .bold,
-                                                     fontSize: 16.0),
-                                               )
-                                             ],
-                                           ),
-                                           Container(
-                                             padding:
-                                             const EdgeInsets
-                                                 .all(5.0),
-                                             height: h * 0.04,
-                                             decoration: const BoxDecoration(
-                                                 color: Colors
-                                                     .green,
-                                                 borderRadius: BorderRadius
-                                                     .all(Radius
-                                                     .circular(
-                                                     20.0))),
-                                             child: Row(
-                                               children: [
-                                                 const FaIcon(
-                                                   FontAwesomeIcons
-                                                       .globe,
-                                                   color: Colors
-                                                       .white,
-                                                   size: 20.0,
-                                                 ),
-                                                 SizedBox(
-                                                   width:
-                                                   w * 0.01,
-                                                 ),
-                                                  Text(
-                                                   data["data"][position]["Presentee"].toString(),
-                                                   style: TextStyle(
-                                                       color: Colors
-                                                           .white,
-                                                       fontWeight:
-                                                       FontWeight
-                                                           .bold),
-                                                 )
-                                               ],
-                                             ),
-                                           )
-
-                                         ],
-                                       ),
-                                       const Divider(),
-                                       Row(
-                                         mainAxisAlignment:
-                                         MainAxisAlignment
-                                             .spaceBetween,
-                                         children: [
-                                           Row(
-                                             children: [
-                                               Icon(
-                                                 Icons
-                                                     .access_time_filled,
-                                                 color: Colors
-                                                     .green.shade200,
-                                               ),
-                                               SizedBox(
-                                                 width: w * 0.01,
-                                               ),
-                                               Text(
-
-                                                   data["data"][position]["in_time"],
-                                                   style: const TextStyle(
-                                                       color: Colors
-                                                           .black54)),
-                                             ],
-                                           ),
-                                           const Text(
-                                             "To",
-                                             style: TextStyle(
-                                                 color: Colors.black38,
-                                                 fontSize: 15.0,
-                                                 fontWeight:
-                                                 FontWeight.bold),
-                                           ),
-                                           Row(
-                                             children: [
-                                               Icon(
-                                                 Icons
-                                                     .access_time_filled,
-                                                 color: Colors
-                                                     .red.shade200,
-                                               ),
-                                               SizedBox(
-                                                 width: w * 0.01,
-                                               ),
-                                               Text(
-
-                                                   data["data"][position]["out_time"],
-                                                   style: const TextStyle(
-                                                       color: Colors
-                                                           .black54)),
-                                             ],
-                                           )
-                                         ],
-                                       ),
-                                       Divider(),
-                                       Row(
-                                         children: [
-                                           Icon(
-                                             Icons
-                                             .assignment,
-                                             color: Colors
-                                                 .red.shade200,
-                                           ),
-                                           SizedBox(
-                                             width: w * 0.01,
-                                           ),
-                                           Text(
-
-                                               data["data"][position]["task"]!=null?data["data"][position]["task"].toString():"",
-                                               style: const TextStyle(
-                                                   color: Colors
-                                                       .black54)),
-                                         ],
-                                       ),
-                                       Divider(),
-                                       Row(
-                                         mainAxisAlignment:
-                                         MainAxisAlignment.end,
-                                         children: [
-                                           InkWell(
-                                             onTap: () {
-Navigator.push(
-    context,
-    MaterialPageRoute(
-        builder:
-            (context) =>
-            viewimage(inimage: data["data"][position]["in_image"], outimage: data["data"][position]["out_image"],)));
-                                             },
-                                             child: Container(
-                                               padding:
-                                               EdgeInsets.all(8.0),
-                                               decoration:
-                                               BoxDecoration(
-                                                 color: primaryColor,
-                                                 borderRadius:
-                                                 BorderRadius.all(
-                                                   Radius.circular(
-                                                       14.0),
-                                                 ),
-                                               ),
-                                               child: Row(children: [
-                                                 Icon(
-                                                   Icons.assignment,
-                                                   color: Colors.white,
-                                                 ),
-                                                 SizedBox(
-                                                   width: 5.0,
-                                                 ),
-                                                 Text(
-                                                   "View Image",
-                                                   style: TextStyle(
-                                                       color: Colors
-                                                           .white,
-                                                       fontWeight:
-                                                       FontWeight
-                                                           .bold),
-                                                 )
-                                               ]),
-                                             ),
-                                           ),
-                                         ],
-                                       )
-                                     ],
-                                   ),
-
-
-                             ),
-                           );
-
-
-                 },
-               ),
-             ),
-
-
-         );
-
-
-      },
-    ):Image.asset("assets/no_data.png");
-
-
-  }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -534,7 +289,252 @@ Navigator.push(
                             if (snapshot.hasError)
                             return SafeArea(child:Text('Error: ${snapshot.error}'));
                             else {
-                            return parse(snapshot.data,h,w);
+                              Color primaryColor = const Color(0xff1f7396);
+                              return   snapshot.data["success"].toString().trim()=="1"?ListView.builder(
+                              itemCount: snapshot.data["data"].length,
+                              itemBuilder: (context, position) {
+                                return InkWell(
+                                  onTap:()=>{
+                                    },
+                                  child: Container(
+                                    child: ValueListenableBuilder<List<dynamic>>(
+                                      valueListenable: _selectedEvents,
+                                      builder: (context, value, _) {
+                                        return
+                                          Container(
+                                            width: w,
+                                            margin: const EdgeInsets.all(5.0),
+                                            child: Card(
+                                              elevation: 3.0,
+                                              shape: const RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(14.0))),
+                                              child:            Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .start,
+                                                        children: [
+
+                                                          SizedBox(
+                                                            width: w * 0.02,
+                                                          ),
+                                                          Text(
+                                                            snapshot.data["data"][position]["emp_name"].toString(),
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black54,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 16.0),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          if(double.parse(snapshot.data["data"][position]["in_latitude"]).toString()!="N/A"||double.parse(snapshot.data["data"][position]["in_longitude"]).toString()!="N/A") {
+                                                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                                              Googlem(center: LatLng(
+                                                                  double.parse(snapshot.data["data"][position]["in_latitude"]),
+                                                                  double.parse(snapshot.data["data"][position]["in_longitude"])))),);
+                                                          } else {
+                                                            Fluttertoast.showToast(msg: "Invalid Location");
+                                                          }
+
+                                                          },
+                                                        child: Container(
+                                                          padding:
+                                                          const EdgeInsets
+                                                              .all(5.0),
+                                                          height: h * 0.04,
+                                                          decoration: const BoxDecoration(
+                                                              color: Colors
+                                                                  .green,
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                  .circular(
+                                                                  20.0))),
+                                                          child: Row(
+                                                            children: [
+                                                              const FaIcon(
+                                                                FontAwesomeIcons
+                                                                    .globe,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 20.0,
+                                                              ),
+                                                              SizedBox(
+                                                                width:
+                                                                w * 0.01,
+                                                              ),
+                                                              Text(
+                                                                snapshot.data["data"][position]["Presentee"].toString(),
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+
+                                                    ],
+                                                  ),
+                                                  const Divider(),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons
+                                                                .access_time_filled,
+                                                            color: Colors
+                                                                .green.shade200,
+                                                          ),
+                                                          SizedBox(
+                                                            width: w * 0.01,
+                                                          ),
+                                                          Text(
+
+                                                              snapshot.data["data"][position]["in_time"],
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .black54)),
+                                                        ],
+                                                      ),
+                                                      const Text(
+                                                        "To",
+                                                        style: TextStyle(
+                                                            color: Colors.black38,
+                                                            fontSize: 15.0,
+                                                            fontWeight:
+                                                            FontWeight.bold),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons
+                                                                .access_time_filled,
+                                                            color: Colors
+                                                                .red.shade200,
+                                                          ),
+                                                          SizedBox(
+                                                            width: w * 0.01,
+                                                          ),
+                                                          Text(
+
+                                                              snapshot.data["data"][position]["out_time"].toString(),
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .black54)),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Divider(),
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .assignment,
+                                                        color: Colors
+                                                            .red.shade200,
+                                                      ),
+                                                      SizedBox(
+                                                        width: w * 0.01,
+                                                      ),
+                                                      Text(
+                                                          snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
+                                                          style: const TextStyle(
+                                                              color: Colors
+                                                                  .black54)),
+                                                    ],
+                                                  ),
+                                                  Divider(),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                      viewimage(inimage: snapshot.data["data"][position]["in_image"].toString(), outimage: snapshot.data["data"][position]["out_image"].toString(),)));
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                          EdgeInsets.all(8.0),
+                                                          decoration:
+                                                          BoxDecoration(
+                                                            color: primaryColor,
+                                                            borderRadius:
+                                                            BorderRadius.all(
+                                                              Radius.circular(
+                                                                  14.0),
+                                                            ),
+                                                          ),
+                                                          child: Row(children: [
+                                                            Icon(
+                                                              Icons.assignment,
+                                                              color: Colors.white,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 5.0,
+                                                            ),
+                                                            Text(
+                                                              "View Image",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                            )
+                                                          ]),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+
+
+                                            ),
+                                          );
+
+
+                                      },
+                                    )
+                                    ,
+                                  ),
+
+
+                                );
+
+
+                              },
+                            ):Image.asset("assets/no_data.png");
             }
         }
       },
