@@ -25,8 +25,8 @@ class MealsListData {
       endColor: '#FFB295',
     ),
     MealsListData(
-      imagePath: 'assets/fitness_app/lunch.png',
-      titleTxt: 'Lunch',
+      imagePath: 'assets/completed-task.png',
+      titleTxt: 'View Task',
       kacl: 602,
       meals: <String>['Salmon,', 'Mixed veggies,', 'Avocado'],
       startColor: '#738AE6',

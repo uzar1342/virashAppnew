@@ -1,4 +1,4 @@
-package com.example.homescreen;
+package com.virash.attendence;
 
 import io.flutter.embedding.android.FlutterActivity;
 

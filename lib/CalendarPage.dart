@@ -344,13 +344,13 @@ class _CalendarPageState extends State<CalendarPage> {
                                                       ),
                                                       GestureDetector(
                                                         onTap: (){
-                                                          if(double.parse(snapshot.data["data"][position]["in_latitude"]).toString()!="N/A"||double.parse(snapshot.data["data"][position]["in_longitude"]).toString()!="N/A") {
+                                                          if(snapshot.data["data"][position]["in_latitude"]!="N/A"||snapshot.data["data"][position]["in_longitude"]!="N/A") {
                                                             Navigator.push(context, MaterialPageRoute(builder: (context) =>
                                                               Googlem(center: LatLng(
                                                                   double.parse(snapshot.data["data"][position]["in_latitude"]),
                                                                   double.parse(snapshot.data["data"][position]["in_longitude"])))),);
                                                           } else {
-                                                            Fluttertoast.showToast(msg: "Invalid Location");
+                                                            Fluttertoast.showToast(msg: "No Location found");
                                                           }
 
                                                           },
