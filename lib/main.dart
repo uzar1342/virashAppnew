@@ -54,7 +54,6 @@ checkinternet() async {
     setState(() {
       isUserLoggedIn = _prefs.getBool(isUserLoggedInKey) ?? false;
       userId = _prefs.getString(userIdKey) ?? '';
-      attendence=_prefs.getBool(Userattendence) ?? false;
       employee_role=_prefs.getString(Userrole) ?? "";
       employee_name=_prefs.getString(Username) ?? "";
       print("IS USER LOGGED IN: $isUserLoggedIn");
@@ -93,10 +92,12 @@ checkinternet() async {
       {
         String jsonsDataString = response.data.toString();
         List as=jsonsDataString.split(",");
-        String sucess=as[0].toString().split(":").last.toString();
+        String sucess=response.data["success"];
         print(sucess);
         if(sucess.trim()=="1")
           {
+            attendence=response.data["attendance_flag"].toString().trim();
+            print(attendence);
             check();
           }
         else

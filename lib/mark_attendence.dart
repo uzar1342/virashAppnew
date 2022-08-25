@@ -158,7 +158,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                               widget.camraloader=false;
                             });
 
-                              if(attendence)
+                              if(attendence.trim()=="True")
                               {
                                 return showDialog(
                                   barrierDismissible: false,
@@ -182,6 +182,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                             {
                                               if(net)
                                                 {
+                                                  attendence="False",
                                                   Logout_attendence(image!),
                                                 }
                                               else
@@ -263,7 +264,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     response.stream.transform(utf8.decoder).listen((value) {
       if(response.statusCode==200)
       {
-        attendence=true;
+
         widget._prefs.setBool(Userattendence,true);
         Get.offAll(() => FitnessAppHomeScreen()) ;
       }
@@ -384,7 +385,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                               response.stream.transform(utf8.decoder).listen((value) {
                                 if(response.statusCode==200)
                                 {
-                                  attendence=false;
                                   widget._prefs.setBool(Userattendence,false);
                                   Get.offAll(() => FitnessAppHomeScreen()) ;
                                 }

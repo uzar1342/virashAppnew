@@ -216,7 +216,7 @@ class _BottomBarViewState extends State<BottomBarView>
                                 }
 
                           },
-                          child: attendence?Icon(
+                          child: attendence.trim()=="True"?Icon(
                             Icons.logout,
                             color: FitnessAppTheme.white,
                             size: 32,
@@ -275,7 +275,7 @@ class _BottomBarViewState extends State<BottomBarView>
     final cameras = await availableCameras();
     final firstCamera = cameras.last;
     Position position = await _getGeoLocationPosition();
-    if(!attendence)
+    if(attendence=="False")
       {
         Get.offAll(() => (TakePictureScreen(camera: firstCamera,latitude: position.latitude.toString(),longitude: position.longitude.toString(),title: "Mark Intime",position: position)));
       }
