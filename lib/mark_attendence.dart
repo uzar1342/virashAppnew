@@ -182,7 +182,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                             {
                                               if(net)
                                                 {
-                                                  attendence="False",
                                                   Logout_attendence(image!),
                                                 }
                                               else
@@ -247,7 +246,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       ),
     );
   }
-
   void Login_attendence(XFile imagePath) async {
     final url = Uri.parse('http://training.virash.in/emp_attendance');
     var request = MultipartRequest("POST", url);
@@ -265,7 +263,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       if(response.statusCode==200)
       {
 
-        widget._prefs.setBool(Userattendence,true);
+        attendence="True";
         Get.offAll(() => FitnessAppHomeScreen()) ;
       }
       else
@@ -385,7 +383,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                               response.stream.transform(utf8.decoder).listen((value) {
                                 if(response.statusCode==200)
                                 {
-                                  widget._prefs.setBool(Userattendence,false);
+                                  attendence="False";
                                   Get.offAll(() => FitnessAppHomeScreen()) ;
                                 }
                                 else
