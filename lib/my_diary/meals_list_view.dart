@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../main.dart';
 import '../CalendarPage.dart';
+import '../ViewEmploye.dart';
 import '../fitness_app_theme.dart';
 import '../models/meals_list_data.dart';
 import '../taskadd.dart';
@@ -56,7 +57,7 @@ class _MealsListViewState extends State<MealsListView>
               child: ListView.builder(
                 padding: const EdgeInsets.only(
                     top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: 2,
+                itemCount: mealsListData.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   final int count =
@@ -152,7 +153,7 @@ class MealsView extends StatelessWidget {
                                Navigator.push(context,
                                    MaterialPageRoute(builder:
                                        (context) =>
-                                           Taskadd()
+                                           const viewemp()
                                    )
                                )
                              }

@@ -1,6 +1,7 @@
 import 'package:Virash/training/training_screen.dart';
 import 'package:flutter/material.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
+import 'bottom_navigation_view/tasknav.dart';
 import 'fitness_app_theme.dart';
 import 'globals.dart';
 import 'models/tabIcon_data.dart';

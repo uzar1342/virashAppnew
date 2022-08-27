@@ -20,33 +20,12 @@ class _TaskaddState extends State<Taskadd> {
   List<dynamic> employelist = [];
   bool isLoading=false;
   String employeName="";
+  var arr = [];
   var empid=null;
   var data=[];
   String? f;
   final GlobalKey<FormFieldState> _key = GlobalKey<FormFieldState>();
-  fetchemployelist() async {
-    print(userId);
-    Dio dio=new Dio();
-    var formData = FormData.fromMap({
-      "emp_id":  userId
-    });
 
-    var response = await dio.post('http://training.virash.in/employee_list', data: formData);
-
-    if (response.statusCode == 200) {
-
-      print(response.data.length);
-      setState(() {
-        employelist = response.data["data"];
-        isLoading = false;
-      });
-    } else {
-      Fluttertoast.showToast(msg: "Unable to fetch bank list");
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
   Sendtask(task) async {
     print(userId);
     Dio dio=new Dio();
@@ -68,61 +47,60 @@ class _TaskaddState extends State<Taskadd> {
 
   @override
   void initState() {
-    fetchemployelist();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    showemployelistDialog() {
-      showDialog(
-          context: context,
-          builder: (context) {
-            double h = MediaQuery.of(context).size.height;
-            double w = MediaQuery.of(context).size.width;
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: h * 0.6,
-                width: w * 0.9,
-                child: AlertDialog(
-                  title: Text("Employe",
-                      style: TextStyle(
-                          color: primaryColor, fontWeight: FontWeight.bold)),
-                  content: Container(
-                    height: h * 0.5,
-                    width: w,
-                    child: ListView.builder(
-                      shrinkWrap: false,
-                      itemCount: employelist.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return InkWell(
-                          onTap: () {
-                            setState(() {
-                              print(employelist.first);
-                              employeName = employelist[index]['emp_name'];
-                              empid = employelist[index]['emp_id'];
-
-                            });
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.all(5.0),
-                            child: Card(
-                              child: Container(
-                                  padding: EdgeInsets.all(10.0),
-                                  child: Text(employelist[index]['emp_name'])),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            );
-          });
-    }
+    // showemployelistDialog() {
+    //   showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         double h = MediaQuery.of(context).size.height;
+    //         double w = MediaQuery.of(context).size.width;
+    //         return Padding(
+    //           padding: const EdgeInsets.all(8.0),
+    //           child: Container(
+    //             height: h * 0.6,
+    //             width: w * 0.9,
+    //             child: AlertDialog(
+    //               title: Text("Employe",
+    //                   style: TextStyle(
+    //                       color: primaryColor, fontWeight: FontWeight.bold)),
+    //               content: Container(
+    //                 height: h * 0.5,
+    //                 width: w,
+    //                 child: ListView.builder(
+    //                   shrinkWrap: false,
+    //                   itemCount: employelist.length,
+    //                   itemBuilder: (BuildContext context, int index) {
+    //                     return InkWell(
+    //                       onTap: () {
+    //                         setState(() {
+    //                           print(employelist.first);
+    //                           employeName = employelist[index]['emp_name'];
+    //                           empid = employelist[index]['emp_id'];
+    //
+    //                         });
+    //                         Navigator.pop(context);
+    //                       },
+    //                       child: Container(
+    //                         margin: EdgeInsets.all(5.0),
+    //                         child: Card(
+    //                           child: Container(
+    //                               padding: EdgeInsets.all(10.0),
+    //                               child: Text(employelist[index]['emp_name'])),
+    //                         ),
+    //                       ),
+    //                     );
+    //                   },
+    //                 ),
+    //               ),
+    //             ),
+    //           ),
+    //         );
+    //       });
+    // }
     var w=MediaQuery.of(context).size.width;
     var h=MediaQuery.of(context).size.height;
     TextEditingController taskcontroler=new TextEditingController();
@@ -130,63 +108,62 @@ class _TaskaddState extends State<Taskadd> {
 appBar: AppBar(title: Text("Add Task"),),
         body: SafeArea(
 
-        child: Container(child: Column(children: <Widget>[
-          SizedBox(
-            height: h * 0.03,
-          ),
-          Text(
-            "Please select Employe name from below",
-            style:
-            TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: h * 0.01,
-          ),
-          InkWell(
-            onTap: () {
-              showemployelistDialog();
-            },
-            child: Container(
-              width: w * 0.95,
-              child: Card(
-                child: Container(
-                  padding: EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.person,
-                            color: Colors.black45,
-                          ),
-                          SizedBox(
-                            width: w * 0.03,
-                          ),
-                          Container(
-                            width: w * 0.7,
-                            child: Text(
-                              employeName,
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.black45,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-
+        child: Container(child:
+        Column(children: <Widget>[
+          // SizedBox(
+          //   height: h * 0.03,
+          // ),
+          // Text(
+          //   "Please select Employe name from below",
+          //   style:
+          //   TextStyle(color: Colors.black38, fontWeight: FontWeight.bold),
+          // ),
+          // SizedBox(
+          //   height: h * 0.01,
+          // ),
+          // InkWell(
+          //   onTap: () {
+          //     showemployelistDialog();
+          //   },
+          //   child: Container(
+          //     width: w * 0.95,
+          //     child: Card(
+          //       child: Container(
+          //         padding: EdgeInsets.all(10.0),
+          //         child: Row(
+          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //           children: [
+          //             Row(
+          //               children: [
+          //                 Icon(
+          //                   Icons.person,
+          //                   color: Colors.black45,
+          //                 ),
+          //                 SizedBox(
+          //                   width: w * 0.03,
+          //                 ),
+          //                 Container(
+          //                   width: w * 0.7,
+          //                   child: Text(
+          //                     employeName,
+          //                     style: TextStyle(
+          //                       color: Colors.black54,
+          //                       fontWeight: FontWeight.bold,
+          //                     ),
+          //                   ),
+          //                 )
+          //               ],
+          //             ),
+          //             Icon(
+          //               Icons.keyboard_arrow_down,
+          //               color: Colors.black45,
+          //             )
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Expanded(child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -205,6 +182,86 @@ appBar: AppBar(title: Text("Add Task"),),
                       ],
                       onChanged: (value) => setState(() {
                                 f=value;
+                      }),
+                      value: f,
+                      hint: const Text(
+                        "Select Priority",
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.all(12),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        hintText: "Priority",
+                        hintStyle: const TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                TextFormField(
+                  controller: taskcontroler,
+                  maxLines:2,
+                  cursorColor: primaryColor,
+                  decoration: InputDecoration(
+                      suffixIcon: Icon(
+                        Icons.assignment,
+                        color: Colors.red.shade200,
+                      ),
+                      hintText: "Task",
+                      hintStyle: TextStyle(
+                        color: Colors.black26,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.0,
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        gapPadding: 9,
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(12.0)),
+                      ),
+                      contentPadding:
+                      EdgeInsets.symmetric(
+                          horizontal: 20.0,
+                          vertical: 16.0)),
+                ),
+              ],
+            ),
+          ),
+          ), Expanded(child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: double.infinity - 50,
+                    child: DropdownButtonFormField<String>(
+                      key: _key,
+                      isExpanded: false,
+                      items: [
+                        buildMenuItem("low"),
+                        buildMenuItem("mediam"),
+                        buildMenuItem("high"),
+                      ],
+                      onChanged: (value) => setState(() {
+                        f=value;
                       }),
                       value: f,
                       hint: const Text(

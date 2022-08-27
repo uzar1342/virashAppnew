@@ -9,7 +9,6 @@ import 'meals_list_view.dart';
 
 class MyDiaryScreen extends StatefulWidget {
   const MyDiaryScreen({Key? key, this.animationController}) : super(key: key);
-
   final AnimationController? animationController;
   @override
   _MyDiaryScreenState createState() => _MyDiaryScreenState();
