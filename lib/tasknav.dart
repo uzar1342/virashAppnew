@@ -1,84 +1,128 @@
-import 'package:Virash/ViewEmploye.dart';
 import 'package:Virash/taskadd.dart';
-import 'package:Virash/tasklist.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:Virash/training/training_screen.dart';
 import 'package:flutter/material.dart';
-
 import 'Tasktest.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'bottom_navigation_view/tasknav.dart';
 import 'fitness_app_theme.dart';
 import 'globals.dart';
 import 'models/tabIcon_data.dart';
+import 'my_diary/my_diary_screen.dart';
 
 class TaskNav extends StatefulWidget {
-   TaskNav({Key? key,required this.id}) : super(key: key);
+  TaskNav({Key? key,required this.id}) : super(key: key);
   bool isLoading = false;
   String id;
   @override
-  State<TaskNav> createState() => _TaskNavState();
+  _TaskNavState createState() => _TaskNavState();
 }
 
-class _TaskNavState extends State<TaskNav> {
-  List<TabIconData> tabIconsList = TabIconData.tasktabIconsList;
-  Widget
-  tabBody =testTaskadd();
+class _TaskNavState extends State<TaskNav>
+    with TickerProviderStateMixin {
+  AnimationController? animationController;
+
+  List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+  Widget tabBody = Container(
+    color: FitnessAppTheme.background,
+  );
+
+  @override
+  void initState() {
+    tabIconsList.forEach((TabIconData tab) {
+      tab.isSelected = false;
+    });
+    tabIconsList[0].isSelected = true;
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 600), vsync: this);
+    tabBody = testTaskadd(empid: widget.id,);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: FitnessAppTheme.background,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: widget.isLoading?Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                color: primaryColor,
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text("Loading...")
+            ],
+          ),
+        ):FutureBuilder<bool>(
+          future: getData(),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            if (!snapshot.hasData) {
+              return const SizedBox();
+            } else {
+              return Stack(
+                children: <Widget>[
+                  tabBody,
+                  bottomBar(),
+                ],
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 200));
     return true;
   }
-  @override
-  Widget build(BuildContext context) {
-    return  Scaffold(
-      backgroundColor: Colors.transparent,
-      body: widget.isLoading?Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(
-              color: primaryColor,
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            Text("Loading...")
-          ],
-        ),
-      ):Column(
-        children: <Widget>[
-          Expanded(flex: 12,child: tabBody),
-          Expanded(flex: 1,child:bottomBar()),
-        ],
-      )
-    );
-  }
+
   Widget bottomBar() {
     return Column(
       children: <Widget>[
-        Expanded(
-          child: Center(child:TaskBottomBarView(
-            tabIconsList: tabIconsList,
-            addClick: () {
-              setState(() {
-                widget.isLoading=true;
+        const Expanded(
+          child: SizedBox(),
+        ),
+        TaskBottomBarView(
+          tabIconsList: tabIconsList,
+          addClick: () {
+            setState(() {
+              widget.isLoading=true;
+            });
+          },
+          changeIndex: (int index) {
+            if (index == 0 || index == 2) {
+              animationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      testTaskadd(empid: widget.id);
+                });
               });
-            },
-            changeIndex: (int index) {
-              if (index == 0 || index == 2) {
-                  setState(() {
-                    tabBody =
-                        testTaskadd();
-                  });
-
-              } else if (index == 1 || index == 3) {
-                  setState(() {
-                    tabBody =
-                        tasklist(id: widget.id,);
-                  });
-
-              }
-            },
-          )),
+            } else if (index == 1 || index == 3) {
+              animationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      TrainingScreen(animationController: animationController);
+                });
+              });
+            }
+          },
         ),
       ],
     );

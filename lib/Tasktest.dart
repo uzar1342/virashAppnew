@@ -1,40 +1,45 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'globals.dart';
 
 
-class testTaskadd extends StatelessWidget {
+class testTaskadd extends StatefulWidget {
+   testTaskadd({Key? key,required this.empid}) : super(key: key);
+String empid;
+  @override
+  State<testTaskadd> createState() => _testTaskaddState();
+}
+
+class _testTaskaddState extends State<testTaskadd> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    return MyHomePage(title: 'Flutter Demo Home Page', empid: widget.empid,);
   }
 }
 
-class Flavor extends StatefulWidget {
+class Task extends StatefulWidget {
   CartItem cartItem;
 
-  Flavor({required this.cartItem});
+  Task({required this.cartItem});
   @override
-  _FlavorState createState() => _FlavorState();
+  _TaskState createState() => _TaskState();
 }
 
-class _FlavorState extends State<Flavor> {
-  String _value = "Flavor 1";
+class _TaskState extends State<Task> {
+  String _value = "";
 
-  @override
   void initState() {
     super.initState();
-    _value = widget.cartItem.flavor;
+    _value= widget.cartItem.flavor!=""?widget.cartItem.flavor:"";
   }
 
   @override
-  void didUpdateWidget(Flavor oldWidget) {
+  void didUpdateWidget(Task oldWidget) {
     if (oldWidget.cartItem.flavor != widget.cartItem.flavor) {
       _value = widget.cartItem.flavor;
     }
@@ -44,49 +49,64 @@ class _FlavorState extends State<Flavor> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: DropdownButton(
-          value: _value,
-          items: [
-            DropdownMenuItem(
-              child: Text("Flavor 1"),
-              value: "Flavor 1",
+      child:TextFormField(
+        initialValue: _value,
+        maxLines:2,
+        onChanged: (value) {
+          setState(() {
+            _value = value.toString();
+            widget.cartItem.flavor = value.toString();
+          });
+        },
+        cursorColor: primaryColor,
+        decoration: InputDecoration(
+            suffixIcon: Icon(
+              Icons.assignment,
+              color: Colors.red.shade200,
             ),
-            DropdownMenuItem(
-              child: Text("Flavor 2"),
-              value: "Flavor 2",
+            hintText: "Task",
+            hintStyle: TextStyle(
+              color: Colors.black26,
+              fontWeight: FontWeight.bold,
+              fontSize: 14.0,
             ),
-            DropdownMenuItem(child: Text("Flavor 3"), value: "Flavor 3"),
-            DropdownMenuItem(child: Text("Flavor 4"), value: "Flavor 4")
-          ],
-          onChanged: (value) {
-            setState(() {
-              _value = value.toString();
-              widget.cartItem.flavor = value.toString();
-            });
-          }),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              gapPadding: 9,
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.all(
+                  Radius.circular(12.0)),
+            ),
+            contentPadding:
+            EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 16.0)),
+      ),
+
     );
   }
 }
 
-class Pizza extends StatefulWidget {
+class Priorety extends StatefulWidget {
   CartItem cartItem;
 
-  Pizza({required this.cartItem});
+  Priorety({required this.cartItem});
   @override
-  _PizzaState createState() => _PizzaState();
+  _PrioretyState createState() => _PrioretyState();
 }
 
-class _PizzaState extends State<Pizza> {
-  String _value = "";
+class _PrioretyState extends State<Priorety> {
+  String _value = "low";
 
   @override
   void initState() {
     super.initState();
-    _value = widget.cartItem.itemName;
+    _value= widget.cartItem.itemName!=""?widget.cartItem.itemName:"low";
   }
 
   @override
-  void didUpdateWidget(Pizza oldWidget) {
+  void didUpdateWidget(Priorety oldWidget) {
     if (oldWidget.cartItem.itemName != widget.cartItem.itemName) {
       _value = widget.cartItem.itemName;
     }
@@ -96,34 +116,69 @@ class _PizzaState extends State<Pizza> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: DropdownButton(
-          value: _value,
-          items: [
-            DropdownMenuItem(
-              child: Text("Pizza 1"),
-              value: "Pizza 1",
+      child:
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          width: double.infinity - 50,
+          child: DropdownButtonFormField<String>(
+            isExpanded: false,
+              items: const [
+                DropdownMenuItem(
+                  child: Text("low"),
+                  value: "low",
+                ),
+                DropdownMenuItem(
+                  child: Text("mediam"),
+                  value: "mediam",
+                ),
+                DropdownMenuItem(child: Text("high"), value: "high"),
+
+              ],
+              onChanged: (value) {
+        setState(() {
+        _value = value.toString();
+        widget.cartItem.itemName = value.toString();
+        });
+        },
+            value: _value,
+            hint: const Text(
+              "Select Priority",
+              style: TextStyle(
+                fontSize: 16,
+              ),
             ),
-            DropdownMenuItem(
-              child: Text("Pizza 2"),
-              value: "Pizza 2",
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(12),
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              hintText: "Priority",
+              hintStyle: const TextStyle(
+                fontSize: 14,
+              ),
             ),
-            DropdownMenuItem(child: Text("Pizza 3"), value: "Pizza 3"),
-            DropdownMenuItem(child: Text("Pizza 4"), value: "Pizza 4")
-          ],
-          onChanged: (value) {
-            setState(() {
-              _value = value.toString();
-              widget.cartItem.itemName = value.toString();
-            });
-          }),
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ),
+
+
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({ Key? key, required this.title}) : super(key: key);
+  MyHomePage({ Key? key, required this.title,required this.empid}) : super(key: key);
 
   final String title;
+  final String empid;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -149,22 +204,28 @@ class CartWidget extends StatefulWidget {
 class _CartWidgetState extends State<CartWidget> {
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        Expanded(child: Pizza(cartItem: widget.cart[widget.index])),
-        Expanded(child: Flavor(cartItem: widget.cart[widget.index])),
-        Expanded(
-          child: IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () {
-              setState(() {
-                print(widget.index);
-                widget.cart.removeAt(widget.index);
-                widget.callback();
-              });
-            },
-          ),
-        )
+        Row(
+          children: [
+            Expanded(flex: 9,child: Priorety(cartItem: widget.cart[widget.index])),
+            Expanded(
+              flex: 1,
+              child: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  setState(() {
+                    print(widget.index);
+                    widget.cart.removeAt(widget.index);
+                    widget.callback();
+                  });
+                },
+              ),
+            )
+          ],
+        ),
+        Task(cartItem: widget.cart[widget.index]),
+        
       ],
     );
   }
@@ -177,50 +238,85 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
+
+
+  Sendtask(task) async {
+    print(task);
+    Dio dio=Dio();
+    var response = await dio.post('http://training.virash.in/provide_task', data: task);
+    if (response.statusCode == 200) {
+      print(response.data.length);
+      Fluttertoast.showToast(msg: "Sucessfull Send");
+    } else {
+      Fluttertoast.showToast(msg: "Unable to fetch bank list");
+      setState(() {
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: ListView.builder(
-                  key: UniqueKey(),
-                  itemCount: cart.length,
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    return CartWidget(
-                        cart: cart, index: index, callback: refresh);
-                  }),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                RaisedButton(
-                  onPressed: () {
-                    cart.add(CartItem(
-                        productType: "pizza",
-                        itemName: "Pizza 1",
-                        flavor: "Flavor 1"));
-                    setState(() {});
-                  },
-                  child: Text("add Pizza"),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: ListView.builder(
+                key: UniqueKey(),
+                itemCount: cart.length,
+                itemBuilder: (BuildContext ctxt, int index) {
+                  return ListTile(
+                    title: CartWidget(
+                        cart: cart, index: index, callback: refresh),
+                  );
+                }),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  cart.add(CartItem(
+                      productType: "",
+                      itemName: "",
+                      flavor: ""));
+                  setState(() {
+                  });
+                },
+                child: Text("Add Task"),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                     var data=[];
+                      cart.forEach((element) {
+                        var item={"task":element.itemName,"priority":element.flavor};
+                        data.add(item);
+                      });
+                      Sendtask({"emp_id":userId,"assigned_to":widget.empid,"tasks":data});
+                    },
+                    backgroundColor: Colors.green,
+                    child: const Icon(Icons.navigation),
+                  ),
                 ),
-                RaisedButton(
-                  onPressed: () {
-                    for (int i = 0; i < cart.length; i++) {
-                      print(cart[i].itemName);
-                    }
-                  },
-                  child: Text("Print Pizza"),
-                ),
-              ],
-            )
-          ],
-        ),
+              ),
+              // RaisedButton(
+              //   onPressed: () {
+              //     for (int i = 0; i < cart.length; i++) {
+              //       print(cart[i].itemName);
+              //     }
+              //   },
+              //   child: Text("Print Pizza"),
+              // ),
+            ],
+          )
+        ],
       ),
     );
   }
