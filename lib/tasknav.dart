@@ -1,6 +1,7 @@
 import 'package:Virash/taskadd.dart';
 import 'package:Virash/training/training_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'Tasktest.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'bottom_navigation_view/tasknav.dart';
@@ -46,6 +47,7 @@ class _TaskNavState extends State<TaskNav>
 
   @override
   Widget build(BuildContext context) {
+  var  h=MediaQuery.of(context).size.height;
     return Container(
       color: FitnessAppTheme.background,
       child: Scaffold(
@@ -69,11 +71,17 @@ class _TaskNavState extends State<TaskNav>
             if (!snapshot.hasData) {
               return const SizedBox();
             } else {
-              return Stack(
-                children: <Widget>[
-                  tabBody,
-                  bottomBar(),
-                ],
+              return SingleChildScrollView(
+                child:Column(
+
+                  children: [
+                    Container(
+                      height: h*0.9,
+                        child: tabBody),
+                    Container(
+                        height: h*0.1,
+                        child: bottomBar()),
+                  ],) ,
               );
             }
           },
@@ -88,43 +96,36 @@ class _TaskNavState extends State<TaskNav>
   }
 
   Widget bottomBar() {
-    return Column(
-      children: <Widget>[
-        const Expanded(
-          child: SizedBox(),
-        ),
-        TaskBottomBarView(
-          tabIconsList: tabIconsList,
-          addClick: () {
-            setState(() {
-              widget.isLoading=true;
-            });
-          },
-          changeIndex: (int index) {
-            if (index == 0 || index == 2) {
-              animationController?.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  tabBody =
-                      testTaskadd(empid: widget.id);
-                });
-              });
-            } else if (index == 1 || index == 3) {
-              animationController?.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  tabBody =
-                      TrainingScreen(animationController: animationController);
-                });
-              });
+    return TaskBottomBarView(
+      tabIconsList: tabIconsList,
+      addClick: () {
+        setState(() {
+          widget.isLoading=true;
+        });
+      },
+      changeIndex: (int index) {
+        if (index == 0 || index == 2) {
+          animationController?.reverse().then<dynamic>((data) {
+            if (!mounted) {
+              return;
             }
-          },
-        ),
-      ],
+            setState(() {
+              tabBody =
+                  testTaskadd(empid: widget.id);
+            });
+          });
+        } else if (index == 1 || index == 3) {
+          animationController?.reverse().then<dynamic>((data) {
+            if (!mounted) {
+              return;
+            }
+            setState(() {
+              tabBody =
+                  TrainingScreen(animationController: animationController);
+            });
+          });
+        }
+      },
     );
   }
 }
