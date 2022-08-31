@@ -80,7 +80,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Future<dynamic> viewattendence()
   async {
-    Dio dio=new Dio();
+    Dio dio=Dio();
     var formData = FormData.fromMap({
       'year': year.toString(),
       'month': month>=10?month.toString():"0"+month.toString(),
@@ -156,7 +156,7 @@ class _CalendarPageState extends State<CalendarPage> {
                           //     MaterialPageRoute(
                           //         builder: (context) => const AttendancePage()));
                         },
-                        icon: FaIcon(
+                        icon: const FaIcon(
                           FontAwesomeIcons.chartArea,
                           color: Colors.white,
                           size: 25,
@@ -332,7 +332,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                           ),
                                                           Text(
                                                             snapshot.data["data"][position]["emp_name"].toString(),
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                                 color: Colors
                                                                     .black54,
                                                                 fontWeight:
@@ -359,8 +359,9 @@ class _CalendarPageState extends State<CalendarPage> {
                                                           const EdgeInsets
                                                               .all(5.0),
                                                           height: h * 0.04,
-                                                          decoration: const BoxDecoration(
-                                                              color: Colors
+                                                          decoration:  BoxDecoration(
+                                                              color:  snapshot.data["data"][position]["Presentee"]=="Absent"?Colors
+                                                                  .red:Colors
                                                                   .green,
                                                               borderRadius: BorderRadius
                                                                   .all(Radius
@@ -381,7 +382,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                               ),
                                                               Text(
                                                                 snapshot.data["data"][position]["Presentee"].toString(),
-                                                                style: TextStyle(
+                                                                style: const TextStyle(
                                                                     color: Colors
                                                                         .white,
                                                                     fontWeight:
@@ -468,7 +469,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                   .black54)),
                                                     ],
                                                   ),
-                                                  Divider(),
+                                                  const Divider(),
                                                   Row(
                                                     mainAxisAlignment:
                                                     MainAxisAlignment.end,
@@ -489,12 +490,12 @@ class _CalendarPageState extends State<CalendarPage> {
                                                           BoxDecoration(
                                                             color: primaryColor,
                                                             borderRadius:
-                                                            BorderRadius.all(
+                                                            const BorderRadius.all(
                                                               Radius.circular(
                                                                   14.0),
                                                             ),
                                                           ),
-                                                          child: Row(children: [
+                                                          child: Row(children: const [
                                                             Icon(
                                                               Icons.assignment,
                                                               color: Colors.white,

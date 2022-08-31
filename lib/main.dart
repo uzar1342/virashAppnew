@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'fitness_app_home_screen.dart';
+import 'virash_app_home_screen.dart';
 import 'globals.dart';
 import 'login.dart';
 import 'mark_attendence.dart';
@@ -116,7 +116,7 @@ checkinternet() async {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder:
           (context) =>
-              FitnessAppHomeScreen()
+              VirashAppHomeScreen()
               ));
       }
       else

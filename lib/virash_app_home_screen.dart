@@ -2,24 +2,24 @@ import 'package:Virash/training/training_screen.dart';
 import 'package:flutter/material.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'bottom_navigation_view/tasknav.dart';
-import 'fitness_app_theme.dart';
+import 'virash_app_theme.dart';
 import 'globals.dart';
 import 'models/tabIcon_data.dart';
-import 'my_diary/my_diary_screen.dart';
+import 'my_diary/homescreen.dart';
 
-class FitnessAppHomeScreen extends StatefulWidget {
+class VirashAppHomeScreen extends StatefulWidget {
   bool isLoading = false;
   @override
-  _FitnessAppHomeScreenState createState() => _FitnessAppHomeScreenState();
+  _VirashAppHomeScreenState createState() => _VirashAppHomeScreenState();
 }
 
-class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
+class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
     with TickerProviderStateMixin {
   AnimationController? animationController;
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   Widget tabBody = Container(
-    color: FitnessAppTheme.background,
+    color: VirashAppTheme.background,
   );
 
   @override
@@ -30,7 +30,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
     tabIconsList[0].isSelected = true;
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = MyDiaryScreen(animationController: animationController);
+    tabBody = MyHomeScreen(animationController: animationController);
     super.initState();
   }
 
@@ -43,7 +43,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: FitnessAppTheme.background,
+      color: VirashAppTheme.background,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: widget.isLoading?Center(
@@ -104,7 +104,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
                 }
                 setState(() {
                   tabBody =
-                      MyDiaryScreen(animationController: animationController);
+                      MyHomeScreen(animationController: animationController);
                 });
               });
             } else if (index == 1 || index == 3) {

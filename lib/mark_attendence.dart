@@ -15,7 +15,7 @@ import 'package:flutter/material.dart'as mi;
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'fitness_app_home_screen.dart';
+import 'virash_app_home_screen.dart';
 import 'globals.dart';
 class TakePictureScreen extends StatefulWidget {
    TakePictureScreen({
@@ -52,7 +52,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             child: new Text('No'),
           ),
           TextButton(
-            onPressed: () => Get.offAll(()=>(FitnessAppHomeScreen())),
+            onPressed: () => Get.offAll(()=>(VirashAppHomeScreen())),
             child: new Text('Yes'),
           ),
         ],
@@ -264,7 +264,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       {
 
         attendence="True";
-        Get.offAll(() => FitnessAppHomeScreen()) ;
+        Get.offAll(() => VirashAppHomeScreen()) ;
       }
       else
       {
@@ -384,7 +384,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                 if(response.statusCode==200)
                                 {
                                   attendence="False";
-                                  Get.offAll(() => FitnessAppHomeScreen()) ;
+                                  Get.offAll(() => VirashAppHomeScreen()) ;
                                 }
                                 else
                                 {

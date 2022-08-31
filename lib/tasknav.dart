@@ -5,10 +5,11 @@ import 'package:get/get.dart';
 import 'Tasktest.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'bottom_navigation_view/tasknav.dart';
-import 'fitness_app_theme.dart';
+import 'emptask.dart';
+import 'virash_app_theme.dart';
 import 'globals.dart';
 import 'models/tabIcon_data.dart';
-import 'my_diary/my_diary_screen.dart';
+import 'my_diary/homescreen.dart';
 
 class TaskNav extends StatefulWidget {
   TaskNav({Key? key,required this.id}) : super(key: key);
@@ -24,7 +25,7 @@ class _TaskNavState extends State<TaskNav>
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   Widget tabBody = Container(
-    color: FitnessAppTheme.background,
+    color: VirashAppTheme.background,
   );
 
   @override
@@ -49,7 +50,7 @@ class _TaskNavState extends State<TaskNav>
   Widget build(BuildContext context) {
   var  h=MediaQuery.of(context).size.height;
     return Container(
-      color: FitnessAppTheme.background,
+      color: VirashAppTheme.background,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: widget.isLoading?Center(
@@ -121,7 +122,7 @@ class _TaskNavState extends State<TaskNav>
             }
             setState(() {
               tabBody =
-                  TrainingScreen(animationController: animationController);
+                  EmpTask(emoid: widget.id);
             });
           });
         }

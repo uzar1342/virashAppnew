@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'fitness_app_home_screen.dart';
+import 'virash_app_home_screen.dart';
 import 'globals.dart';
 class HomePage extends StatefulWidget {
   @override
@@ -244,7 +244,7 @@ class _HomePageState extends State<HomePage> {
            Navigator.pushReplacement(context,
                MaterialPageRoute(builder:
                    (context) =>
-                   FitnessAppHomeScreen()
+                   VirashAppHomeScreen()
                )
            );
           }

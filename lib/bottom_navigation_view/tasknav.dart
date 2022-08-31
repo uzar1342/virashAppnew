@@ -10,8 +10,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
-import '../fitness_app_home_screen.dart';
-import '../fitness_app_theme.dart';
+import '../virash_app_home_screen.dart';
+import '../virash_app_theme.dart';
 import '../globals.dart';
 import '../mark_attendence.dart';
 import '../models/tabIcon_data.dart';
@@ -80,7 +80,7 @@ class _TaskBottomBarViewState extends State<TaskBottomBarView>
           animation: animationController!,
           builder: (BuildContext context, Widget? child) {
             return PhysicalShape(
-              color: FitnessAppTheme.white,
+              color: VirashAppTheme.white,
               elevation: 16.0,
               clipper: TabClipper(
                   radius: Tween<double>(begin: 0.0, end: 1.0)
@@ -253,7 +253,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       width: 0,
                       height: 0,
                       decoration: BoxDecoration(
-                        color: FitnessAppTheme.nearlyDarkBlue,
+                        color: VirashAppTheme.nearlyDarkBlue,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -274,7 +274,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       width: 4,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: FitnessAppTheme.nearlyDarkBlue,
+                        color: VirashAppTheme.nearlyDarkBlue,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -295,7 +295,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       width: 6,
                       height: 6,
                       decoration: BoxDecoration(
-                        color: FitnessAppTheme.nearlyDarkBlue,
+                        color: VirashAppTheme.nearlyDarkBlue,
                         shape: BoxShape.circle,
                       ),
                     ),

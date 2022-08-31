@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'fitness_app_home_screen.dart';
+import 'virash_app_home_screen.dart';
 import 'globals.dart';
 
 class viewemp extends StatefulWidget {
@@ -65,12 +65,15 @@ print(formData.fields);
                   itemBuilder: (context, position) {
                     return InkWell(
                       onTap:()=>{
-Navigator.push(context, MaterialPageRoute(builder: (c)=>
+                        Navigator.push(context, MaterialPageRoute(builder: (c)=>
 
-                     // FitnessAppHomeScreen())
-    TaskNav(id: snapshot.data["data"][position]["emp_id"].toString(),))
-)},
+                                             // FitnessAppHomeScreen())
+                            TaskNav(id: snapshot.data["data"][position]["emp_id"].toString(),))
+                        )},
                       child: Card(
+                        shape:RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0)
+                        ),
                         elevation: 5,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

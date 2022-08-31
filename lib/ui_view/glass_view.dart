@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../main.dart';
-import '../fitness_app_theme.dart';
+import '../virash_app_theme.dart';
 
 class GlassView extends StatelessWidget {
   final AnimationController? animationController;
@@ -52,11 +52,11 @@ class GlassView extends StatelessWidget {
                                   'Prepare your stomach for lunch with one or two glass of water',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    fontFamily: FitnessAppTheme.fontName,
+                                    fontFamily: VirashAppTheme.fontName,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14,
                                     letterSpacing: 0.0,
-                                    color: FitnessAppTheme.nearlyDarkBlue
+                                    color: VirashAppTheme.nearlyDarkBlue
                                         .withOpacity(0.6),
                                   ),
                                 ),

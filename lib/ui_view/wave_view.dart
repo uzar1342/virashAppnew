@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' as vector;
 
-import '../fitness_app_theme.dart';
+import '../virash_app_theme.dart';
 
 class WaveView extends StatefulWidget {
   final double percentageValue;
@@ -88,7 +88,7 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
             new ClipPath(
               child: new Container(
                 decoration: BoxDecoration(
-                  color: FitnessAppTheme.nearlyDarkBlue.withOpacity(0.5),
+                  color: VirashAppTheme.nearlyDarkBlue.withOpacity(0.5),
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(80.0),
                       bottomLeft: Radius.circular(80.0),
@@ -96,8 +96,8 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
                       topRight: Radius.circular(80.0)),
                   gradient: LinearGradient(
                     colors: [
-                      FitnessAppTheme.nearlyDarkBlue.withOpacity(0.2),
-                      FitnessAppTheme.nearlyDarkBlue.withOpacity(0.5)
+                      VirashAppTheme.nearlyDarkBlue.withOpacity(0.2),
+                      VirashAppTheme.nearlyDarkBlue.withOpacity(0.5)
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -109,11 +109,11 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
             new ClipPath(
               child: new Container(
                 decoration: BoxDecoration(
-                  color: FitnessAppTheme.nearlyDarkBlue,
+                  color: VirashAppTheme.nearlyDarkBlue,
                   gradient: LinearGradient(
                     colors: [
-                      FitnessAppTheme.nearlyDarkBlue.withOpacity(0.4),
-                      FitnessAppTheme.nearlyDarkBlue
+                      VirashAppTheme.nearlyDarkBlue.withOpacity(0.4),
+                      VirashAppTheme.nearlyDarkBlue
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -138,11 +138,11 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
                       widget.percentageValue.round().toString(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: FitnessAppTheme.fontName,
+                        fontFamily: VirashAppTheme.fontName,
                         fontWeight: FontWeight.w500,
                         fontSize: 24,
                         letterSpacing: 0.0,
-                        color: FitnessAppTheme.white,
+                        color: VirashAppTheme.white,
                       ),
                     ),
                     Padding(
@@ -151,11 +151,11 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
                         '%',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontFamily: FitnessAppTheme.fontName,
+                          fontFamily: VirashAppTheme.fontName,
                           fontWeight: FontWeight.w500,
                           fontSize: 14,
                           letterSpacing: 0.0,
-                          color: FitnessAppTheme.white,
+                          color: VirashAppTheme.white,
                         ),
                       ),
                     ),
@@ -176,7 +176,7 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
                   width: 2,
                   height: 2,
                   decoration: BoxDecoration(
-                    color: FitnessAppTheme.white.withOpacity(0.4),
+                    color: VirashAppTheme.white.withOpacity(0.4),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -195,7 +195,7 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
                   width: 4,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: FitnessAppTheme.white.withOpacity(0.4),
+                    color: VirashAppTheme.white.withOpacity(0.4),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -214,7 +214,7 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
                   width: 3,
                   height: 3,
                   decoration: BoxDecoration(
-                    color: FitnessAppTheme.white.withOpacity(0.4),
+                    color: VirashAppTheme.white.withOpacity(0.4),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -231,7 +231,7 @@ class _WaveViewState extends State<WaveView> with TickerProviderStateMixin {
                   width: 4,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: FitnessAppTheme.white.withOpacity(
+                    color: VirashAppTheme.white.withOpacity(
                         animationController!.status == AnimationStatus.reverse
                             ? 0.0
                             : 0.4),

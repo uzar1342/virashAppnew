@@ -10,8 +10,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
-import '../fitness_app_home_screen.dart';
-import '../fitness_app_theme.dart';
+import '../virash_app_home_screen.dart';
+import '../virash_app_theme.dart';
 import '../globals.dart';
 import '../mark_attendence.dart';
 import '../models/tabIcon_data.dart';
@@ -83,7 +83,7 @@ class _BottomBarViewState extends State<BottomBarView>
             return Transform(
               transform: Matrix4.translationValues(0.0, 0.0, 0.0),
               child: PhysicalShape(
-                color: FitnessAppTheme.white,
+                color: VirashAppTheme.white,
                 elevation: 16.0,
                 clipper: TabClipper(
                     radius: Tween<double>(begin: 0.0, end: 1.0)
@@ -181,10 +181,10 @@ class _BottomBarViewState extends State<BottomBarView>
                     child: Container(
                       // alignment: Alignment.center,s
                       decoration: BoxDecoration(
-                        color: FitnessAppTheme.nearlyDarkBlue,
+                        color: VirashAppTheme.nearlyDarkBlue,
                         gradient: LinearGradient(
                             colors: [
-                              FitnessAppTheme.nearlyDarkBlue,
+                              VirashAppTheme.nearlyDarkBlue,
                               HexColor('#6A88E5'),
                             ],
                             begin: Alignment.topLeft,
@@ -192,7 +192,7 @@ class _BottomBarViewState extends State<BottomBarView>
                         shape: BoxShape.circle,
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color: FitnessAppTheme.nearlyDarkBlue
+                              color: VirashAppTheme.nearlyDarkBlue
                                   .withOpacity(0.4),
                               offset: const Offset(8.0, 16.0),
                               blurRadius: 16.0),
@@ -218,11 +218,11 @@ class _BottomBarViewState extends State<BottomBarView>
                           },
                           child: attendence.trim()=="True"?Icon(
                             Icons.logout,
-                            color: FitnessAppTheme.white,
+                            color: VirashAppTheme.white,
                             size: 32,
                           ):Icon(
                             Icons.login,
-                            color: FitnessAppTheme.white,
+                            color: VirashAppTheme.white,
                             size: 32,
                           ),
                         ),
@@ -373,7 +373,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       width: 8,
                       height: 8,
                       decoration: BoxDecoration(
-                        color: FitnessAppTheme.nearlyDarkBlue,
+                        color: VirashAppTheme.nearlyDarkBlue,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -394,7 +394,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       width: 4,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: FitnessAppTheme.nearlyDarkBlue,
+                        color: VirashAppTheme.nearlyDarkBlue,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -415,7 +415,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       width: 6,
                       height: 6,
                       decoration: BoxDecoration(
-                        color: FitnessAppTheme.nearlyDarkBlue,
+                        color: VirashAppTheme.nearlyDarkBlue,
                         shape: BoxShape.circle,
                       ),
                     ),
