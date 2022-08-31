@@ -6,9 +6,7 @@ import 'globals.dart';
 
 class tasklist extends StatefulWidget {
    tasklist({Key? key,required this.id }) : super(key: key);
-
   String id;
-
   @override
   State<tasklist> createState() => _tasklistState();
 }
@@ -25,10 +23,8 @@ class _tasklistState extends State<tasklist> {
     if (response.statusCode == 200) {
       print(response.data);
       return response.data;
-
     } else {
       return response.data;
-
     }
   }
   @override

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 import 'globals.dart';
 
@@ -13,7 +14,26 @@ class EmpTask extends StatefulWidget {
   State<EmpTask> createState() => _EmpTaskState();
 }
 
+
+class check{ //modal class for Person object
+  String id;
+  check({required this.id});
+}
+
+
+class checkid  {
+  List<check> cart;
+  int index;
+  checkid({required this.cart, required this.index});
+  remove()
+  {
+    cart.removeAt(index);
+  }
+}
+
+
 class _EmpTaskState extends State<EmpTask> {
+  var  _isChecked;
   bool isLoading=true;
   fetchemployetask() async {
     print(widget.emoid);
@@ -26,6 +46,8 @@ class _EmpTaskState extends State<EmpTask> {
     print(formData.fields);
     var response = await dio.post('http://training.virash.in/employeeAllTask', data: formData);
     if (response.statusCode == 200) {
+
+      _isChecked = List<bool>.filled(response.data["data"].length, false);
       print(response.data);
       return response.data;
     } else {
@@ -36,6 +58,7 @@ class _EmpTaskState extends State<EmpTask> {
       return response.data;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +72,7 @@ class _EmpTaskState extends State<EmpTask> {
                 if (snapshot.hasError)
                   return SafeArea(child:Text('Error: ${snapshot.error}'));
                 else {
+
                   var w=MediaQuery.of(context).size.width;
                   var h=MediaQuery.of(context).size.height;
                   Color primaryColor = const Color(0xff1f7396);
@@ -260,33 +284,49 @@ class _EmpTaskState extends State<EmpTask> {
                                       child: Container(
                                         padding:
                                         EdgeInsets.all(8.0),
-                                        decoration:
-                                        BoxDecoration(
-                                          color: primaryColor,
-                                          borderRadius:
-                                          BorderRadius.all(
-                                            Radius.circular(
-                                                14.0),
-                                          ),
+                                        child:
+
+                                        Checkbox(value: _isChecked[position], onChanged: (bool? value) {
+                                        print(value);
+                                        if(_isChecked[position])
+                                        {
+                                          _isChecked[position]=false;
+                                        }
+                                        else
+                                        {
+                                          _isChecked[position]=true;
+                                        }
+                                          // if(value==true)
+                                          // {
+                                          //     id.add(check(id:snapshot.data["data"][position]["task_id"].toString()));
+                                          //   }
+                                          // else
+                                          // {
+                                          //   checkid(index: position, cart: id);
+                                          // }
+                                          //
+                                        },
+
                                         ),
-                                        child: Row(children: [
-                                          Icon(
-                                            Icons.assignment,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            width: 5.0,
-                                          ),
-                                          Text(
-                                            "View Image",
-                                            style: TextStyle(
-                                                color: Colors
-                                                    .white,
-                                                fontWeight:
-                                                FontWeight
-                                                    .bold),
-                                          )
-                                        ]),
+
+                                        // Row(children: [
+                                        //   Icon(
+                                        //     Icons.assignment,
+                                        //     color: Colors.white,
+                                        //   ),
+                                        //   SizedBox(
+                                        //     width: 5.0,
+                                        //   ),
+                                        //   Text(
+                                        //     "Check",
+                                        //     style: TextStyle(
+                                        //         color: Colors
+                                        //             .white,
+                                        //         fontWeight:
+                                        //         FontWeight
+                                        //             .bold),
+                                        //   )
+                                        // ]),
                                       ),
                                     ),
                                   ],

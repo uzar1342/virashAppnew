@@ -20,8 +20,6 @@ class _viewempState extends State<viewemp> {
   fetchemployelist() async {
     print(userId);
     Dio dio=Dio();
-
-
     var formData = FormData.fromMap({
       "emp_id":userId
     });
@@ -54,11 +52,11 @@ print(formData.fields);
         future: fetchemployelist(), // async work
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           switch (snapshot.connectionState) {
-            case ConnectionState.waiting: return Center(child: Text('Loading....'));
+            case ConnectionState.waiting: return const Center(child: Text('Loading....'));
             default:
-              if (snapshot.hasError)
+              if (snapshot.hasError) {
                 return SafeArea(child:Text('Error: ${snapshot.error}'));
-              else {
+              } else {
                 Color primaryColor = const Color(0xff1f7396);
                 return   snapshot.data["success"].toString().trim()=="1"?ListView.builder(
                   itemCount: snapshot.data["data"].length,
