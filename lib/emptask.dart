@@ -32,8 +32,38 @@ class checkid  {
 }
 
 
+
+
+
+
 class _EmpTaskState extends State<EmpTask> {
-  var  _isChecked;
+
+
+  updatetask(taskid) async {
+    print(userId);
+    var id=[];
+    id.add(taskid);
+
+    Dio dio=Dio();
+    var formData =
+    {
+      "emp_id":widget.emoid,
+      "completed_task":id,
+  };
+    print(formData);
+    var response = await dio.post('http://training.virash.in/markCompletedTask', data: formData);
+    if (response.statusCode == 200) {
+      print(response.data);
+      setState(() {
+
+      });
+      return response.data;
+    } else {
+      return response.data;
+    }
+  }
+
+
   bool isLoading=true;
   fetchemployetask() async {
     print(widget.emoid);
@@ -47,7 +77,6 @@ class _EmpTaskState extends State<EmpTask> {
     var response = await dio.post('http://training.virash.in/employeeAllTask', data: formData);
     if (response.statusCode == 200) {
 
-      _isChecked = List<bool>.filled(response.data["data"].length, false);
       print(response.data);
       return response.data;
     } else {
@@ -79,7 +108,8 @@ class _EmpTaskState extends State<EmpTask> {
                   return   snapshot.data["success"].toString().trim()=="1"?ListView.builder(
                     itemCount: snapshot.data["data"].length,
                     itemBuilder: (context, position) {
-                      return InkWell(
+                      return
+                        snapshot.data["data"][position]["status"]=="Pending"? InkWell(
                         onTap:()=>{
                           // Navigator.push(context, MaterialPageRoute(builder: (c)=>
                           //
@@ -148,7 +178,7 @@ class _EmpTaskState extends State<EmpTask> {
                                                 .red:snapshot.data["data"][position]["priority"]=="medium"?Colors
                                                 .yellow:Colors
                                                 .green,
-                                            borderRadius: BorderRadius
+                                            borderRadius: const BorderRadius
                                                 .all(Radius
                                                 .circular(
                                                 20.0))),
@@ -271,62 +301,72 @@ class _EmpTaskState extends State<EmpTask> {
                                                 .black54)),
                                   ],
                                 ),
+                                Divider(),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons
+                                          .pending_actions,
+                                      color: Colors
+                                          .red.shade200,
+                                    )
+                                    ,
+                                    SizedBox(
+                                      width: w * 0.01,
+                                    ),
+                                    Text(
+                                        snapshot.data["data"][position]["status"],
+                                        style: const TextStyle(
+                                            color: Colors
+                                                .black54)),
+                                  ],
+                                ),
 
                                 Divider(),
                                 Row(
                                   mainAxisAlignment:
                                   MainAxisAlignment.end,
                                   children: [
-                                    InkWell(
-                                      onTap: () {
+                                    Container(
+                                      padding:
+                                      EdgeInsets.all(8.0),
+                                      child:
 
-                                        },
-                                      child: Container(
-                                        padding:
-                                        EdgeInsets.all(8.0),
-                                        child:
-
-                                        Checkbox(value: _isChecked[position], onChanged: (bool? value) {
-                                        print(value);
-                                        if(_isChecked[position])
-                                        {
-                                          _isChecked[position]=false;
-                                        }
-                                        else
-                                        {
-                                          _isChecked[position]=true;
-                                        }
-                                          // if(value==true)
-                                          // {
-                                          //     id.add(check(id:snapshot.data["data"][position]["task_id"].toString()));
-                                          //   }
-                                          // else
-                                          // {
-                                          //   checkid(index: position, cart: id);
-                                          // }
-                                          //
-                                        },
-
+                                      InkWell(
+                                        onTap: () {
+                                          updatetask(snapshot.data["data"][position]["task_id"]);
+                                           },
+                                        child: Container(
+                                          padding:
+                                          EdgeInsets.all(8.0),
+                                          decoration:
+                                          BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius:
+                                            const BorderRadius.all(
+                                              Radius.circular(
+                                                  14.0),
+                                            ),
+                                          ),
+                                          child: Row(children: const [
+                                            Icon(
+                                              Icons.assignment,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: 5.0,
+                                            ),
+                                            Text(
+                                              "View Image",
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .white,
+                                                  fontWeight:
+                                                  FontWeight
+                                                      .bold),
+                                            )
+                                          ]),
                                         ),
-
-                                        // Row(children: [
-                                        //   Icon(
-                                        //     Icons.assignment,
-                                        //     color: Colors.white,
-                                        //   ),
-                                        //   SizedBox(
-                                        //     width: 5.0,
-                                        //   ),
-                                        //   Text(
-                                        //     "Check",
-                                        //     style: TextStyle(
-                                        //         color: Colors
-                                        //             .white,
-                                        //         fontWeight:
-                                        //         FontWeight
-                                        //             .bold),
-                                        //   )
-                                        // ]),
                                       ),
                                     ),
                                   ],
@@ -356,7 +396,8 @@ class _EmpTaskState extends State<EmpTask> {
                         // ),
 
 
-                      );
+                      ):
+                      Container();
 
 
                     },
