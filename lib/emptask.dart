@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -39,11 +40,13 @@ class checkid  {
 class _EmpTaskState extends State<EmpTask> {
 
 
+
+  int check=0;
+
   updatetask(taskid) async {
     print(userId);
     var id=[];
     id.add(taskid);
-
     Dio dio=Dio();
     var formData =
     {
@@ -53,7 +56,6 @@ class _EmpTaskState extends State<EmpTask> {
     print(formData);
     var response = await dio.post('http://training.virash.in/markCompletedTask', data: formData);
     if (response.statusCode == 200) {
-      print(response.data);
       setState(() {
 
       });
@@ -68,14 +70,26 @@ class _EmpTaskState extends State<EmpTask> {
   fetchemployetask() async {
     print(widget.emoid);
     Dio dio=Dio();
-
-
     var formData = FormData.fromMap({
       "emp_id":widget.emoid
     });
     print(formData.fields);
     var response = await dio.post('http://training.virash.in/employeeAllTask', data: formData);
     if (response.statusCode == 200) {
+
+      print(response.data["data"]);
+
+      if(response.data["data"]!=null)
+      {
+        int len=int.parse(response.data["data"].length.toString());
+        for(int i=0;i<len;i++)
+        {
+          if (response.data["data"][i]["status"] == "Pending") {check++;}
+        }
+      }
+
+
+      print(check);
 
       print(response.data);
       return response.data;
@@ -98,14 +112,13 @@ class _EmpTaskState extends State<EmpTask> {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting: return Center(child: Text('Loading....'));
               default:
-                if (snapshot.hasError)
+                if (snapshot.hasError) {
                   return SafeArea(child:Text('Error: ${snapshot.error}'));
-                else {
-
+                } else {
                   var w=MediaQuery.of(context).size.width;
                   var h=MediaQuery.of(context).size.height;
                   Color primaryColor = const Color(0xff1f7396);
-                  return   snapshot.data["success"].toString().trim()=="1"?ListView.builder(
+                  return   check>0?ListView.builder(
                     itemCount: snapshot.data["data"].length,
                     itemBuilder: (context, position) {
                       return
@@ -331,10 +344,29 @@ class _EmpTaskState extends State<EmpTask> {
                                       padding:
                                       EdgeInsets.all(8.0),
                                       child:
-
                                       InkWell(
                                         onTap: () {
-                                          updatetask(snapshot.data["data"][position]["task_id"]);
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              title:  const Text('Are you sure?'),
+                                              content:  const Text('Do you want to exit an Attendence'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () => Navigator.of(context).pop(false),
+                                                  child:  const Text('No'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () => {
+
+                                                    updatetask(snapshot.data["data"][position]["task_id"]),
+                                                setState(() {
+                                                            })},
+                                                child:  const Text('Yes'),
+                                                ),
+                                              ],
+                                            ),
+                                          );
                                            },
                                         child: Container(
                                           padding:
@@ -401,7 +433,7 @@ class _EmpTaskState extends State<EmpTask> {
 
 
                     },
-                  ):Image.asset("assets/no_data.png");
+                  ):Center(child: Image.asset("assets/no_data.png"));
                 }
             }
           },
