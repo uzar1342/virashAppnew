@@ -9,8 +9,10 @@ import 'package:toggle_switch/toggle_switch.dart';
 import 'globals.dart';
 
 class EmpTask extends StatefulWidget {
-   EmpTask({Key? key,required this.emoid}) : super(key: key);
+   EmpTask({Key? key,required this.emoid,required this.status}) : super(key: key);
    String emoid;
+   String status;
+
   @override
   State<EmpTask> createState() => _EmpTaskState();
 }
@@ -38,11 +40,7 @@ class checkid  {
 
 
 class _EmpTaskState extends State<EmpTask> {
-
-
-
-  int check=0;
-
+  late int check;
   updatetask(taskid) async {
     print(userId);
     var id=[];
@@ -68,6 +66,7 @@ class _EmpTaskState extends State<EmpTask> {
 
   bool isLoading=true;
   fetchemployetask() async {
+    check=0;
     print(widget.emoid);
     Dio dio=Dio();
     var formData = FormData.fromMap({
@@ -84,7 +83,7 @@ class _EmpTaskState extends State<EmpTask> {
         int len=int.parse(response.data["data"].length.toString());
         for(int i=0;i<len;i++)
         {
-          if (response.data["data"][i]["status"] == "Pending") {check++;}
+          if (response.data["data"][i]["status"] == widget.status) {check++;}
         }
       }
 
@@ -102,6 +101,7 @@ class _EmpTaskState extends State<EmpTask> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,24 +115,20 @@ class _EmpTaskState extends State<EmpTask> {
                 if (snapshot.hasError) {
                   return SafeArea(child:Text('Error: ${snapshot.error}'));
                 } else {
+                  print("object");
                   var w=MediaQuery.of(context).size.width;
                   var h=MediaQuery.of(context).size.height;
                   Color primaryColor = const Color(0xff1f7396);
-                  return   check>0?ListView.builder(
+                  return
+                    snapshot.data["data"]!=null&&check>0?ListView.builder(
                     itemCount: snapshot.data["data"].length,
                     itemBuilder: (context, position) {
                       return
-                        snapshot.data["data"][position]["status"]=="Pending"? InkWell(
+                        snapshot.data["data"][position]["status"]==widget.status?
+                        InkWell(
                         onTap:()=>{
-                          // Navigator.push(context, MaterialPageRoute(builder: (c)=>
-                          //
-                          // // FitnessAppHomeScreen())
-                          // TaskNav(id: snapshot.data["data"][position]["emp_id"].toString(),))
-                          // )
-                        },
+                           },
                         child:
-
-
                         Container(
                           width: w,
                           margin: const EdgeInsets.all(5.0),
@@ -335,8 +331,8 @@ class _EmpTaskState extends State<EmpTask> {
                                   ],
                                 ),
 
-                                Divider(),
-                                Row(
+                                widget.status=="Pending"?Divider():Container(),
+                                widget.status=="Pending"?Row(
                                   mainAxisAlignment:
                                   MainAxisAlignment.end,
                                   children: [
@@ -402,7 +398,7 @@ class _EmpTaskState extends State<EmpTask> {
                                       ),
                                     ),
                                   ],
-                                )
+                                ):Container()
                               ],
                             ),
 
@@ -429,12 +425,9 @@ class _EmpTaskState extends State<EmpTask> {
 
 
                       ):
-                      Container();
-
-
+                        Container();
                     },
-                  ):Center(child: Image.asset("assets/no_data.png"));
-                }
+                  ):Center(child: Image.asset("assets/no_data.png"));}
             }
           },
         )

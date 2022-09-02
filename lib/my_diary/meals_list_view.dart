@@ -157,7 +157,7 @@ class MealsView extends StatelessWidget {
                                        (context) =>
 
                                        employee_role=="Employee"?
-                                            EmpTask(emoid: userId):viewemp()
+                                            EmpTask(emoid: userId, status: '',):viewemp()
                                    )
                                )
                              }

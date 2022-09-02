@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'Tasktest.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'bottom_navigation_view/tasknav.dart';
+import 'completetask.dart';
 import 'emptask.dart';
 import 'virash_app_theme.dart';
 import 'globals.dart';
@@ -27,6 +28,7 @@ class _TaskNavState extends State<TaskNav>
   Widget tabBody = Container(
     color: VirashAppTheme.background,
   );
+
 
   @override
   void initState() {
@@ -91,6 +93,7 @@ class _TaskNavState extends State<TaskNav>
     );
   }
 
+
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 200));
     return true;
@@ -105,7 +108,7 @@ class _TaskNavState extends State<TaskNav>
         });
       },
       changeIndex: (int index) {
-        if (index == 0 || index == 2) {
+        if (index == 0 ) {
           animationController?.reverse().then<dynamic>((data) {
             if (!mounted) {
               return;
@@ -122,7 +125,18 @@ class _TaskNavState extends State<TaskNav>
             }
             setState(() {
               tabBody =
-                  EmpTask(emoid: widget.id);
+                  EmpTask(emoid: widget.id, status: 'Pending',);
+            });
+          });
+        }else if (index == 2 ){
+          animationController?.reverse().then<dynamic>((data) {
+            if (!mounted) {
+              return;
+            }
+            setState(() {
+              tabBody =
+                  EmpTask(emoid: widget.id, status: 'Rejected',);
+                  //CompTask(emoid: widget.id);
             });
           });
         }
