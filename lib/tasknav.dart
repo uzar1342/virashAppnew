@@ -24,7 +24,7 @@ class _TaskNavState extends State<TaskNav>
     with TickerProviderStateMixin {
   AnimationController? animationController;
 
-  List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+  List<TabIconData> tabIconsList = TabIconData.tasktabIconsList;
   Widget tabBody = Container(
     color: VirashAppTheme.background,
   );

@@ -3,6 +3,8 @@ import 'package:dio/dio.dart'as di;
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
+import 'package:dio/src/form_data.dart' as f;
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -17,6 +19,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isLoading = false;
   bool net = false;
+
+
 
   checkinternet() async {
     bool result = await InternetConnectionChecker().hasConnection;
@@ -214,6 +218,40 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+
+  acess()
+  async {
+    Dio dio=Dio();
+    var formData = f.FormData.fromMap({
+      'emp_id': userId,
+    });
+    final url = Uri.parse('http://training.virash.in/check_access');
+    var response = await dio.post(url.toString(), data: formData);
+    if(response.statusCode==200)
+    {
+      String jsonsDataString = response.data.toString();
+      List as=jsonsDataString.split(",");
+      String sucess=response.data["success"];
+      print(sucess);
+      if(sucess.trim()=="1")
+      {
+        attendence=response.data["attendance_flag"].toString().trim();
+        print(attendence);
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder:
+                (context) =>
+                VirashAppHomeScreen()
+            )
+        );
+      }
+      else
+      {
+        Fluttertoast.showToast(msg: "Acess Dineid");
+      }
+
+    }
+  }
+
   Future<void> login(String Email, String pass) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Dio dio=Dio();
@@ -241,12 +279,9 @@ class _HomePageState extends State<HomePage> {
             employee_name=prefs.getString(Username) ?? "";
             userId = prefs.getString(userIdKey) ?? '';
 
-           Navigator.pushReplacement(context,
-               MaterialPageRoute(builder:
-                   (context) =>
-                   VirashAppHomeScreen()
-               )
-           );
+
+            acess();
+
           }
         else{
           setState(() {

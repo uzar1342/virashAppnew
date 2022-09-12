@@ -43,7 +43,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   Future<bool> _onWillPop() async {
     return (await showDialog(
       context: context,
-      builder: (context) => new AlertDialog(
+      builder: (context) => AlertDialog(
         title: new Text('Are you sure?'),
         content: new Text('Do you want to exit an Attendence'),
         actions: <Widget>[
