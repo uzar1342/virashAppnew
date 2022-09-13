@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:Virash/shared_prefs_keys.dart';
 import 'package:camera/camera.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -40,15 +41,30 @@ class MyHomePage extends StatefulWidget {
 }
 class _MyHomePageState extends State<MyHomePage> {
   bool isUserLoggedIn = false;
-checkinternet() async {
-  bool result = await InternetConnectionChecker().hasConnection;
-  if (result == true) {
-    getUserLogginStatus();
-    timer();
-  } else {
-    Fluttertoast.showToast(msg: "No Internet");
+  bool net = false;
+  var subscription;
+  checkinternet() async {
+
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        setState(() {
+          setState(() {
+
+            net = false;
+
+          });
+        });
+      } else {
+        setState(() {
+          net = true;
+          getUserLogginStatus();
+          timer();
+        });
+      }
+    });
   }
-}
   getUserLogginStatus() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -66,17 +82,43 @@ checkinternet() async {
   }
   @override
   void initState() {
-
     checkinternet();
     super.initState();
-
-
+  }
+  @override
+  void dispose() {
+    subscription.cancel;
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
     return Container(
         color: Colors.white,
-        child:Image.asset("assets/logo-withoutBG.png")
+        child:net?Image.asset("assets/logo-withoutBG.png"):SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/no_internet.png",
+                  height: 300,
+                  width: 300,
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14.0),
+                  child: Text(
+                    "Looks like you got disconnected, Please check your Internet connection",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            ))
     );
   }
 

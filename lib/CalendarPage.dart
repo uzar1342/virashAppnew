@@ -1,4 +1,5 @@
 import 'package:Virash/viewimage.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -11,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'globals.dart';
 import 'googlemap.dart';
+import 'no_internet_page.dart';
 
 
 class CalendarPage extends StatefulWidget {
@@ -28,18 +30,25 @@ class _CalendarPageState extends State<CalendarPage> {
   late int month;
   final DateFormat formatter = DateFormat('dd-MM-yyy');
   bool isLoading = true;
-
-  bool net = false;
-
+  var subscription;
+  bool net = true;
   checkinternet() async {
 
-    bool result = await InternetConnectionChecker().hasConnection;
-    if (result == true) {
-      net=true;
-    } else {
-      net=false;
-      Fluttertoast.showToast(msg: "No Internet");
-    }
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        setState(() {
+          setState(() {
+            net = false;
+          });
+        });
+      } else {
+        setState(() {
+          net = true;
+        });
+      }
+    });
   }
 
   List<dynamic> calevents = [];
@@ -63,6 +72,8 @@ class _CalendarPageState extends State<CalendarPage> {
     final formatted = formatter.format(day);
     return events[formatted] ?? [];
   }
+
+
 
   @override
   void initState() {
@@ -89,7 +100,7 @@ class _CalendarPageState extends State<CalendarPage> {
       "emp_id":  userId
     });
     print(formData.fields);
-      var response = await dio.post('http://training.virash.in/allEmployeesAttendanceDetails', data: formData);
+    var response = await dio.post('http://training.virash.in/allEmployeesAttendanceDetails', data: formData);
     if(response.statusCode==200)
     {
       print(response.data);
@@ -103,13 +114,20 @@ class _CalendarPageState extends State<CalendarPage> {
 
   }
 
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Color primaryColor = const Color(0xff1f7396);
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: SafeArea(
+      body: net?SafeArea(
           child: Column(
             children: [
               Container(
@@ -542,6 +560,30 @@ class _CalendarPageState extends State<CalendarPage> {
                       )  ),
                     ],
                   )),
+            ],
+          )):SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/no_internet.png",
+                height: 300,
+                width: 300,
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 14.0),
+                child: Text(
+                  "Looks like you got disconnected, Please check your Internet connection",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: primaryColor,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              )
             ],
           )),
     );

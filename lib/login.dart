@@ -264,7 +264,6 @@ class _HomePageState extends State<HomePage> {
     if(response.statusCode==200)
       {
         print(response.data["data"]["employee_id"]);
-        String jsonsDataString = response.data.toString();
         if(response.data["success"].trim()=="1")
           {
             setState(() {

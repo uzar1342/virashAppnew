@@ -1,4 +1,5 @@
 import 'package:Virash/training/training_screen.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'bottom_navigation_view/tasknav.dart';
@@ -16,14 +17,37 @@ class VirashAppHomeScreen extends StatefulWidget {
 class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
     with TickerProviderStateMixin {
   AnimationController? animationController;
+  bool net = true;
+  var subscription;
+  checkinternet() async {
 
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        setState(() {
+          setState(() {
+
+            net = false;
+
+          });
+        });
+      } else {
+        setState(() {
+          net = true;
+        });
+      }
+    });
+  }
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   Widget tabBody = Container(
     color: VirashAppTheme.background,
   );
 
   @override
-  void initState() {
+  void initState()
+  {
+    checkinternet();
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
     });
@@ -65,12 +89,36 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
             if (!snapshot.hasData) {
               return const SizedBox();
             } else {
-              return Stack(
+              return net?Stack(
                 children: <Widget>[
                   tabBody,
                   bottomBar(),
                 ],
-              );
+              ):SafeArea(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "assets/no_internet.png",
+                        height: 300,
+                        width: 300,
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 14.0),
+                        child: Text(
+                          "Looks like you got disconnected, Please check your Internet connection",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: primaryColor,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      )
+                    ],
+                  ));
             }
           },
         ),
