@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import '../../main.dart';
 import '../CalendarPage.dart';
 import '../ViewEmploye.dart';
+import '../empnav.dart';
 import '../emptask.dart';
 import '../globals.dart';
 import '../virash_app_theme.dart';
 import '../models/meals_list_data.dart';
-import '../taskadd.dart';
-
 class MealsListView extends StatefulWidget {
   const MealsListView(
       {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
@@ -155,9 +154,10 @@ class MealsView extends StatelessWidget {
                                Navigator.push(context,
                                    MaterialPageRoute(builder:
                                        (context) =>
-
                                        employee_role=="Employee"?
-                                            EmpTask(emoid: userId, status: '',):viewemp()
+                                           // EmpTask(emoid: userId, status: '',)
+                                       EmpTaskNav(id: userId,)
+                                           :viewemp()
                                    )
                                )
                              }

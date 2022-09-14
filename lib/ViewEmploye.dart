@@ -52,7 +52,7 @@ print(formData.fields);
         future: fetchemployelist(), // async work
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           switch (snapshot.connectionState) {
-            case ConnectionState.waiting: return const Center(child: Text('Loading....'));
+            case ConnectionState.waiting: return const Center(child: CircularProgressIndicator());
             default:
               if (snapshot.hasError) {
                 return SafeArea(child:Text('Error: ${snapshot.error}'));

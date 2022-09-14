@@ -1,27 +1,20 @@
-import 'package:Virash/training/training_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'taskAdd.dart';
-import 'approved_task.dart';
-import 'bottom_navigation_view/bottom_bar_view.dart';
-import 'bottom_navigation_view/tasknav.dart';
-import 'completetask.dart';
+import 'empolbottombar.dart';
 import 'emptask.dart';
 import 'virash_app_theme.dart';
 import 'globals.dart';
 import 'models/tabIcon_data.dart';
-import 'my_diary/homescreen.dart';
 
-class TaskNav extends StatefulWidget {
-  TaskNav({Key? key,required this.id}) : super(key: key);
+class EmpTaskNav extends StatefulWidget {
+  EmpTaskNav({Key? key,required this.id}) : super(key: key);
   bool isLoading = false;
   String id;
   @override
-  _TaskNavState createState() => _TaskNavState();
+  _EmpTaskNavState createState() => _EmpTaskNavState();
 }
 
-class _TaskNavState extends State<TaskNav>
+class _EmpTaskNavState extends State<EmpTaskNav>
     with TickerProviderStateMixin {
   AnimationController? animationController;
 
@@ -48,7 +41,7 @@ class _TaskNavState extends State<TaskNav>
   }
 
 
-  List<TabIconData> tabIconsList = TabIconData.tasktabIconsList;
+  List<TabIconData> tabIconsList = TabIconData.emptabIconsList;
   Widget tabBody = Container(
     color: VirashAppTheme.background,
   );
@@ -63,7 +56,7 @@ class _TaskNavState extends State<TaskNav>
     tabIconsList[0].isSelected = true;
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = Taskadd(empid: widget.id,);
+    tabBody = EmpTask(emoid: widget.id, status: 'Pending',);
     super.initState();
   }
 
@@ -76,7 +69,7 @@ class _TaskNavState extends State<TaskNav>
 
   @override
   Widget build(BuildContext context) {
-  var  h=MediaQuery.of(context).size.height;
+    var  h=MediaQuery.of(context).size.height;
     return Container(
       color: VirashAppTheme.background,
       child: net?Scaffold(
@@ -105,7 +98,7 @@ class _TaskNavState extends State<TaskNav>
 
                   children: [
                     Container(
-                      height: h*0.9,
+                        height: h*0.9,
                         child: tabBody),
                     Container(
                         height: h*0.1,
@@ -152,7 +145,7 @@ class _TaskNavState extends State<TaskNav>
   }
 
   Widget bottomBar() {
-    return TaskBottomBarView(
+    return EmpBottomBarView(
       tabIconsList: tabIconsList,
       addClick: () {
         setState(() {
@@ -160,17 +153,7 @@ class _TaskNavState extends State<TaskNav>
         });
       },
       changeIndex: (int index) {
-        if (index == 0 ) {
-          animationController?.reverse().then<dynamic>((data) {
-            if (!mounted) {
-              return;
-            }
-            setState(() {
-              tabBody =
-                  Taskadd(empid: widget.id);
-            });
-          });
-        } else if (index == 1 ) {
+       if (index == 0 ) {
           animationController?.reverse().then<dynamic>((data) {
             if (!mounted) {
               return;
@@ -180,6 +163,18 @@ class _TaskNavState extends State<TaskNav>
                   EmpTask(emoid: widget.id, status: 'Pending',);
             });
           });
+        }else if (index == 1 ){
+          animationController?.reverse().then<dynamic>((data) {
+            if (!mounted) {
+              return;
+            }
+            setState(() {
+              tabBody =
+                 // ApprovedTask(emoid: widget.id,);
+               EmpTask(emoid: widget.id, status: 'complete',);
+              // CompTask(emoid: widget.id);
+            });
+          });
         }else if (index == 2 ){
           animationController?.reverse().then<dynamic>((data) {
             if (!mounted) {
@@ -187,20 +182,8 @@ class _TaskNavState extends State<TaskNav>
             }
             setState(() {
               tabBody =
-                  ApprovedTask(emoid: widget.id,);
-              // EmpTask(emoid: widget.id, status: 'complete',);
-                 // CompTask(emoid: widget.id);
-            });
-          });
-        }else if (index == 3 ){
-          animationController?.reverse().then<dynamic>((data) {
-            if (!mounted) {
-              return;
-            }
-            setState(() {
-              tabBody =
                   EmpTask(emoid: widget.id, status: 'Rejected',);
-                  //CompTask(emoid: widget.id);
+              //CompTask(emoid: widget.id);
             });
           });
         }

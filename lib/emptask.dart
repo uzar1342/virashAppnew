@@ -105,7 +105,7 @@ class _EmpTaskState extends State<EmpTask> {
           future: fetchemployetask(), // async work
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             switch (snapshot.connectionState) {
-              case ConnectionState.waiting: return Center(child: Text('Loading....'));
+              case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
               default:
                 if (snapshot.hasError) {
                   return SafeArea(child:Text('Error: ${snapshot.error}'));

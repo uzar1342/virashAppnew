@@ -7,12 +7,14 @@ class TabIconData {
     this.selectedImagePath = '',
     this.isSelected = false,
     this.animationController,
+    this.lable=""
   });
 
   String imagePath;
   String selectedImagePath;
   bool isSelected;
   int index;
+  String lable;
 
   AnimationController? animationController;
 
@@ -22,12 +24,14 @@ class TabIconData {
       selectedImagePath: 'assets/fitness_app/tab_1s.png',
       index: 0,
       isSelected: true,
+      lable: "Home",
       animationController: null,
     ),
     TabIconData(
       imagePath: 'assets/fitness_app/tab_2.png',
       selectedImagePath: 'assets/fitness_app/tab_2s.png',
       index: 1,
+      lable: "",
       isSelected: false,
       animationController: null,
     ),
@@ -35,6 +39,7 @@ class TabIconData {
       imagePath: 'assets/fitness_app/tab_3.png',
       selectedImagePath: 'assets/fitness_app/tab_3s.png',
       index: 2,
+      lable: "",
       isSelected: false,
       animationController: null,
     ),
@@ -42,6 +47,7 @@ class TabIconData {
       imagePath: 'assets/fitness_app/tab_4.png',
       selectedImagePath: 'assets/fitness_app/tab_4s.png',
       index: 3,
+      lable: "",
       isSelected: false,
       animationController: null,
     ),
@@ -51,6 +57,7 @@ class TabIconData {
       imagePath: 'assets/plus.png',
       selectedImagePath: 'assets/plus.png',
       index: 0,
+      lable: "Add Task",
       isSelected: true,
       animationController: null,
     ),
@@ -58,6 +65,7 @@ class TabIconData {
       imagePath: 'assets/file.png',
       selectedImagePath: 'assets/file.png',
       index: 1,
+      lable: "pending",
       isSelected: false,
       animationController: null,
     ),
@@ -65,19 +73,54 @@ class TabIconData {
       imagePath: 'assets/completed-task.png',
       selectedImagePath: 'assets/completed-task.png',
       index: 2,
+      lable: "completed",
       isSelected: false,
       animationController: null,
     ),
     TabIconData(
-      imagePath: 'assets/fitness_app/tab_4.png',
-      selectedImagePath: 'assets/fitness_app/tab_4s.png',
+      imagePath: 'assets/say_no.png',
+      selectedImagePath: 'assets/say_no.png',
       index: 3,
+      lable: "rejected",
       isSelected: false,
       animationController: null,
     ),TabIconData(
       imagePath: 'assets/fitness_app/tab_4.png',
       selectedImagePath: 'assets/fitness_app/tab_4s.png',
       index: 4,
+      isSelected: false,
+      animationController: null,
+    ),
+  ];
+  static List<TabIconData> emptabIconsList = <TabIconData>[
+    TabIconData(
+      imagePath: 'assets/file.png',
+      selectedImagePath: 'assets/file.png',
+      index: 1,
+      lable: "pending",
+      isSelected: false,
+      animationController: null,
+    ),
+    TabIconData(
+      imagePath: 'assets/completed-task.png',
+      selectedImagePath: 'assets/completed-task.png',
+      index: 2,
+      lable: "completed",
+      isSelected: false,
+      animationController: null,
+    ),
+    TabIconData(
+      imagePath: 'assets/say_no.png',
+      selectedImagePath: 'assets/say_no.png',
+      index: 3,
+      lable: "rejected",
+      isSelected: false,
+      animationController: null,
+    ),TabIconData(
+      imagePath: 'assets/fitness_app/tab_4.png',
+      selectedImagePath: 'assets/fitness_app/tab_4s.png',
+      index: 4,
+      lable: "Na",
       isSelected: false,
       animationController: null,
     ),

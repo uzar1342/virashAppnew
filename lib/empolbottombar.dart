@@ -17,8 +17,8 @@ import '../mark_attendence.dart';
 import '../models/tabIcon_data.dart';
 import '../shared_prefs_keys.dart';
 
-class TaskBottomBarView extends StatefulWidget {
-  const TaskBottomBarView(
+class EmpBottomBarView extends StatefulWidget {
+  const EmpBottomBarView(
       {Key? key, this.tabIconsList, this.changeIndex, this.addClick})
       : super(key: key);
 
@@ -27,10 +27,10 @@ class TaskBottomBarView extends StatefulWidget {
   final List<TabIconData>? tabIconsList;
 
   @override
-  _TaskBottomBarViewState createState() => _TaskBottomBarViewState();
+  _EmpBottomBarViewState createState() => _EmpBottomBarViewState();
 }
 
-class _TaskBottomBarViewState extends State<TaskBottomBarView>
+class _EmpBottomBarViewState extends State<EmpBottomBarView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
   bool isLoading = false;
@@ -130,15 +130,6 @@ class _TaskBottomBarViewState extends State<TaskBottomBarView>
                                   setRemoveAllSelection(
                                       widget.tabIconsList?[2]);
                                   widget.changeIndex!(2);
-                                }),
-                          ),
-                          Expanded(
-                            child: TabIcons(
-                                tabIconData: widget.tabIconsList?[3],
-                                removeAllSelect: () {
-                                  setRemoveAllSelection(
-                                      widget.tabIconsList?[3]);
-                                  widget.changeIndex!(3);
                                 }),
                           ),
                         ],

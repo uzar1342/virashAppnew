@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +6,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'globals.dart';
 
 
-class testTaskadd extends StatefulWidget {
-   testTaskadd({Key? key,required this.empid}) : super(key: key);
-String empid;
+class Taskadd extends StatefulWidget {
+   Taskadd({Key? key,required this.empid}) : super(key: key);
+    String empid;
   @override
-  State<testTaskadd> createState() => _testTaskaddState();
+  State<Taskadd> createState() => _TaskaddState();
 }
 
-class _testTaskaddState extends State<testTaskadd> {
+class _TaskaddState extends State<Taskadd> {
   @override
   Widget build(BuildContext context) {
     return MyHomePage(title: 'Add Task', empid: widget.empid,);
@@ -103,6 +101,7 @@ class _PrioretyState extends State<Priorety> {
   void initState() {
     super.initState();
     _value= widget.cartItem.itemName!=""?widget.cartItem.itemName:"low";
+    widget.cartItem.itemName="low";
   }
 
   @override
@@ -234,6 +233,8 @@ class _CartWidgetState extends State<CartWidget> {
 class _MyHomePageState extends State<MyHomePage> {
   List<CartItem> cart = [];
 
+  bool loder= false;
+
   void refresh() {
     setState(() {});
   }
@@ -242,15 +243,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Sendtask(task) async {
     print(task);
+
+    setState(() {
+     loder=true;
+    });
+
     Dio dio=Dio();
     var response = await dio.post('http://training.virash.in/provide_task', data: task);
     if (response.statusCode == 200) {
+      setState(() {
+        loder=false;
+      });
       print(response.data.length);
       Fluttertoast.showToast(msg: "Sucessfull Send");
-    } else {
-      Fluttertoast.showToast(msg: "Unable to fetch bank list");
+    }
+    else {
       setState(() {
+        loder=false;
       });
+      Fluttertoast.showToast(msg: "Unable to fetch bank list");
     }
   }
 
@@ -260,8 +271,33 @@ class _MyHomePageState extends State<MyHomePage> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            onPressed: () {
+              cart.add(CartItem(
+                  productType: "",
+                  itemName: "",
+                  flavor: ""));
+              setState(() {
+              });
+            },
+            icon: const Icon(Icons.add),
+          ),
+          IconButton(
+            onPressed: () {
+
+
+    var data=[];
+    cart.forEach((element) {
+    var item={"task":element.itemName,"priority":element.flavor};
+    data.add(item);
+    });
+    Sendtask({"emp_id":userId,"assigned_to":widget.empid,"tasks":data});
+    },icon: const Icon(Icons.send),
+          )
+        ],
       ),
-      body: Column(
+      body: !loder?Column(
         children: <Widget>[
           Expanded(
             child: ListView.builder(
@@ -274,50 +310,50 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 }),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  cart.add(CartItem(
-                      productType: "",
-                      itemName: "",
-                      flavor: ""));
-                  setState(() {
-                  });
-                },
-                child: Text("Add Task"),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: FloatingActionButton(
-                    onPressed: () {
-                     var data=[];
-                      cart.forEach((element) {
-                        var item={"task":element.itemName,"priority":element.flavor};
-                        data.add(item);
-                      });
-                      Sendtask({"emp_id":userId,"assigned_to":widget.empid,"tasks":data});
-                    },
-                    backgroundColor: Colors.green,
-                    child: const Icon(Icons.navigation),
-                  ),
-                ),
-              ),
-              // RaisedButton(
-              //   onPressed: () {
-              //     for (int i = 0; i < cart.length; i++) {
-              //       print(cart[i].itemName);
-              //     }
-              //   },
-              //   child: Text("Print Pizza"),
-              // ),
-            ],
-          )
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //   children: [
+          //     ElevatedButton(
+          //       onPressed: () {
+          //         cart.add(CartItem(
+          //             productType: "",
+          //             itemName: "",
+          //             flavor: ""));
+          //         setState(() {
+          //         });
+          //       },
+          //       child: Text("Add Task"),
+          //     ),
+          //     Padding(
+          //       padding: const EdgeInsets.all(8.0),
+          //       child: Align(
+          //         alignment: Alignment.centerRight,
+          //         child: FloatingActionButton(
+          //           onPressed: () {
+          //            var data=[];
+          //             cart.forEach((element) {
+          //               var item={"task":element.itemName,"priority":element.flavor};
+          //               data.add(item);
+          //             });
+          //             Sendtask({"emp_id":userId,"assigned_to":widget.empid,"tasks":data});
+          //           },
+          //           backgroundColor: Colors.green,
+          //           child: const Icon(Icons.navigation),
+          //         ),
+          //       ),
+          //     ),
+          //     // RaisedButton(
+          //     //   onPressed: () {
+          //     //     for (int i = 0; i < cart.length; i++) {
+          //     //       print(cart[i].itemName);
+          //     //     }
+          //     //   },
+          //     //   child: Text("Print Pizza"),
+          //     // ),
+          //   ],
+          // )
         ],
-      ),
+      ):Center(child: CircularProgressIndicator(),),
     );
   }
 }

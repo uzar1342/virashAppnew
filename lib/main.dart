@@ -1,17 +1,14 @@
 import 'dart:async';
 import 'package:Virash/shared_prefs_keys.dart';
-import 'package:camera/camera.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'virash_app_home_screen.dart';
 import 'globals.dart';
 import 'login.dart';
-import 'mark_attendence.dart';
 void main() {
   runApp( MyApp());
 }

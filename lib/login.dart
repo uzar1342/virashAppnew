@@ -1,4 +1,5 @@
 import 'package:Virash/shared_prefs_keys.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart'as di;
 import 'package:dio/dio.dart';
 
@@ -18,18 +19,26 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isLoading = false;
-  bool net = false;
-
-
-
+  bool net = true;
+  var subscription;
   checkinternet() async {
-    bool result = await InternetConnectionChecker().hasConnection;
-    if (result == true) {
-      net=true;
-    } else {
-      net=false;
-      Fluttertoast.showToast(msg: "No Internet");
-    }
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        setState(() {
+          setState(() {
+
+            net = false;
+
+          });
+        });
+      } else {
+        setState(() {
+          net = true;
+        });
+      }
+    });
   }
 @override
   void initState() {
@@ -44,7 +53,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(
+        body: net?SingleChildScrollView(
           child: Container(
             child: Column(
               children: <Widget>[
@@ -214,7 +223,31 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-        )
+        ):SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/no_internet.png",
+                  height: 300,
+                  width: 300,
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14.0),
+                  child: Text(
+                    "Looks like you got disconnected, Please check your Internet connection",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            ))
     );
   }
 
