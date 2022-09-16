@@ -289,7 +289,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     var data=[];
     cart.forEach((element) {
-    var item={"task":element.itemName,"priority":element.flavor};
+    var item={"task":element.flavor,"priority":element.itemName};
     data.add(item);
     });
     Sendtask({"emp_id":userId,"assigned_to":widget.empid,"tasks":data});

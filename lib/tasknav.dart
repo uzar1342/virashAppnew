@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'taskAdd.dart';
 import 'approved_task.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
-import 'bottom_navigation_view/tasknav.dart';
+import 'bottom_navigation_view/TaskBottomBarView.dart';
 import 'completetask.dart';
 import 'emptask.dart';
 import 'virash_app_theme.dart';
@@ -91,7 +91,7 @@ class _TaskNavState extends State<TaskNav>
               SizedBox(
                 height: 10.0,
               ),
-              Text("Loading...")
+              CircularProgressIndicator()
             ],
           ),
         ):FutureBuilder<bool>(

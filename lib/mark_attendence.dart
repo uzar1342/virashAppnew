@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'dart:io';
 import 'package:Virash/shared_prefs_keys.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -36,7 +37,8 @@ class TakePictureScreen extends StatefulWidget {
 class TakePictureScreenState extends State<TakePictureScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
-  bool net = false;
+  bool net = true;
+  bool loader =true;
   late String Address;
     XFile? image=null;
   late Image camerraImage;
@@ -65,7 +67,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     print(placemarks);
     Placemark place = placemarks[0];
      Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-
   }
 
   @override
@@ -90,17 +91,25 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     _controller.dispose();
     super.dispose();
   }
-
-
-
+  var subscription;
   checkinternet() async {
-    bool result = await InternetConnectionChecker().hasConnection;
-    if (result == true) {
-      net=true;
-    } else {
-      net=false;
-      Fluttertoast.showToast(msg: "No Internet");
-    }
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        setState(() {
+          setState(() {
+
+            net = false;
+
+          });
+        });
+      } else {
+        setState(() {
+          net = true;
+        });
+      }
+    });
   }
 
   @override
@@ -109,144 +118,175 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(title:  Text(widget.title.toString())),
-        body: Column(
-          children: [
-            Expanded(
-              flex: 6,
-              child: widget.camraloader?
-              FutureBuilder<void>(
-                future: _initializeControllerFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    // If the Future is complete, display the preview.
-                    return CameraPreview(_controller);
-                  } else {
-                    // Otherwise, display a loading indicator.
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                },
-              ): Image.file(File(image!.path)),
-            ),
-            SizedBox(height: 20),
-             Expanded(
-              flex: 1,
-                child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize:const mi.Size(double.infinity, 80),
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                            primary: Colors.green,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6),
+        body: net?Container(
+          child: loader?Column(
+            children: [
+              Expanded(
+                flex: 6,
+                child: widget.camraloader?
+                FutureBuilder<void>(
+                  future: _initializeControllerFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      // If the Future is complete, display the preview.
+                      return CameraPreview(_controller);
+                    } else {
+                      // Otherwise, display a loading indicator.
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ): Image.file(File(image!.path)),
+              ),
+              SizedBox(height: 20),
+               Expanded(
+                flex: 1,
+                  child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize:const mi.Size(double.infinity, 80),
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                              primary: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
                             ),
-                          ),
-                          onPressed: () async {
-                            try {
-                              // Ensure that the camera is initialized.
-                              await _initializeControllerFuture;
-                              // Attempt to take a picture and get the file `image`
-                              // where it was saved.
-                              image = await _controller.takePicture();
+                            onPressed: () async {
+                              try {
+                                // Ensure that the camera is initialized.
+                                await _initializeControllerFuture;
+                                // Attempt to take a picture and get the file `image`
+                                // where it was saved.
+                                image = await _controller.takePicture();
 
-                              if (!mounted) return;
-                              // If the picture was taken, display it on a new screen.
+                                if (!mounted) return;
+                                // If the picture was taken, display it on a new screen.
 
-                            setState(() {
-                              widget.camraloader=false;
-                            });
+                              setState(() {
+                                widget.camraloader=false;
+                              });
 
-                              if(attendence.trim()=="True")
-                              {
-                                return showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title:  const Text('Are you sure?'),
-                                    content:  const Text('Do you want Logout'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () =>
-                                        {
-                                        setState(() {
-                                        widget.camraloader=true;
-                                        }),
-
-                                          Navigator.of(context).pop(false)},
-                                        child:  const Text('No'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () =>
-                                            {
-                                              if(net)
-                                                {
-                                                  Logout_attendence(image!),
-                                                }
-                                              else
-                                                {
-                                                Fluttertoast.showToast(msg: "No Internet")
-                                                }
-                                            },
-                                            child:  const Text('Yes'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-
-                              }
-                              else
-                              {
-                                return showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text('Are you sure?'),
-                                    content: const Text('Do you want Login'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () =>
-                                        {setState(() {
+                                if(attendence.trim()=="True")
+                                {
+                                  return showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title:  const Text('Are you sure?'),
+                                      content:  const Text('Do you want Logout'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                          {
+                                          setState(() {
                                           widget.camraloader=true;
-                                        }),
-                                          Navigator.of(context).pop(false)},
-                                        child:  const Text('No'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () =>  {
-                              if(net)
-                              {
-                                Login_attendence(image!),
-                              }
-                              else
-                              {
-                              Fluttertoast.showToast(msg: "No Internet")
-                              }
+                                          }),
+                                            Navigator.of(context).pop(false)},
+                                          child:  const Text('No'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              {
+                                                if(net)
+                                                  {
+                                                  Navigator.of(context).pop(false),
+                                                    Logout_attendence(image!),
+                                                  }
+                                                else
+                                                  {
+                                                  Navigator.of(context).pop(false),
+                                                  Fluttertoast.showToast(msg: "No Internet")
+                                                  }
+                                              },
+                                              child:  const Text('Yes'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
 
-                              },
-                                        child:  const Text('Yes'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
+                                }
+                                else
+                                {
+                                  return showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('Are you sure?'),
+                                      content: const Text('Do you want Login'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                          {setState(() {
+                                            widget.camraloader=true;
+                                          }),
+                                            Navigator.of(context).pop(false)},
+                                          child:  const Text('No'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>  {
+                                Navigator.of(context).pop(false),
+                                if(net)
+                                {
+                                  Login_attendence(image!),
+                                }
+                                else
+                                {
+                                Fluttertoast.showToast(msg: "No Internet")
+                                }
 
-                            } catch (e) {
-                              // If an error occurs, log the error to the console.
-                              print(e);
+                                },
+                                          child:  const Text('Yes'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+
+                              } catch (e) {
+                                // If an error occurs, log the error to the console.
+                                print(e);
+                              }
                             }
-                          }
-                          , child: Text(widget.title,style: const TextStyle(fontSize: 25),)),
-                    )))
+                            , child: Text(widget.title,style: const TextStyle(fontSize: 25),)),
+                      )))
 
-          ],
-        ),
+            ],
+          ):Center(child: CircularProgressIndicator()),
+        ):SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/no_internet.png",
+                  height: 300,
+                  width: 300,
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14.0),
+                  child: Text(
+                    "Looks like you got disconnected, Please check your Internet connection",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            )),
 
       ),
     );
   }
   void Login_attendence(XFile imagePath) async {
+    setState(() {
+      loader=false;
+    });
     final url = Uri.parse('http://training.virash.in/emp_attendance');
     var request = MultipartRequest("POST", url);
     request.fields['in_latitude'] = widget.latitude;
@@ -262,12 +302,17 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     response.stream.transform(utf8.decoder).listen((value) {
       if(response.statusCode==200)
       {
-
+        setState(() {
+          loader=true;
+        });
         attendence="True";
         Get.offAll(() => VirashAppHomeScreen()) ;
       }
       else
       {
+        setState(() {
+          loader=true;
+        });
         Fluttertoast.showToast(msg:value.toString(),toastLength: Toast.LENGTH_LONG);
       }
     }
@@ -275,6 +320,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
   }
   void Logout_attendence(XFile imagePath) async {
+    setState(() {
+      loader=false;
+    });
     TextEditingController remark=new TextEditingController();
     var h=context.height;
     var w=context.width;
@@ -350,6 +398,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                       children: [
                         TextButton(
                           onPressed: () {
+                            setState(() {
+                              loader=true;
+                            });
                             Navigator.pop(context);
                           },
                           child: Text(
@@ -383,11 +434,17 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                               response.stream.transform(utf8.decoder).listen((value) {
                                 if(response.statusCode==200)
                                 {
+                                  setState(() {
+                                    loader=true;
+                                  });
                                   attendence="False";
                                   Get.offAll(() => VirashAppHomeScreen()) ;
                                 }
                                 else
                                 {
+                                  setState(() {
+                                    loader=true;
+                                  });
                                   Fluttertoast.showToast(msg:value.toString(),toastLength: Toast.LENGTH_LONG);
                                 }
                               }

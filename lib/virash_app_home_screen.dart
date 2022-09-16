@@ -2,7 +2,7 @@ import 'package:Virash/training/training_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
-import 'bottom_navigation_view/tasknav.dart';
+import 'bottom_navigation_view/TaskBottomBarView.dart';
 import 'virash_app_theme.dart';
 import 'globals.dart';
 import 'models/tabIcon_data.dart';

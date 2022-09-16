@@ -256,7 +256,6 @@ class _EmpTaskState extends State<EmpTask> {
                                           width: w * 0.01,
                                         ),
                                         Text(
-
                                             snapshot.data["data"][position]["assigned_time"].toString(),
                                             style: const TextStyle(
                                                 color: Colors
@@ -325,13 +324,12 @@ class _EmpTaskState extends State<EmpTask> {
                                                 .black54)),
                                   ],
                                 ),
-
-                                widget.status=="Pending"?Divider():Container(),
-                                widget.status=="Pending"?Row(
+                              Divider(),
+                              Row(
                                   mainAxisAlignment:
                                   MainAxisAlignment.end,
                                   children: [
-                                    Container(
+                                   employee_role=="Employee"?Container(
                                       padding:
                                       EdgeInsets.all(8.0),
                                       child:
@@ -349,10 +347,10 @@ class _EmpTaskState extends State<EmpTask> {
                                                 ),
                                                 TextButton(
                                                   onPressed: () => {
-
+                                                    Navigator.of(context).pop(false),
                                                     updatetask(snapshot.data["data"][position]["task_id"]),
                                                 setState(() {
-                                                            })},
+                                                })},
                                                 child:  const Text('Yes'),
                                                 ),
                                               ],
@@ -373,14 +371,14 @@ class _EmpTaskState extends State<EmpTask> {
                                           ),
                                           child: Row(children: const [
                                             Icon(
-                                              Icons.assignment,
+                                              Icons.check,
                                               color: Colors.white,
                                             ),
                                             SizedBox(
                                               width: 5.0,
                                             ),
                                             Text(
-                                              "View Image",
+                                              "check",
                                               style: TextStyle(
                                                   color: Colors
                                                       .white,
@@ -391,35 +389,16 @@ class _EmpTaskState extends State<EmpTask> {
                                           ]),
                                         ),
                                       ),
-                                    ),
+                                    ):Container(),
                                   ],
-                                ):Container()
+                                )
                               ],
                             ),
 
 
                           ),
                         )
-
-
-
-                        //
-                        // Card(
-                        //   shape:RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(15.0)
-                        //   ),
-                        //   elevation: 5,
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(8.0),
-                        //     child: ListTile(
-                        //       leading: Icon(Icons.person),
-                        //       title: Text(snapshot.data["data"][position]["task"]),
-                        //     ),
-                        //   ),
-                        // ),
-
-
-                      ):
+                        ):
                         Container();
                     },
                   ):Center(child: Image.asset("assets/no_data.png"));}
