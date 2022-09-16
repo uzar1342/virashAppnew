@@ -128,8 +128,8 @@ class _PrioretyState extends State<Priorety> {
                   value: "low",
                 ),
                 DropdownMenuItem(
-                  child: Text("mediam"),
-                  value: "mediam",
+                  child: Text("medium"),
+                  value: "medium",
                 ),
                 DropdownMenuItem(child: Text("high"), value: "high"),
 
@@ -243,7 +243,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Sendtask(task) async {
     print(task);
-
     setState(() {
      loder=true;
     });
@@ -252,6 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var response = await dio.post('http://training.virash.in/provide_task', data: task);
     if (response.statusCode == 200) {
       setState(() {
+        cart.clear();
         loder=false;
       });
       print(response.data.length);
@@ -261,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         loder=false;
       });
-      Fluttertoast.showToast(msg: "Unable to fetch bank list");
+      Fluttertoast.showToast(msg: "Unable to send task");
     }
   }
 

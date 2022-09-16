@@ -100,7 +100,7 @@ class _EmpTaskState extends State<EmpTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title:Text("VIEW EMPLOYE")),
+        appBar: AppBar(title:Text("VIEW EMPLOYEE")),
         body:FutureBuilder<dynamic>(
           future: fetchemployetask(), // async work
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
