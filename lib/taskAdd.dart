@@ -121,6 +121,19 @@ class _PrioretyState extends State<Priorety> {
         child: SizedBox(
           width: double.infinity - 50,
           child: DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue, width: 2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue, width: 2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              filled: true,
+              fillColor: Colors.blueGrey,
+            ),
+            dropdownColor: Colors.blueGrey,
             isExpanded: false,
               items: const [
                 DropdownMenuItem(
@@ -145,19 +158,6 @@ class _PrioretyState extends State<Priorety> {
               "Select Priority",
               style: TextStyle(
                 fontSize: 16,
-              ),
-            ),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.all(12),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              hintText: "Priority",
-              hintStyle: const TextStyle(
-                fontSize: 14,
               ),
             ),
             style: const TextStyle(
@@ -285,14 +285,54 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           IconButton(
             onPressed: () {
+             var count=0;
+              var data=[];
+              cart.forEach((element) {
+                if(element.flavor.trim()!="")
+                  {
+                    var item={"task":element.flavor,"priority":element.itemName};
+                    data.add(item);
+                  }
+                else
+                  {
+                    count++;
+                  }
+
+              });
+              if(count==0)
+                {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: new Text('Are you sure?'),
+                      content: new Text('Do you want ADD Task'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: new Text('No'),
+                        ),
+                        TextButton(
+                          onPressed: () => {
+                            Navigator.of(context).pop(false),
+                            Sendtask({
+                              "emp_id": userId,
+                              "assigned_to": widget.empid,
+                              "tasks": data
+                            })
+                          },
+                          child: new Text('Yes'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              else
+                {
+                  Fluttertoast.showToast(msg: "Fill Task");
+                }
 
 
-    var data=[];
-    cart.forEach((element) {
-    var item={"task":element.flavor,"priority":element.itemName};
-    data.add(item);
-    });
-    Sendtask({"emp_id":userId,"assigned_to":widget.empid,"tasks":data});
+
     },icon: const Icon(Icons.send),
           )
         ],

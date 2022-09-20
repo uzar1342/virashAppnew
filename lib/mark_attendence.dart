@@ -209,7 +209,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                 }
                                 else
                                 {
-                                  return showDialog(
+                                  return
+                                    showDialog(
                                     barrierDismissible: false,
                                     context: context,
                                     builder: (context) => AlertDialog(

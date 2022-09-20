@@ -104,8 +104,6 @@ class _EmpTaskState extends State<EmpTask> {
             });
             return Future<void>.delayed(const Duration(seconds: 3));
           },
-
-
           child: FutureBuilder<dynamic>(
             future: fetchemployetask(), // async work
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -248,7 +246,6 @@ class _EmpTaskState extends State<EmpTask> {
                                                       .black54)),
                                         ],
                                       ),
-
                                       Row(
                                         children: [
                                           Icon(
@@ -334,7 +331,7 @@ class _EmpTaskState extends State<EmpTask> {
                                     mainAxisAlignment:
                                     MainAxisAlignment.end,
                                     children: [
-                                     employee_role=="Employee"?Container(
+                                     employee_role=="Employee & Faculty"?Container(
                                         padding:
                                         EdgeInsets.all(8.0),
                                         child:
@@ -344,7 +341,7 @@ class _EmpTaskState extends State<EmpTask> {
                                               context: context,
                                               builder: (context) => AlertDialog(
                                                 title:  const Text('Are you sure?'),
-                                                content:  const Text('Do you want to exit an Attendence'),
+                                                content:  const Text('Task Completed'),
                                                 actions: <Widget>[
                                                   TextButton(
                                                     onPressed: () => Navigator.of(context).pop(false),

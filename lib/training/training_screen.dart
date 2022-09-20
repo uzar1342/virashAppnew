@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../login.dart';
 import '../virash_app_theme.dart';
 import '../ui_view/area_list_view.dart';
 import '../ui_view/running_view.dart';
@@ -206,15 +208,27 @@ class _TrainingScreenState extends State<TrainingScreen>
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Training',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontFamily: VirashAppTheme.fontName,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 22 + 6 - 6 * topBarOpacity,
-                                    letterSpacing: 1.2,
-                                    color: VirashAppTheme.darkerText,
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                                    prefs.clear();
+                                    Navigator.pushReplacement(context,
+                                        MaterialPageRoute(builder:
+                                            (context) =>
+                                                HomePage()
+                                        )
+                                    );
+                                  },
+                                  child: Text(
+                                    'Training',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontFamily: VirashAppTheme.fontName,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 22 + 6 - 6 * topBarOpacity,
+                                      letterSpacing: 1.2,
+                                      color: VirashAppTheme.darkerText,
+                                    ),
                                   ),
                                 ),
                               ),
