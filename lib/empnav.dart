@@ -84,7 +84,7 @@ class _EmpTaskNavState extends State<EmpTaskNav>
               SizedBox(
                 height: 10.0,
               ),
-              Text("Loading...")
+              CircularProgressIndicator()
             ],
           ),
         ):FutureBuilder<bool>(
