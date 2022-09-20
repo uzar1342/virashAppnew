@@ -24,17 +24,10 @@ class check{ //modal class for Person object
 }
 
 
-class checkid  {
-  List<check> cart;
-  int index;
-  checkid({required this.cart, required this.index});
-  remove()
-  {
-    cart.removeAt(index);
-  }
-}
 
 class _EmpTaskState extends State<EmpTask> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  GlobalKey<RefreshIndicatorState>();
   late int check;
   updatetask(taskid) async {
     print(userId);
@@ -101,309 +94,322 @@ class _EmpTaskState extends State<EmpTask> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title:Text("VIEW EMPLOYEE")),
-        body:FutureBuilder<dynamic>(
-          future: fetchemployetask(), // async work
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
-              default:
-                if (snapshot.hasError) {
-                  return SafeArea(child:Text('Error: ${snapshot.error}'));
-                } else {
-                  print("object");
-                  var w=MediaQuery.of(context).size.width;
-                  var h=MediaQuery.of(context).size.height;
-                  Color primaryColor = const Color(0xff1f7396);
-                  return
-                    snapshot.data["data"]!=null&&check>0?ListView.builder(
-                    itemCount: snapshot.data["data"].length,
-                    itemBuilder: (context, position) {
-                      return
-                        snapshot.data["data"][position]["status"]==widget.status?
-                        InkWell(
-                        onTap:()=>{
-                           },
-                        child:
-                        Container(
-                          width: w,
-                          margin: const EdgeInsets.all(5.0),
-                          child: Card(
-                            elevation: 3.0,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(14.0))),
-                            child:            Column(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .spaceBetween,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment
-                                          .center,
-                                      mainAxisAlignment:
-                                      MainAxisAlignment
-                                          .start,
-                                      children: [
+        body:RefreshIndicator(
+          key: _refreshIndicatorKey,
+          color: Colors.white,
+          backgroundColor: Colors.blue,
+          strokeWidth: 4.0,
+          onRefresh: () async {
+            _refreshIndicatorKey.currentState?.show(); setState(() {
+            });
+            return Future<void>.delayed(const Duration(seconds: 3));
+          },
 
-                                        SizedBox(
-                                          width: w * 0.02,
+
+          child: FutureBuilder<dynamic>(
+            future: fetchemployetask(), // async work
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
+                default:
+                  if (snapshot.hasError) {
+                    return SafeArea(child:Text('Error: ${snapshot.error}'));
+                  } else {
+                    print("object");
+                    var w=MediaQuery.of(context).size.width;
+                    var h=MediaQuery.of(context).size.height;
+                    Color primaryColor = const Color(0xff1f7396);
+                    return
+                      snapshot.data["data"]!=null&&check>0?ListView.builder(
+                      itemCount: snapshot.data["data"].length,
+                      itemBuilder: (context, position) {
+                        return
+                          snapshot.data["data"][position]["status"]==widget.status?
+                          InkWell(
+                          onTap:()=>{
+                             },
+                          child:
+                          Container(
+                            width: w,
+                            margin: const EdgeInsets.all(5.0),
+                            child: Card(
+                              elevation: 3.0,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(14.0))),
+                              child:            Column(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment
+                                        .spaceBetween,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment
+                                            .center,
+                                        mainAxisAlignment:
+                                        MainAxisAlignment
+                                            .start,
+                                        children: [
+
+                                          SizedBox(
+                                            width: w * 0.02,
+                                          ),
+                                          Text(
+                                            snapshot.data["data"][position]["emp_name"].toString(),
+                                            style: const TextStyle(
+                                                color: Colors
+                                                    .black54,
+                                                fontWeight:
+                                                FontWeight
+                                                    .bold,
+                                                fontSize: 16.0),
+                                          )
+                                        ],
+                                      ),
+                                      GestureDetector(
+                                        onTap: (){
+
+
+                                        },
+                                        child: Container(
+                                          padding:
+                                          const EdgeInsets
+                                              .all(5.0),
+                                          height: h * 0.04,
+                                          decoration:
+                                          BoxDecoration(
+                                              color: snapshot.data["data"][position]["priority"]=="high"?
+                                                Colors
+                                                  .red:snapshot.data["data"][position]["priority"]=="medium"?Colors
+                                                  .yellow:Colors
+                                                  .green,
+                                              borderRadius: const BorderRadius
+                                                  .all(Radius
+                                                  .circular(
+                                                  20.0))),
+                                          child: Row(
+                                            children: [
+                                              const FaIcon(
+                                                FontAwesomeIcons
+                                                    .globe,
+                                                color: Colors
+                                                    .white,
+                                                size: 20.0,
+                                              ),
+                                              SizedBox(
+                                                width:
+                                                w * 0.01,
+                                              ),
+                                                Text(
+                                                  snapshot.data["data"][position]["priority"].toString(),
+                                                  style: const TextStyle(
+                                                      color:
+                                                      Colors
+                                                          .white,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold),
+                                                ),
+
+
+                                            ],
+                                          ),
                                         ),
-                                        Text(
-                                          snapshot.data["data"][position]["emp_name"].toString(),
+                                      )
+
+                                    ],
+                                  ),
+                                  const Divider(),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment
+                                        .spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons
+                                                .date_range_sharp,
+                                            color: Colors
+                                                .green.shade200,
+                                          ),
+                                          SizedBox(
+                                            width: w * 0.01,
+                                          ),
+                                          Text(
+
+                                              snapshot.data["data"][position]["assigned_date"],
+                                              style: const TextStyle(
+                                                  color: Colors
+                                                      .black54)),
+                                        ],
+                                      ),
+
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons
+                                                .access_time_filled,
+                                            color: Colors
+                                                .red.shade200,
+                                          ),
+                                          SizedBox(
+                                            width: w * 0.01,
+                                          ),
+                                          Text(
+                                              snapshot.data["data"][position]["assigned_time"].toString(),
+                                              style: const TextStyle(
+                                                  color: Colors
+                                                      .black54)),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  Divider(),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons
+                                            .assignment,
+                                        color: Colors
+                                            .red.shade200,
+                                      ),
+                                      SizedBox(
+                                        width: w * 0.01,
+                                      ),
+                                      Text(
+                                          snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
                                           style: const TextStyle(
                                               color: Colors
-                                                  .black54,
-                                              fontWeight:
-                                              FontWeight
-                                                  .bold,
-                                              fontSize: 16.0),
-                                        )
-                                      ],
-                                    ),
-                                    GestureDetector(
-                                      onTap: (){
-
-
-                                      },
-                                      child: Container(
-                                        padding:
-                                        const EdgeInsets
-                                            .all(5.0),
-                                        height: h * 0.04,
-                                        decoration:
-                                        BoxDecoration(
-                                            color: snapshot.data["data"][position]["priority"]=="high"?
-                                              Colors
-                                                .red:snapshot.data["data"][position]["priority"]=="medium"?Colors
-                                                .yellow:Colors
-                                                .green,
-                                            borderRadius: const BorderRadius
-                                                .all(Radius
-                                                .circular(
-                                                20.0))),
-                                        child: Row(
-                                          children: [
-                                            const FaIcon(
-                                              FontAwesomeIcons
-                                                  .globe,
+                                                  .black54)),
+                                    ],
+                                  ),
+                                  Divider(),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: SizedBox(
+                                            height: 24 ,
+                                            width: 24,
+                                            child: Image.asset("assets/assignment.png",)),
+                                      )
+                                      ,
+                                      SizedBox(
+                                        width: w * 0.01,
+                                      ),
+                                      Text(
+                                          snapshot.data["data"][position]["assigned_by"],
+                                          style: const TextStyle(
                                               color: Colors
-                                                  .white,
-                                              size: 20.0,
+                                                  .black54)),
+                                    ],
+                                  ),
+                                  Divider(),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons
+                                            .pending_actions,
+                                        color: Colors
+                                            .red.shade200,
+                                      )
+                                      ,
+                                      SizedBox(
+                                        width: w * 0.01,
+                                      ),
+                                      Text(
+                                          snapshot.data["data"][position]["status"],
+                                          style: const TextStyle(
+                                              color: Colors
+                                                  .black54)),
+                                    ],
+                                  ),
+                                Divider(),
+                                Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.end,
+                                    children: [
+                                     employee_role=="Employee"?Container(
+                                        padding:
+                                        EdgeInsets.all(8.0),
+                                        child:
+                                        InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                title:  const Text('Are you sure?'),
+                                                content:  const Text('Do you want to exit an Attendence'),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () => Navigator.of(context).pop(false),
+                                                    child:  const Text('No'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () => {
+                                                      Navigator.of(context).pop(false),
+                                                      updatetask(snapshot.data["data"][position]["task_id"]),
+                                                  setState(() {
+                                                  })},
+                                                  child:  const Text('Yes'),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                             },
+                                          child: Container(
+                                            padding:
+                                            EdgeInsets.all(8.0),
+                                            decoration:
+                                            BoxDecoration(
+                                              color: primaryColor,
+                                              borderRadius:
+                                              const BorderRadius.all(
+                                                Radius.circular(
+                                                    14.0),
+                                              ),
                                             ),
-                                            SizedBox(
-                                              width:
-                                              w * 0.01,
-                                            ),
+                                            child: Row(children: const [
+                                              Icon(
+                                                Icons.check,
+                                                color: Colors.white,
+                                              ),
+                                              SizedBox(
+                                                width: 5.0,
+                                              ),
                                               Text(
-                                                snapshot.data["data"][position]["priority"].toString(),
-                                                style: const TextStyle(
-                                                    color:
-                                                    Colors
+                                                "check",
+                                                style: TextStyle(
+                                                    color: Colors
                                                         .white,
                                                     fontWeight:
                                                     FontWeight
                                                         .bold),
-                                              ),
-
-
-                                          ],
-                                        ),
-                                      ),
-                                    )
-
-                                  ],
-                                ),
-                                const Divider(),
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons
-                                              .date_range_sharp,
-                                          color: Colors
-                                              .green.shade200,
-                                        ),
-                                        SizedBox(
-                                          width: w * 0.01,
-                                        ),
-                                        Text(
-
-                                            snapshot.data["data"][position]["assigned_date"],
-                                            style: const TextStyle(
-                                                color: Colors
-                                                    .black54)),
-                                      ],
-                                    ),
-
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons
-                                              .access_time_filled,
-                                          color: Colors
-                                              .red.shade200,
-                                        ),
-                                        SizedBox(
-                                          width: w * 0.01,
-                                        ),
-                                        Text(
-                                            snapshot.data["data"][position]["assigned_time"].toString(),
-                                            style: const TextStyle(
-                                                color: Colors
-                                                    .black54)),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                Divider(),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons
-                                          .assignment,
-                                      color: Colors
-                                          .red.shade200,
-                                    ),
-                                    SizedBox(
-                                      width: w * 0.01,
-                                    ),
-                                    Text(
-                                        snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
-                                        style: const TextStyle(
-                                            color: Colors
-                                                .black54)),
-                                  ],
-                                ),
-                                Divider(),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: SizedBox(
-                                          height: 24 ,
-                                          width: 24,
-                                          child: Image.asset("assets/assignment.png",)),
-                                    )
-                                    ,
-                                    SizedBox(
-                                      width: w * 0.01,
-                                    ),
-                                    Text(
-                                        snapshot.data["data"][position]["assigned_by"],
-                                        style: const TextStyle(
-                                            color: Colors
-                                                .black54)),
-                                  ],
-                                ),
-                                Divider(),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons
-                                          .pending_actions,
-                                      color: Colors
-                                          .red.shade200,
-                                    )
-                                    ,
-                                    SizedBox(
-                                      width: w * 0.01,
-                                    ),
-                                    Text(
-                                        snapshot.data["data"][position]["status"],
-                                        style: const TextStyle(
-                                            color: Colors
-                                                .black54)),
-                                  ],
-                                ),
-                              Divider(),
-                              Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.end,
-                                  children: [
-                                   employee_role=="Employee"?Container(
-                                      padding:
-                                      EdgeInsets.all(8.0),
-                                      child:
-                                      InkWell(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                              title:  const Text('Are you sure?'),
-                                              content:  const Text('Do you want to exit an Attendence'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () => Navigator.of(context).pop(false),
-                                                  child:  const Text('No'),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () => {
-                                                    Navigator.of(context).pop(false),
-                                                    updatetask(snapshot.data["data"][position]["task_id"]),
-                                                setState(() {
-                                                })},
-                                                child:  const Text('Yes'),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                           },
-                                        child: Container(
-                                          padding:
-                                          EdgeInsets.all(8.0),
-                                          decoration:
-                                          BoxDecoration(
-                                            color: primaryColor,
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(
-                                                  14.0),
-                                            ),
+                                              )
+                                            ]),
                                           ),
-                                          child: Row(children: const [
-                                            Icon(
-                                              Icons.check,
-                                              color: Colors.white,
-                                            ),
-                                            SizedBox(
-                                              width: 5.0,
-                                            ),
-                                            Text(
-                                              "check",
-                                              style: TextStyle(
-                                                  color: Colors
-                                                      .white,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold),
-                                            )
-                                          ]),
                                         ),
-                                      ),
-                                    ):Container(),
-                                  ],
-                                )
-                              ],
+                                      ):Container(),
+                                    ],
+                                  )
+                                ],
+                              ),
+
+
                             ),
-
-
-                          ),
-                        )
-                        ):
-                        Container();
-                    },
-                  ):Center(child: Image.asset("assets/no_data.png"));}
-            }
-          },
+                          )
+                          ):
+                          Container();
+                      },
+                    ):Center(child: Image.asset("assets/no_data.png"));}
+              }
+            },
+          ),
         )
 
     );
