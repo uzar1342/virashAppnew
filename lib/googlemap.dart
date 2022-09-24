@@ -6,8 +6,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
 class Googlem extends StatefulWidget {
-  Googlem({Key? key,required this.center}) : super(key: key);
-  LatLng center ;
+  Googlem({Key? key,required this.lan,required this.lug}) : super(key: key);
+ double lan;
+ double lug;
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -29,17 +31,19 @@ class _MyAppState extends State<Googlem> {
 
   @override
   void initState() {
-    setState(() {
+
+    print(widget.lug);
+
       _markers.add(Marker(
-        markerId: MarkerId(widget.center.toString()),
-        position: widget.center,
+        markerId: MarkerId((widget.lan+widget.lug).toString()),
+        position: LatLng(widget.lan,widget.lug),//widget.center,
         infoWindow: InfoWindow(
-          title: 'Really cool place',
-          snippet: '5 Star Rating',
+          title: 'Attendence',
+          snippet: 'virash',
         ),
         icon: BitmapDescriptor.defaultMarker,
       ));
-    });
+
     super.initState();
   }
 
@@ -64,8 +68,8 @@ class _MyAppState extends State<Googlem> {
             GoogleMap(
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
-                target: widget.center,
-                zoom: 11.0,
+                target: LatLng(widget.lan,widget.lug),
+                zoom: 18.0,
               ),
               mapType: _currentMapType,
               markers: _markers,

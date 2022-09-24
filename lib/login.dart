@@ -223,7 +223,8 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-        ):SafeArea(
+        ):
+        SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

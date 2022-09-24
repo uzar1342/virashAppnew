@@ -364,9 +364,9 @@ class _CalendarPageState extends State<CalendarPage> {
                                                         onTap: (){
                                                           if(snapshot.data["data"][position]["in_latitude"]!="N/A"||snapshot.data["data"][position]["in_longitude"]!="N/A") {
                                                             Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                                              Googlem(center: LatLng(
-                                                                  double.parse(snapshot.data["data"][position]["in_latitude"]),
-                                                                  double.parse(snapshot.data["data"][position]["in_longitude"])))),);
+                                                              Googlem(
+
+                                                                   lan: double.parse(snapshot.data["data"][position]["in_latitude"]), lug: double.parse(snapshot.data["data"][position]["in_longitude"]))));
                                                           } else {
                                                             Fluttertoast.showToast(msg: "No Location found");
                                                           }

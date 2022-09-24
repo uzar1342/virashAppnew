@@ -246,7 +246,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
      loder=true;
     });
-
     Dio dio=Dio();
     var response = await dio.post('http://training.virash.in/provide_task', data: task);
     if (response.statusCode == 200) {

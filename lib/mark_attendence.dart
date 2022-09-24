@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 import 'dart:io';
-import 'package:Virash/shared_prefs_keys.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
@@ -14,7 +13,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart'as mi;
 import 'package:http/http.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'virash_app_home_screen.dart';
 import 'globals.dart';
@@ -22,7 +20,6 @@ class TakePictureScreen extends StatefulWidget {
    TakePictureScreen({
     super.key, required this.camera,required this.latitude,required this.longitude,required this.title,required this.position
   });
-
   final CameraDescription camera;
   final Position position;
   final String title;
@@ -192,6 +189,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                                 if(net)
                                                   {
                                                   Navigator.of(context).pop(false),
+
                                                     Logout_attendence(image!),
                                                   }
                                                 else
@@ -230,13 +228,16 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                 Navigator.of(context).pop(false),
                                 if(net)
                                 {
+                                setState(() {
+                                loader=false;
+                                }),
+                                  //Login_attendence(image!),
                                   Login_attendence(image!),
                                 }
                                 else
                                 {
                                 Fluttertoast.showToast(msg: "No Internet")
                                 }
-
                                 },
                                           child:  const Text('Yes'),
                                         ),
@@ -285,13 +286,10 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     );
   }
   void Login_attendence(XFile imagePath) async {
-    setState(() {
-      loader=false;
-    });
     final url = Uri.parse('http://training.virash.in/emp_attendance');
     var request = MultipartRequest("POST", url);
     request.fields['in_latitude'] = widget.latitude;
-    request.fields['in_longitude'] = widget.latitude;
+    request.fields['in_longitude'] = widget.longitude;
     request.fields['in_location'] = Address;
     request.fields['emp_id'] = userId;
     File file = File(imagePath.path);
@@ -303,9 +301,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     response.stream.transform(utf8.decoder).listen((value) {
       if(response.statusCode==200)
       {
-        setState(() {
-          loader=true;
-        });
         attendence="True";
         Get.offAll(() => VirashAppHomeScreen()) ;
       }
@@ -321,15 +316,10 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
   }
   void Logout_attendence(XFile imagePath) async {
-    setState(() {
-      loader=false;
-    });
     TextEditingController remark=new TextEditingController();
     var h=context.height;
     var w=context.width;
-    Navigator.of(context).pop(false);
     print("logout");
-
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -360,9 +350,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                         child: TextFormField(
                           maxLines: 8,
                           controller: remark,
-                          onChanged: (text) {
-                            setState(() {});
-                          },
                           cursorColor: primaryColor,
                           decoration: InputDecoration(
                               suffixIcon: Icon(
@@ -399,9 +386,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                       children: [
                         TextButton(
                           onPressed: () {
-                            setState(() {
-                              loader=true;
-                            });
                             Navigator.pop(context);
                           },
                           child: Text(
@@ -416,6 +400,10 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                         ),
                         InkWell(
                           onTap: () async {
+                            Navigator.pop(context);
+                            setState(() {
+                              loader=false;
+                            });
                           if(remark.value.text!="")
                             {
                               final url = Uri.parse('http://training.virash.in/emp_attendance');
@@ -435,11 +423,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                               response.stream.transform(utf8.decoder).listen((value) {
                                 if(response.statusCode==200)
                                 {
-                                  setState(() {
-                                    loader=true;
-                                  });
                                   attendence="False";
-                                  Get.offAll(() => VirashAppHomeScreen()) ;
+                                  Get.offAll(() => VirashAppHomeScreen());
                                 }
                                 else
                                 {

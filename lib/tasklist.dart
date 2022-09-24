@@ -41,7 +41,8 @@ class _tasklistState extends State<tasklist> {
                   return SafeArea(child:Text('Error: ${snapshot.error}'));
                 else {
                   Color primaryColor = const Color(0xff1f7396);
-                  return   snapshot.data["success"].toString().trim()=="1"?ListView.builder(
+                  return   snapshot.data["success"].toString().trim()=="1"?
+                  ListView.builder(
                     itemCount: snapshot.data["data"].length,
                     itemBuilder: (context, position) {
                       return InkWell(
