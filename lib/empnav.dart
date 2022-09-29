@@ -171,7 +171,7 @@ class _EmpTaskNavState extends State<EmpTaskNav>
             setState(() {
               tabBody =
                  // ApprovedTask(emoid: widget.id,);
-               EmpTask(emoid: widget.id, status: 'complete',);
+               EmpTask(emoid: widget.id, status: 'Completed',);
               // CompTask(emoid: widget.id);
             });
           });

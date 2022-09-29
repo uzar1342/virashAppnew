@@ -151,382 +151,425 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                     var h=MediaQuery.of(context).size.height;
                     Color primaryColor = const Color(0xff1f7396);
                     return
-                      snapshot.data["data"]!=null?ListView.builder(
-                        itemCount: snapshot.data["data"].length,
-                        itemBuilder: (context, position) {
-                          return
-                            snapshot.data["data"][position]["status"]!="Pending"?
-                            Card(
-                              elevation: 3.0,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(14.0))),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 4,
-                                        child: GestureDetector(
-                                          onTap: (){
+                      snapshot.data["data"]!=null?Container(
+                        child:snapshot.data["data"].length>0?ListView.builder(
+                          itemCount: snapshot.data["data"].length,
+                          itemBuilder: (context, position) {
+                            return
+                              snapshot.data["data"][position]["status"]!="Pending"?
+                              Card(
+                                elevation: 3.0,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(14.0))),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 4,
+                                          child: GestureDetector(
+                                            onTap: (){
 
-                                            showDialog(
+                                              showDialog(
 
-                                                context: context,
-                                                builder: (context) => AlertDialog(
-                                                  content: InkWell(
-                                                      onTap:()=>{
-                                                      },
-                                                      child:
-                                                      Container(
-                                                      width: w,
-                                                        height: h*0.4,
-                                                        margin: const EdgeInsets.all(5.0),
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment.spaceEvenly,
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                              children: [
-                                                                Row(
-                                                                  crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                                  mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                                  children: [
+                                                  context: context,
+                                                  builder: (context) => AlertDialog(
+                                                    content: InkWell(
+                                                        onTap:()=>{
+                                                        },
+                                                        child:
+                                                        Container(
+                                                        width: w,
+                                                          height: h*0.4,
+                                                          margin: const EdgeInsets.all(5.0),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment.spaceEvenly,
+                                                            children: [
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                                children: [
+                                                                  Row(
+                                                                    crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                    children: [
 
-                                                                    SizedBox(
-                                                                      width: w * 0.02,
+                                                                      SizedBox(
+                                                                        width: w * 0.02,
+                                                                      ),
+                                                                      Text(
+                                                                        snapshot.data["data"][position]["emp_name"].toString(),
+                                                                        style: const TextStyle(
+                                                                            color: Colors
+                                                                                .black54,
+                                                                            fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                            fontSize: 16.0),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                  GestureDetector(
+                                                                    onTap: (){
+
+
+                                                                    },
+                                                                    child: Container(
+                                                                      padding:
+                                                                      const EdgeInsets
+                                                                          .all(5.0),
+                                                                      height: h * 0.04,
+                                                                      decoration:
+                                                                      BoxDecoration(
+                                                                          color: snapshot.data["data"][position]["priority"]=="high"?
+                                                                          Colors
+                                                                              .red:snapshot.data["data"][position]["priority"]=="medium"?Colors
+                                                                              .yellow:Colors
+                                                                              .green,
+                                                                          borderRadius: const BorderRadius
+                                                                              .all(Radius
+                                                                              .circular(
+                                                                              20.0))),
+                                                                      child: Row(
+                                                                        children: [
+                                                                          const FaIcon(
+                                                                            FontAwesomeIcons
+                                                                                .globe,
+                                                                            color: Colors
+                                                                                .white,
+                                                                            size: 20.0,
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                            w * 0.01,
+                                                                          ),
+                                                                          Text(
+                                                                            snapshot.data["data"][position]["priority"].toString(),
+                                                                            style: const TextStyle(
+                                                                                color:
+                                                                                Colors
+                                                                                    .white,
+                                                                                fontWeight:
+                                                                                FontWeight
+                                                                                    .bold),
+                                                                          ),
+
+
+                                                                        ],
+                                                                      ),
                                                                     ),
-                                                                    Text(
-                                                                      snapshot.data["data"][position]["emp_name"].toString(),
+                                                                  )
+
+                                                                ],
+                                                              ),
+                                                              const Divider(),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                                children: [
+                                                                  Row(
+                                                                    children: [
+                                                                      Icon(
+                                                                        Icons
+                                                                            .date_range_sharp,
+                                                                        color: Colors
+                                                                            .green.shade200,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: w * 0.01,
+                                                                      ),
+                                                                      Text(
+
+                                                                          snapshot.data["data"][position]["date_assigned"]!=null?snapshot.data["data"][position]["date_assigned"].toString():"N/A",
+                                                                          style: const TextStyle(
+                                                                              color: Colors
+                                                                                  .black54)),
+                                                                    ],
+                                                                  ),
+
+
+                                                                  Row(
+                                                                    children: [
+                                                                      Icon(
+                                                                        Icons
+                                                                            .access_time_filled,
+                                                                        color: Colors
+                                                                            .red.shade200,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width: w * 0.01,
+                                                                      ),
+                                                                      Text(
+
+                                                                          snapshot.data["data"][position]["time_assigned"].toString(),
+                                                                          style: const TextStyle(
+                                                                              color: Colors
+                                                                                  .black54)),
+                                                                    ],
+                                                                  )
+                                                                ],
+                                                              ),
+                                                              Divider(),
+                                                              Row(
+                                                                children: [
+                                                                  Icon(
+                                                                    Icons
+                                                                        .assignment,
+                                                                    color: Colors
+                                                                        .red.shade200,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: w * 0.01,
+                                                                  ),
+                                                                  Text(
+                                                                      snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
                                                                       style: const TextStyle(
                                                                           color: Colors
-                                                                              .black54,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                          fontSize: 16.0),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                                GestureDetector(
-                                                                  onTap: (){
+                                                                              .black54)),
+                                                                ],
+                                                              ),
 
-
-                                                                  },
-                                                                  child: Container(
-                                                                    padding:
-                                                                    const EdgeInsets
-                                                                        .all(5.0),
-                                                                    height: h * 0.04,
-                                                                    decoration:
-                                                                    BoxDecoration(
-                                                                        color: snapshot.data["data"][position]["priority"]=="high"?
-                                                                        Colors
-                                                                            .red:snapshot.data["data"][position]["priority"]=="medium"?Colors
-                                                                            .yellow:Colors
-                                                                            .green,
-                                                                        borderRadius: const BorderRadius
-                                                                            .all(Radius
-                                                                            .circular(
-                                                                            20.0))),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        const FaIcon(
-                                                                          FontAwesomeIcons
-                                                                              .globe,
+                                                              Divider(),
+                                                              Row(
+                                                                children: [
+                                                                  Icon(
+                                                                    Icons
+                                                                        .pending_actions,
+                                                                    color: Colors
+                                                                        .red.shade200,
+                                                                  )
+                                                                  ,
+                                                                  SizedBox(
+                                                                    width: w * 0.01,
+                                                                  ),
+                                                                  Text(
+                                                                      snapshot.data["data"][position]["status"],
+                                                                      style: const TextStyle(
                                                                           color: Colors
-                                                                              .white,
-                                                                          size: 20.0,
+                                                                              .black54)),
+                                                                ],
+                                                              ),
+
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment.end,
+                                                                children: [
+                                                                  Container(
+                                                                    padding:
+                                                                    EdgeInsets.all(8.0),
+                                                                    child:
+                                                                    InkWell(
+                                                                      onTap: () {
+                                                                        showDialog(
+                                                                          context: context,
+                                                                          builder: (context) => AlertDialog(
+                                                                            title:  const Text('Are you sure?'),
+                                                                            content:  const Text('Do you want to approve this task'),
+                                                                            actions: <Widget>[
+                                                                              TextButton(
+                                                                                onPressed: () => Navigator.of(context).pop(false),
+                                                                                child:  const Text('No'),
+                                                                              ),
+                                                                              TextButton(
+                                                                                onPressed: () => {
+                                                                                  Navigator.of(context).pop(false),
+                                                                                  approvtask(snapshot.data["data"][position]["task_id"]),
+                                                                                  setState(() {
+                                                                                  })},
+                                                                                child:  const Text('Yes'),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      child: Container(
+                                                                        padding:
+                                                                        EdgeInsets.all(8.0),
+                                                                        decoration:
+                                                                        BoxDecoration(
+                                                                          color: primaryColor,
+                                                                          borderRadius:
+                                                                          const BorderRadius.all(
+                                                                            Radius.circular(
+                                                                                14.0),
+                                                                          ),
                                                                         ),
-                                                                        SizedBox(
-                                                                          width:
-                                                                          w * 0.01,
-                                                                        ),
-                                                                        Text(
-                                                                          snapshot.data["data"][position]["priority"].toString(),
-                                                                          style: const TextStyle(
-                                                                              color:
-                                                                              Colors
-                                                                                  .white,
-                                                                              fontWeight:
-                                                                              FontWeight
-                                                                                  .bold),
-                                                                        ),
-
-
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                )
-
-                                                              ],
-                                                            ),
-                                                            const Divider(),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                              children: [
-                                                                Row(
-                                                                  children: [
-                                                                    Icon(
-                                                                      Icons
-                                                                          .date_range_sharp,
-                                                                      color: Colors
-                                                                          .green.shade200,
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: w * 0.01,
-                                                                    ),
-                                                                    Text(
-
-                                                                        snapshot.data["data"][position]["date_assigned"]!=null?snapshot.data["data"][position]["date_assigned"].toString():"N/A",
-                                                                        style: const TextStyle(
-                                                                            color: Colors
-                                                                                .black54)),
-                                                                  ],
-                                                                ),
-
-
-                                                                Row(
-                                                                  children: [
-                                                                    Icon(
-                                                                      Icons
-                                                                          .access_time_filled,
-                                                                      color: Colors
-                                                                          .red.shade200,
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: w * 0.01,
-                                                                    ),
-                                                                    Text(
-
-                                                                        snapshot.data["data"][position]["time_assigned"].toString(),
-                                                                        style: const TextStyle(
-                                                                            color: Colors
-                                                                                .black54)),
-                                                                  ],
-                                                                )
-                                                              ],
-                                                            ),
-                                                            Divider(),
-                                                            Row(
-                                                              children: [
-                                                                Icon(
-                                                                  Icons
-                                                                      .assignment,
-                                                                  color: Colors
-                                                                      .red.shade200,
-                                                                ),
-                                                                SizedBox(
-                                                                  width: w * 0.01,
-                                                                ),
-                                                                Text(
-                                                                    snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
-                                                                    style: const TextStyle(
-                                                                        color: Colors
-                                                                            .black54)),
-                                                              ],
-                                                            ),
-
-                                                            Divider(),
-                                                            Row(
-                                                              children: [
-                                                                Icon(
-                                                                  Icons
-                                                                      .pending_actions,
-                                                                  color: Colors
-                                                                      .red.shade200,
-                                                                )
-                                                                ,
-                                                                SizedBox(
-                                                                  width: w * 0.01,
-                                                                ),
-                                                                Text(
-                                                                    snapshot.data["data"][position]["status"],
-                                                                    style: const TextStyle(
-                                                                        color: Colors
-                                                                            .black54)),
-                                                              ],
-                                                            ),
-
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment.end,
-                                                              children: [
-                                                                Container(
-                                                                  padding:
-                                                                  EdgeInsets.all(8.0),
-                                                                  child:
-                                                                  InkWell(
-                                                                    onTap: () {
-                                                                      showDialog(
-                                                                        context: context,
-                                                                        builder: (context) => AlertDialog(
-                                                                          title:  const Text('Are you sure?'),
-                                                                          content:  const Text('Do you want to approve this task'),
-                                                                          actions: <Widget>[
-                                                                            TextButton(
-                                                                              onPressed: () => Navigator.of(context).pop(false),
-                                                                              child:  const Text('No'),
-                                                                            ),
-                                                                            TextButton(
-                                                                              onPressed: () => {
-                                                                                Navigator.of(context).pop(false),
-                                                                                approvtask(snapshot.data["data"][position]["task_id"]),
-                                                                                setState(() {
-                                                                                })},
-                                                                              child:  const Text('Yes'),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      );
-                                                                    },
-                                                                    child: Container(
-                                                                      padding:
-                                                                      EdgeInsets.all(8.0),
-                                                                      decoration:
-                                                                      BoxDecoration(
-                                                                        color: primaryColor,
-                                                                        borderRadius:
-                                                                        const BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              14.0),
-                                                                        ),
+                                                                        child: Row(children: const [
+                                                                          Icon(
+                                                                            Icons.check,
+                                                                            color: Colors.white,
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width: 5.0,
+                                                                          ),
+                                                                          Text(
+                                                                            "Approved Task",
+                                                                            style: TextStyle(
+                                                                                color: Colors
+                                                                                    .white,
+                                                                                fontWeight:
+                                                                                FontWeight
+                                                                                    .bold),
+                                                                          )
+                                                                        ]),
                                                                       ),
-                                                                      child: Row(children: const [
-                                                                        Icon(
-                                                                          Icons.check,
-                                                                          color: Colors.white,
-                                                                        ),
-                                                                        SizedBox(
-                                                                          width: 5.0,
-                                                                        ),
-                                                                        Text(
-                                                                          "Approved Task",
-                                                                          style: TextStyle(
-                                                                              color: Colors
-                                                                                  .white,
-                                                                              fontWeight:
-                                                                              FontWeight
-                                                                                  .bold),
-                                                                        )
-                                                                      ]),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                                Container(
-                                                                  padding:
-                                                                  EdgeInsets.all(8.0),
-                                                                  child:
-                                                                  InkWell(
-                                                                    onTap: () {
-                                                                      showDialog(
-                                                                        context: context,
-                                                                        builder: (context) => AlertDialog(
-                                                                          title:  const Text('Are you sure?'),
-                                                                          content:  const Text('Do you want Reject this task'),
-                                                                          actions: <Widget>[
-                                                                            TextButton(
-                                                                              onPressed: () => Navigator.of(context).pop(false),
-                                                                              child:  const Text('No'),
-                                                                            ),
-                                                                            TextButton(
-                                                                              onPressed: () => {
-                                                                                Navigator.of(context).pop(false),
-                                                                                rejtask(snapshot.data["data"][position]["task_id"]),
-                                                                                setState(() {
-                                                                                })},
-                                                                              child:  const Text('Yes'),
-                                                                            ),
-                                                                          ],
+                                                                  Container(
+                                                                    padding:
+                                                                    EdgeInsets.all(8.0),
+                                                                    child:
+                                                                    InkWell(
+                                                                      onTap: () {
+                                                                        showDialog(
+                                                                          context: context,
+                                                                          builder: (context) => AlertDialog(
+                                                                            title:  const Text('Are you sure?'),
+                                                                            content:  const Text('Do you want Reject this task'),
+                                                                            actions: <Widget>[
+                                                                              TextButton(
+                                                                                onPressed: () => Navigator.of(context).pop(false),
+                                                                                child:  const Text('No'),
+                                                                              ),
+                                                                              TextButton(
+                                                                                onPressed: () => {
+                                                                                  Navigator.of(context).pop(false),
+                                                                                  rejtask(snapshot.data["data"][position]["task_id"]),
+                                                                                  setState(() {
+                                                                                  })},
+                                                                                child:  const Text('Yes'),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      child: Container(
+                                                                        padding:
+                                                                        EdgeInsets.all(8.0),
+                                                                        decoration:
+                                                                        BoxDecoration(
+                                                                          color: primaryColor,
+                                                                          borderRadius:
+                                                                          const BorderRadius.all(
+                                                                            Radius.circular(
+                                                                                14.0),
+                                                                          ),
                                                                         ),
-                                                                      );
-                                                                    },
-                                                                    child: Container(
-                                                                      padding:
-                                                                      EdgeInsets.all(8.0),
-                                                                      decoration:
-                                                                      BoxDecoration(
-                                                                        color: primaryColor,
-                                                                        borderRadius:
-                                                                        const BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              14.0),
-                                                                        ),
+                                                                        child: Row(children: const [
+                                                                          Icon(
+                                                                            Icons.cancel,
+                                                                            color: Colors.white,
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width: 5.0,
+                                                                          ),
+                                                                          Text(
+                                                                            "Reject Task",
+                                                                            style: TextStyle(
+                                                                                color: Colors
+                                                                                    .white,
+                                                                                fontWeight:
+                                                                                FontWeight
+                                                                                    .bold),
+                                                                          )
+                                                                        ]),
                                                                       ),
-                                                                      child: Row(children: const [
-                                                                        Icon(
-                                                                          Icons.cancel,
-                                                                          color: Colors.white,
-                                                                        ),
-                                                                        SizedBox(
-                                                                          width: 5.0,
-                                                                        ),
-                                                                        Text(
-                                                                          "Reject Task",
-                                                                          style: TextStyle(
-                                                                              color: Colors
-                                                                                  .white,
-                                                                              fontWeight:
-                                                                              FontWeight
-                                                                                  .bold),
-                                                                        )
-                                                                      ]),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
-                                                      )
+                                                                ],
+                                                              )
+                                                            ],
+                                                          ),
+                                                        )
 
 
 
-                                                  )
-                                                  ,
-                                                ));
+                                                    )
+                                                    ,
+                                                  ));
 
-                                          },
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons
-                                                    .assignment,
-                                                color: Colors
-                                                    .red.shade200,
-                                              ),
-                                              SizedBox(
-                                                width: w * 0.01,
-                                              ),
-                                              Text(
-                                                  snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
-                                                  style: const TextStyle(
-                                                      color: Colors
-                                                          .black54)),
-                                            ],
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons
+                                                      .assignment,
+                                                  color: Colors
+                                                      .red.shade200,
+                                                ),
+                                                SizedBox(
+                                                  width: w * 0.01,
+                                                ),
+                                                Text(
+                                                    snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
+                                                    style: const TextStyle(
+                                                        color: Colors
+                                                            .black54)),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
 
 
 
 
-                                      Expanded(
-                                        flex: 1,
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Container(
+                                        Expanded(
+                                          flex: 1,
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  child:
+                                                  InkWell(
+                                                    onTap: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) => AlertDialog(
+                                                          title:  const Text('Are you sure?'),
+                                                          content:  const Text('Do you want to approve this task'),
+                                                          actions: <Widget>[
+                                                            TextButton(
+                                                              onPressed: () => Navigator.of(context).pop(false),
+                                                              child:  const Text('No'),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed: () => {
+                                                                Navigator.of(context).pop(false),
+                                                                approvtask(snapshot.data["data"][position]["task_id"]),
+                                                                setState(() {
+                                                                })},
+                                                              child:  const Text('Yes'),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Container(
+
+
+                                                      child: Row(children: const [
+                                                        Icon(
+                                                          Icons.check,
+                                                          color: Colors.green,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 5.0,
+                                                        ),
+                                                      ]),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(child:Container(
                                                 child:
                                                 InkWell(
                                                   onTap: () {
@@ -534,7 +577,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                                       context: context,
                                                       builder: (context) => AlertDialog(
                                                         title:  const Text('Are you sure?'),
-                                                        content:  const Text('Do you want to approve this task'),
+                                                        content:  const Text('Do you want Reject this task'),
                                                         actions: <Widget>[
                                                           TextButton(
                                                             onPressed: () => Navigator.of(context).pop(false),
@@ -543,7 +586,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                                           TextButton(
                                                             onPressed: () => {
                                                               Navigator.of(context).pop(false),
-                                                              approvtask(snapshot.data["data"][position]["task_id"]),
+                                                              rejtask(snapshot.data["data"][position]["task_id"]),
                                                               setState(() {
                                                               })},
                                                             child:  const Text('Yes'),
@@ -557,70 +600,29 @@ class _ApprovedTaskState extends State<ApprovedTask> {
 
                                                     child: Row(children: const [
                                                       Icon(
-                                                        Icons.check,
-                                                        color: Colors.green,
+                                                        Icons.cancel_outlined,
+                                                        color: Colors.red,
                                                       ),
-                                                      SizedBox(
-                                                        width: 5.0,
-                                                      ),
+
                                                     ]),
                                                   ),
                                                 ),
-                                              ),
-                                            ),
-                                            Expanded(child:Container(
-                                              child:
-                                              InkWell(
-                                                onTap: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) => AlertDialog(
-                                                      title:  const Text('Are you sure?'),
-                                                      content:  const Text('Do you want Reject this task'),
-                                                      actions: <Widget>[
-                                                        TextButton(
-                                                          onPressed: () => Navigator.of(context).pop(false),
-                                                          child:  const Text('No'),
-                                                        ),
-                                                        TextButton(
-                                                          onPressed: () => {
-                                                            Navigator.of(context).pop(false),
-                                                            rejtask(snapshot.data["data"][position]["task_id"]),
-                                                            setState(() {
-                                                            })},
-                                                          child:  const Text('Yes'),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                                child: Container(
-
-
-                                                  child: Row(children: const [
-                                                    Icon(
-                                                      Icons.cancel_outlined,
-                                                      color: Colors.red,
-                                                    ),
-
-                                                  ]),
-                                                ),
-                                              ),
-                                            )),
-                                          ],
-                                        ),
-                                      )
+                                              )),
+                                            ],
+                                          ),
+                                        )
 
 
 
 
 
-                                  ],
+                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ):Container();
-                        },
+                              ):Container();
+                          },
+                        ):Center(child: Image.asset("assets/no_data.png")),
                       ):Center(child: Image.asset("assets/no_data.png"));}
               }
             },

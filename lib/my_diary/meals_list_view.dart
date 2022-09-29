@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../../main.dart';
 import '../CalendarPage.dart';
 import '../ViewEmploye.dart';
+import '../dash_page.dart';
 import '../empnav.dart';
-import '../emptask.dart';
 import '../globals.dart';
 import '../virash_app_theme.dart';
 import '../models/meals_list_data.dart';
@@ -58,7 +58,7 @@ class _MealsListViewState extends State<MealsListView>
               child: ListView.builder(
                 padding: const EdgeInsets.only(
                     top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: mealsListData.length,
+                itemCount: 1,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   final int count =
@@ -70,12 +70,27 @@ class _MealsListViewState extends State<MealsListView>
                               curve: Interval((1 / count) * index, 1.0,
                                   curve: Curves.fastOutSlowIn)));
                   animationController?.forward();
-
-                  return MealsView(
-                    position: index,
-                    mealsListData: mealsListData[index],
-                    animation: animation,
-                    animationController: animationController!,
+                  return Row(
+                    children: [
+                      MealsView(
+                        position: 0,
+                        mealsListData: mealsListData[0],
+                        animation: animation,
+                        animationController: animationController!,
+                      ),
+                      employee_role!="Faculty"?MealsView(
+                        position: 1,
+                        mealsListData: mealsListData[1],
+                        animation: animation,
+                        animationController: animationController!,
+                      ):Container(),
+                      employee_role!="Developer"?MealsView(
+                        position: 2,
+                        mealsListData: mealsListData[2],
+                        animation: animation,
+                        animationController: animationController!,
+                      ):Container(),
+                    ],
                   );
                 },
               ),
@@ -91,12 +106,10 @@ class MealsView extends StatelessWidget {
   const MealsView(
       {Key? key, this.mealsListData, this.animationController, this.animation,required this.position})
       : super(key: key);
-
   final int position;
   final MealsListData? mealsListData;
   final AnimationController? animationController;
   final Animation<double>? animation;
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -154,13 +167,23 @@ class MealsView extends StatelessWidget {
                                Navigator.push(context,
                                    MaterialPageRoute(builder:
                                        (context) =>
-                                       employee_role=="Employee & Faculty"?
+                                       employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"?
                                            // EmpTask(emoid: userId, status: '',)
                                        EmpTaskNav(id: userId,)
                                            :viewemp()
                                    )
                                )
                              }
+                            else if(position==2)
+                              {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder:
+                                        (context) =>
+                                            DashPage()
+
+                                    )
+                                )
+                              }
                           },
                         child: Padding(
                           padding: const EdgeInsets.only(

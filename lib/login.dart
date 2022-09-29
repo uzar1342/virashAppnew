@@ -8,7 +8,6 @@ import 'package:dio/src/form_data.dart' as f;
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'virash_app_home_screen.dart';
 import 'globals.dart';
@@ -19,7 +18,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isLoading = false;
-  bool net = true;
+  bool net = true , _passwordVisible=false;
+  String _password="";
+
+
   var subscription;
   checkinternet() async {
     subscription = Connectivity()
@@ -151,13 +153,30 @@ class _HomePageState extends State<HomePage> {
                             Container(
                               padding: EdgeInsets.all(8.0),
                               child: TextField(
-                                obscureText: true,
+                                obscureText: !_passwordVisible,
                                 controller: passcon,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: "Password",
-                                    hintStyle: TextStyle(color: Colors.grey[400])
+                                    hintStyle: TextStyle(color: Colors.grey[400]),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        // Based on passwordVisible state choose the icon
+                                        _passwordVisible
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: Theme.of(context).primaryColorDark,
+                                      ),
+                                      onPressed: () {
+                                        // Update the state i.e. toogle the state of passwordVisible variable
+                                        setState(() {
+                                          String val=passcon.value.text;
+                                          _passwordVisible = !_passwordVisible;
+                                        });
+                                      },
+                                    )
                                 ),
+
                               ),
                             )
                           ],
@@ -269,6 +288,9 @@ class _HomePageState extends State<HomePage> {
       print(sucess);
       if(sucess.trim()=="1")
       {
+        setState(() {
+          isLoading=false;
+        });
         attendence=response.data["attendance_flag"].toString().trim();
         print(attendence);
         Navigator.pushReplacement(context,
@@ -280,6 +302,9 @@ class _HomePageState extends State<HomePage> {
       }
       else
       {
+        setState(() {
+          isLoading=false;
+        });
         Fluttertoast.showToast(msg: "Acess Dineid");
       }
 
@@ -297,12 +322,10 @@ class _HomePageState extends State<HomePage> {
     var response = await dio.post('http://training.virash.in/auth-user', data:formData);
     if(response.statusCode==200)
       {
-        print(response.data["data"]["employee_id"]);
+
         if(response.data["success"].trim()=="1")
           {
-            setState(() {
-              isLoading=false;
-            });
+            print(response.data["data"]["employee_id"]);
         //   prefs.setString(userIdKey,data2);
            prefs.setString(Username,response.data["data"]["employee_name"].toString());
            prefs.setString(Userrole,response.data["data"]["employee_role"]);
