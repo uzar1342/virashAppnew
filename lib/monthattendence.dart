@@ -142,7 +142,7 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
   Future<dynamic> fetchEmployList()  async {
     Dio dio=Dio();
     var formData = FormData.fromMap({
-      'emp_id':userId,
+      'emp_id':widget.id,
       "attendance_date":"${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}"
     });
     print(formData.fields);
