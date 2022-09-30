@@ -10,27 +10,19 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
-class MonthCalendarPage extends StatelessWidget {
-  // This widget is the root of your application.
+import 'OuttimeForm.dart';
+
+
+class MonthCalendarPage extends StatefulWidget {
+  MonthCalendarPage({Key? key ,required this.name, required  this.id}) : super(key: key);
+  String name;
+  String id;
   @override
-  Widget build(BuildContext context) {
-    return  MaterialApp(
-
-
-      home: new MyHomePage(title: 'Flutter Calendar Carousel Example'),
-    );
-  }
+  _MonthCalendarPageState createState() => new _MonthCalendarPageState();
 }
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-  @override
-  _MyHomePageState createState() => new _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _MonthCalendarPageState extends State<MonthCalendarPage> {
   late int year;
+  var ocassion=[];
   late int day;
   late int month;
   DateTime _currentDate = DateTime.now();
@@ -71,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<dynamic> fetchCourseList()  async {
     Dio dio=Dio();
     var formData = FormData.fromMap({
-      'emp_id':userId,
+      'emp_id':widget.id,
       "month":"${year}-${month>=10?month.toString():"0"+month.toString()}"
     });
     print(formData.fields);
@@ -80,10 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
       if(response.data!=null)
         {
           int i, num=int.parse(response.data["data"].length.toString());
-
        for(i=0;i<num;i++)
          {
-if(response.data["data"][i]["attendance_date"]!=null)
+        if(response.data["data"][i]["attendance_date"]!=null)
   {
 
     if( response.data["data"][i]["Presentee"]=="Present")
@@ -94,7 +85,7 @@ if(response.data["data"][i]["attendance_date"]!=null)
         _markedDateMap.add(
             DateTime(year, month, day),
             Event(
-              dot: Text(".",style: TextStyle(color: Colors.greenAccent,fontSize: 50)), date: DateTime.now(),
+              dot: Text(".",style: TextStyle(color: Color(0xff05c902),fontSize: 50)), date: DateTime.now(),
             ));
       }
     else if(response.data["data"][i]["Presentee"]=="Absent")
@@ -105,10 +96,31 @@ if(response.data["data"][i]["attendance_date"]!=null)
         _markedDateMap.add(
             DateTime(year, month, day),
             Event(
-              dot: Text(".",style: TextStyle(color: Colors.red,fontSize: 50)), date: DateTime.now(),
+              dot: Text(".",style: TextStyle(color: Colors.redAccent,fontSize: 50)), date: DateTime.now(),
             ));
       }
-
+    else if(response.data["data"][i]["Presentee"]=="Week off")
+      {
+        String date=  response.data["data"][i]["attendance_date"];
+        var d1=  date.split("-");
+        int year=int.parse(d1[0]),month=int.parse(d1[1]),day=int.parse(d1[2]);
+        _markedDateMap.add(
+            DateTime(year, month, day),
+            Event(
+              dot: Text(".",style: TextStyle(color: Color(0xff022FFE),fontSize: 50)), date: DateTime.now(),
+            ));
+      }else if(response.data["data"][i]["Presentee"]=="Holiday")
+      {
+        String date=  response.data["data"][i]["attendance_date"];
+        var d1=  date.split("-");
+        int year=int.parse(d1[0]),month=int.parse(d1[1]),day=int.parse(d1[2]);
+        ocassion.add(day);
+        _markedDateMap.add(
+            DateTime(year, month, day),
+            Event(
+              dot: Text(".",style: TextStyle(color: Color(0xff5D10B9),fontSize: 50)), date: DateTime.now(),
+            ));
+      }
 
   }
 
@@ -162,11 +174,12 @@ if(response.data["data"][i]["attendance_date"]!=null)
 
     /// Example Calendar Carousel without header and custom prev & next button
     final _calendarCarouselNoHeader = CalendarCarousel<Event>(
-      todayBorderColor: Colors.green,
+      todayBorderColor: Colors.black,
       onDayPressed: (date, events) {
         this.setState(() => _currentDate2 = date);
         events.forEach((event) => {day=date.day,year=date.year,month=date.month});
       },
+      daysHaveCircularBorder: false,
       showOnlyCurrentMonthDate: false,
       weekendTextStyle: TextStyle(
         color: Colors.red,
@@ -220,7 +233,7 @@ if(response.data["data"][i]["attendance_date"]!=null)
     double w = MediaQuery.of(context).size.width;
     return  Scaffold(
         appBar:  AppBar(
-          title:  Text(widget.title),
+          title:  Text("Monthly Attendence"),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -232,48 +245,68 @@ if(response.data["data"][i]["attendance_date"]!=null)
               height: 100,
               padding: EdgeInsets.all(8),
                 child:  Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Expanded(
-                        child: Text(
-                          _currentMonth,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24.0,
-                          ),
-                        )),
-                    TextButton(
-                      child: Text('PREV'),
-                      onPressed: () {
-                        _markedDateMap.clear();
-                        print(_targetDateTime.month);  print(DateTime.now().month);
-                        setState(() {
-                          _targetDateTime = DateTime(
-                              _targetDateTime.year, _targetDateTime.month - 1);
-                          _currentMonth =
-                              DateFormat.yMMM().format(_targetDateTime);
-                          year=_targetDateTime.year;
-                          month=_targetDateTime.month;
-                          fetchCourseList();
-                        });
-                      },
+                    Container(
+                      width: w*0.3,
+                      alignment: Alignment.centerLeft,
+                      child: TextButton(
+                        child: Text('PREV'),
+                        onPressed: () {
+                          _markedDateMap.clear();
+                          print(_targetDateTime.month);  print(DateTime.now().month);
+                          setState(() {
+                            _targetDateTime = DateTime(
+                                _targetDateTime.year, _targetDateTime.month - 1);
+                            _currentMonth =
+                                DateFormat.yMMM().format(_targetDateTime);
+                            year=_targetDateTime.year;
+                            month=_targetDateTime.month;
+                            fetchCourseList();
+                          });
+                        },
+                      ),
                     ),
-                    _targetDateTime.month<DateTime.now().month?TextButton(
-                      child: Text('NEXT'),
-                      onPressed: () {
-                        _markedDateMap.clear();
-                        print(_targetDateTime.month);
-                        setState(() {
+                    Container(
+                      width: w*0.3,
+                      alignment: Alignment.center,
+                      child: Text(
+                        _currentMonth,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24.0,
+                        ),
+                      ),
+                    ),
+                    _targetDateTime.month<DateTime.now().month?Container(
+                      width: w*0.3,
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        child: Text('NEXT'),
+                        onPressed: () {
+                          _markedDateMap.clear();
+                          print(_targetDateTime.month);
+                          setState(() {
 
-                          _targetDateTime = DateTime(
-                              _targetDateTime.year, _targetDateTime.month + 1);
-                          _currentMonth =
-                              DateFormat.yMMM().format(_targetDateTime);
-                          year=_targetDateTime.year;
-                          month=_targetDateTime.month;
-                          fetchCourseList();
-                        });
-                      },
-                    ):Container()
+                            _targetDateTime = DateTime(
+                                _targetDateTime.year, _targetDateTime.month + 1);
+                            _currentMonth =
+                                DateFormat.yMMM().format(_targetDateTime);
+                            year=_targetDateTime.year;
+                            month=_targetDateTime.month;
+                            fetchCourseList();
+                          });
+                        },
+                      ),
+                    ):Container(
+                      width: w*0.3,
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        child: Text('NEXT'),
+                        onPressed: () {
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -331,7 +364,7 @@ if(response.data["data"][i]["attendance_date"]!=null)
                                                   width: w * 0.02,
                                                 ),
                                                 Text(
-                                                  snapshot.data["data"][0]["emp_name"].toString(),
+                                                  widget.name,
                                                   style: const TextStyle(
                                                       color: Colors
                                                           .black54,
@@ -487,6 +520,51 @@ if(response.data["data"][i]["attendance_date"]!=null)
                                                 ]),
                                               ),
                                             ),
+                                            snapshot.data["data"][0]["out_time"]==null?SizedBox(width: 10,):Container(),
+                                            snapshot.data["data"][0]["out_time"]==null?  Container(
+                                              child: employee_role=="Admin"||employee_role=="Super Admin"?InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder:
+                                                              (context) =>
+                                                              DateTimePicker(id: userId, date: "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",)
+                                                      ));
+                                                },
+                                                child: Container(
+                                                  padding:
+                                                  EdgeInsets.all(8.0),
+                                                  decoration:
+                                                  BoxDecoration(
+                                                    color: primaryColor,
+                                                    borderRadius:
+                                                    const BorderRadius.all(
+                                                      Radius.circular(
+                                                          14.0),
+                                                    ),
+                                                  ),
+                                                  child: Row(children: const [
+                                                    Icon(
+                                                      Icons.punch_clock_rounded,
+                                                      color: Colors.white,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 5.0,
+                                                    ),
+                                                    Text(
+                                                      "Mark Outtime",
+                                                      style: TextStyle(
+                                                          color: Colors
+                                                              .white,
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .bold),
+                                                    )
+                                                  ]),
+                                                ),
+                                              ):Container(),
+                                            ):Container(),
                                           ],
                                         )
                                       ],

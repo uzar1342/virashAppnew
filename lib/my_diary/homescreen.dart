@@ -86,7 +86,6 @@ class _MyHomeScreenState extends State<MyHomeScreen>
         animationController: widget.animationController!,
       ),
     );
-
     listViews.add(
       MealsListView(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -100,12 +99,10 @@ class _MyHomeScreenState extends State<MyHomeScreen>
 
 
   }
-
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
   }
-
   @override
   Widget build(BuildContext context) {
     return Container(

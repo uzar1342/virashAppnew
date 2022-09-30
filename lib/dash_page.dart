@@ -6,8 +6,8 @@ import 'CalendarPage.dart';
 import 'Faculty_tabbar.dart';
 import 'OuttimeForm.dart';
 import 'TodayBatch.dart';
-import 'configs/globals.dart';
 import 'courses_page.dart';
+import 'globals.dart';
 import 'monthattendence.dart';
 
 class DashPage extends StatefulWidget {
@@ -66,8 +66,8 @@ class _DashPageState extends State<DashPage> {
               //Icon(Icons.book, size: 30, color: Colors.white),
               Icon(Icons.settings, size: 30, color: Colors.white),
             ],
-            color: primaryColor,
-            buttonBackgroundColor: primaryColor,
+            color: Color(0xff1f7396),
+            buttonBackgroundColor: Color(0xff1f7396),
             animationCurve: Curves.easeInOut,
             backgroundColor: Colors.transparent,
             animationDuration: const Duration(milliseconds: 600),
@@ -81,7 +81,7 @@ class _DashPageState extends State<DashPage> {
           body: _page == 0
               ? const CoursesPage()
               : _page == 1
-                  ?  MonthCalendarPage()
+                  ?  TodayBatch(day: 'Today')
                   : _page == 2
                       ? Container(height:size.height*0.97,child: const Tabbar())
                       : Center(
@@ -118,7 +118,7 @@ class _DashPageState extends State<DashPage> {
                   "Looks like you got disconnected, Please check your Internet connection",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: primaryColor,
+                      color: Color(0xff1f7396),
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold),
                 ),

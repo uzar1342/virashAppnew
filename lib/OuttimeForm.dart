@@ -1,15 +1,20 @@
+import 'package:Virash/virash_app_home_screen.dart';
 import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart';
+import 'package:get/get.dart' as d;
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 
+import 'dash_page.dart';
 import 'globals.dart';
 
 class DateTimePicker extends StatefulWidget {
+   DateTimePicker({Key? key,required this.id,required this.date}) : super(key: key);
+  String id,date;
   @override
   _DateTimePickerState createState() => _DateTimePickerState();
 }
@@ -18,7 +23,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
   late double _height;
   late double _width;
 
-    String _setTime="", setDate="",address="";
+  String _setTime="", setDate="",address="";
 
   late String _hour, _minute, _time;
   late Position position;
@@ -61,19 +66,6 @@ class _DateTimePickerState extends State<DateTimePicker> {
   }
 
 
-  Future<Null> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        initialDatePickerMode: DatePickerMode.day,
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2101));
-    if (picked != null)
-      setState(() {
-        selectedDate = picked;
-        _dateController.text = DateFormat("yyyy-MM-dd").format(selectedDate);
-      });
-  }
 
   Future<Null> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -89,7 +81,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
         _timeController.text = _time;
         _timeController.text = formatDate(
             DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
-            [HH, ':', mm]).toString();
+            [h, ':', nn, " ", am]).toString();
       });
   }
 getLat()
@@ -103,7 +95,7 @@ async {
   @override
   void initState() {
     getLat();
-    _dateController.text = DateFormat("yyyy-MM-dd").format(DateTime.now());
+    _dateController.text = widget.date;
     _timeController.text = formatDate(
         DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute,DateTime.now().second),
         [h, ':', nn, " ", am]).toString();
@@ -123,7 +115,7 @@ async {
         centerTitle: true,
         title: Text('Date time picker'),
       ),
-      body: Container(
+      body: isLoading?Container(
         width: _width,
         height: _height,
         child: Column(
@@ -132,7 +124,6 @@ async {
               children: <Widget>[
                 InkWell(
                   onTap: () {
-                    _selectDate(context);
                   },
                   child: Container(
                     width: _width * 0.8,
@@ -207,12 +198,22 @@ async {
             ),
 
             ElevatedButton(onPressed: () async {
+              setState(() {
+                isLoading = false;
+              });
               Position position = await _getGeoLocationPosition();
+
+              var df =  DateFormat("h:mma");
+              String h=_timeController.value.text;
+              var da=h.split(" ");
+              var dt = df.parse(da.first+""+da.last);
+              print(DateFormat('HH:mm').format(dt));
+
               Dio dio=Dio();
               var formData = FormData.fromMap({
-                'emp_id':"3",
+                'emp_id':widget.id,
                 "atte_date": _dateController.value.text,
-                "out_time":_timeController.value.text+":00",
+                "out_time":DateFormat('HH:mm').format(dt)+":00",
                 "admin_id":userId,
                 "remark":_remark.value.text,
                 "out_longitude":position.longitude,
@@ -223,14 +224,12 @@ async {
               var response = await dio.post('http://training.virash.in/outTimeByAdmin', data:formData);
               if (response.statusCode == 200) {
                 print(response.data);
-                setState(() {
-                  isLoading = false;
-                });
+                Get.off(()=>(DashPage()));
               } else {
                 print(response.statusCode);
                 Fluttertoast.showToast(msg: "Please try again later");
                 setState(() {
-                  isLoading = false;
+                  isLoading = true;
                 });
 
               }
@@ -239,7 +238,7 @@ async {
             }, child: Text("Send"))
           ],
         ),
-      ),
+      ):Center(child: CircularProgressIndicator()),
     );
   }
 }

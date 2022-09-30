@@ -11,16 +11,14 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'virash_app_home_screen.dart';
 import 'globals.dart';
+String _password="";
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
-
 class _HomePageState extends State<HomePage> {
   bool isLoading = false;
   bool net = true , _passwordVisible=false;
-  String _password="";
-
 
   var subscription;
   checkinternet() async {
@@ -149,36 +147,9 @@ class _HomePageState extends State<HomePage> {
                                     hintStyle: TextStyle(color: Colors.grey[400])
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              child: TextField(
-                                obscureText: !_passwordVisible,
-                                controller: passcon,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Password",
-                                    hintStyle: TextStyle(color: Colors.grey[400]),
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        // Based on passwordVisible state choose the icon
-                                        _passwordVisible
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                        color: Theme.of(context).primaryColorDark,
-                                      ),
-                                      onPressed: () {
-                                        // Update the state i.e. toogle the state of passwordVisible variable
-                                        setState(() {
-                                          String val=passcon.value.text;
-                                          _passwordVisible = !_passwordVisible;
-                                        });
-                                      },
-                                    )
-                                ),
 
-                              ),
-                            )
+                            ),
+                            pass()
                           ],
                         ),
                       ),
@@ -197,14 +168,15 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ):InkWell(
                         onTap: () {
+                          print(_password);
                           if(net==true)
                             {
-                              if(Emailcon.value.text!=""&&passcon.value.text!="")
+                              if(Emailcon.value.text!=""&&_password!="")
                               {
                                 setState(() {
                                   isLoading=true;
                                 });
-                                login(Emailcon.value.text,passcon.value.text);
+                                login(Emailcon.value.text,_password);
                               }
                               else
                               {
@@ -311,6 +283,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+
+
   Future<void> login(String Email, String pass) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Dio dio=Dio();
@@ -356,5 +330,47 @@ class _HomePageState extends State<HomePage> {
         print(response.headers.printError);
       }
 
+  }
+}
+class pass extends StatefulWidget {
+  const pass({Key? key}) : super(key: key);
+  @override
+  State<pass> createState() => _passState();
+}
+
+class _passState extends State<pass> {
+  @override
+  bool _passwordVisible=false;
+  Widget build(BuildContext context) {
+    return  Container(
+      padding: EdgeInsets.all(8.0),
+      child: TextField(
+        obscureText: !_passwordVisible,
+        onChanged: (c){
+          _password=c;
+        },
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: "Password",
+            hintStyle: TextStyle(color: Colors.grey[400]),
+            suffixIcon: IconButton(
+              icon: Icon(
+                // Based on passwordVisible state choose the icon
+                _passwordVisible
+                    ? Icons.visibility
+                    : Icons.visibility_off,
+                color: Theme.of(context).primaryColorDark,
+              ),
+              onPressed: () {
+                // Update the state i.e. toogle the state of passwordVisible variable
+                setState(() {
+                  _passwordVisible = !_passwordVisible;
+                });
+              },
+            )
+        ),
+
+      ),
+    );
   }
 }

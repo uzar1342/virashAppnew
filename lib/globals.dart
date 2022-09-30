@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Color primaryColor = const Color(0xff7f3248);
+Color primaryColor = const Color(0xff1f7396);
 
 String userId = '';
 String attendence = "";

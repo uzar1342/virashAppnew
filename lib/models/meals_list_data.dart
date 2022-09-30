@@ -40,13 +40,13 @@ class MealsListData {
       startColor: '#FE95B6',
       endColor: '#FF5287',
     ),
-    // MealsListData(
-    //   imagePath: 'assets/fitness_app/dinner.png',
-    //   titleTxt: 'Dinner',
-    //   kacl: 0,
-    //   meals: <String>['Recommend:', '703 kcal'],
-    //   startColor: '#6F72CA',
-    //   endColor: '#1E1466',
-    // ),
+    MealsListData(
+      imagePath: 'assets/fitness_app/schedule.png',
+      titleTxt: 'ViewMonthlyAttendence',
+      kacl: 0,
+      meals: <String>['Recommend:', '703 kcal'],
+      startColor: '#6F72CA',
+      endColor: '#1E1466',
+    ),
   ];
 }

@@ -4,11 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'monthattendence.dart';
 import 'virash_app_home_screen.dart';
 import 'globals.dart';
 
 class viewemp extends StatefulWidget {
-  const viewemp({Key? key}) : super(key: key);
+   viewemp({Key? key,required this.type}) : super(key: key);
+  String type;
 
   @override
   State<viewemp> createState() => _viewempState();
@@ -63,11 +65,19 @@ print(formData.fields);
                   itemBuilder: (context, position) {
                     return InkWell(
                       onTap:()=>{
-                        Navigator.push(context, MaterialPageRoute(builder: (c)=>
-
-                                             // FitnessAppHomeScreen())
-                            TaskNav(id: snapshot.data["data"][position]["emp_id"].toString(),))
-                        )},
+                        if(widget.type=="T")
+                          {
+                            Navigator.push(context, MaterialPageRoute(builder: (c)=>
+                                TaskNav(id: snapshot.data["data"][position]["emp_id"].toString(),))
+                            )
+                          }
+                        else if(widget.type=="A")
+                          {
+                            Navigator.push(context, MaterialPageRoute(builder: (c)=>
+                                MonthCalendarPage(name: snapshot.data["data"][position]["emp_name"].toString(), id: snapshot.data["data"][position]["emp_id"].toString(),))
+                            )
+                          }
+                        },
                       child: Card(
                         shape:RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0)

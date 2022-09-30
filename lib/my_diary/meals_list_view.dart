@@ -5,6 +5,7 @@ import '../ViewEmploye.dart';
 import '../dash_page.dart';
 import '../empnav.dart';
 import '../globals.dart';
+import '../monthattendence.dart';
 import '../virash_app_theme.dart';
 import '../models/meals_list_data.dart';
 class MealsListView extends StatefulWidget {
@@ -89,6 +90,11 @@ class _MealsListViewState extends State<MealsListView>
                         mealsListData: mealsListData[2],
                         animation: animation,
                         animationController: animationController!,
+                      ):Container(),employee_role!="Faculty"?MealsView(
+                        position: 3,
+                        mealsListData: mealsListData[3],
+                        animation: animation,
+                        animationController: animationController!,
                       ):Container(),
                     ],
                   );
@@ -170,7 +176,7 @@ class MealsView extends StatelessWidget {
                                        employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"?
                                            // EmpTask(emoid: userId, status: '',)
                                        EmpTaskNav(id: userId,)
-                                           :viewemp()
+                                           :viewemp(type: 'T',)
                                    )
                                )
                              }
@@ -181,6 +187,18 @@ class MealsView extends StatelessWidget {
                                         (context) =>
                                             DashPage()
 
+                                    )
+                                )
+                              }else if(position==3)
+                              {
+
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder:
+                                        (context) =>
+                                    employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"?
+                                    // EmpTask(emoid: userId, status: '',)
+                                    MonthCalendarPage(id: userId, name: employee_name,)
+                                        :viewemp(type: 'A',)
                                     )
                                 )
                               }
