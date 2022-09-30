@@ -18,7 +18,7 @@ import 'virash_app_home_screen.dart';
 import 'globals.dart';
 class TakePictureScreen extends StatefulWidget {
    TakePictureScreen({
-    super.key, required this.camera,required this.latitude,required this.longitude,required this.title,required this.position
+     required this.camera,required this.latitude,required this.longitude,required this.title,required this.position
   });
   final CameraDescription camera;
   final Position position;
@@ -37,7 +37,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   bool net = true;
   bool loader =true;
   late String Address;
-    XFile? image=null;
+  XFile? image=null;
   late Image camerraImage;
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -68,6 +68,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
   @override
   void initState() {
+    print(widget.title);
     super.initState();
     GetAddressFromLatLong(widget.position);
     checkinternet();

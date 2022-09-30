@@ -132,7 +132,7 @@ class _EmpTaskState extends State<EmpTask> {
                             margin: const EdgeInsets.all(5.0),
                             child: Card(
                               elevation: 3.0,
-                              shape: const RoundedRectangleBorder(
+                              shape:  RoundedRectangleBorder(
                                   borderRadius: BorderRadius.all(
                                       Radius.circular(14.0))),
                               child:            Column(
@@ -327,11 +327,11 @@ class _EmpTaskState extends State<EmpTask> {
                                     ],
                                   ),
                                 Divider(),
-                                Row(
+                                  snapshot.data["data"][position]["status"]!="Completed"?Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.end,
                                     children: [
-                                     employee_role=="Employee & Faculty"?Container(
+                                      employee_role=="Developer & Faculty"||employee_role=="Developer"?Container(
                                         padding:
                                         EdgeInsets.all(8.0),
                                         child:
@@ -393,7 +393,7 @@ class _EmpTaskState extends State<EmpTask> {
                                         ),
                                       ):Container(),
                                     ],
-                                  )
+                                  ):Container()
                                 ],
                               ),
 

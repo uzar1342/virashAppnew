@@ -7,7 +7,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
 import '../virash_app_home_screen.dart';
@@ -37,19 +36,9 @@ class _TaskBottomBarViewState extends State<TaskBottomBarView>
   bool net = false;
   String Address='';
 
-  checkinternet() async {
-    bool result = await InternetConnectionChecker().hasConnection;
-    if (result == true) {
-      net=true;
-    } else {
-      net=false;
-      Fluttertoast.showToast(msg: "No Internet");
-    }
-  }
 
   @override
   void initState() {
-    checkinternet();
     WidgetsFlutterBinding.ensureInitialized();
     animationController = AnimationController(
       vsync: this,
