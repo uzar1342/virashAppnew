@@ -2,7 +2,6 @@ import 'package:Virash/globals.dart';
 import 'package:Virash/viewimage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
 import 'package:flutter_calendar_carousel/classes/event.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart' show DateFormat;
-
 
 class MonthCalendarPage extends StatelessWidget {
   // This widget is the root of your application.
@@ -32,6 +30,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late int year;
+  late int day;
+  late int month;
   DateTime _currentDate = DateTime.now();
   DateTime _currentDate2 = DateTime.now();
   String _currentMonth = DateFormat.yMMM().format(DateTime.now());
@@ -71,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Dio dio=Dio();
     var formData = FormData.fromMap({
       'emp_id':userId,
-      "month":"2022-09"
+      "month":"${year}-${month>=10?month.toString():"0"+month.toString()}"
     });
     print(formData.fields);
     var response = await dio.post('http://training.virash.in/attendance_details', data:formData);
@@ -84,11 +85,12 @@ class _MyHomePageState extends State<MyHomePage> {
          {
 if(response.data["data"][i]["attendance_date"]!=null)
   {
-    String date=  response.data["data"][i]["attendance_date"];
-    var d1=  date.split("-");
-    int year=int.parse(d1[0]),month=int.parse(d1[1]),day=int.parse(d1[2]);
+
     if( response.data["data"][i]["Presentee"]=="Present")
       {
+        String date=  response.data["data"][i]["attendance_date"];
+        var d1=  date.split("-");
+        int year=int.parse(d1[0]),month=int.parse(d1[1]),day=int.parse(d1[2]);
         _markedDateMap.add(
             DateTime(year, month, day),
             Event(
@@ -97,6 +99,9 @@ if(response.data["data"][i]["attendance_date"]!=null)
       }
     else if(response.data["data"][i]["Presentee"]=="Absent")
       {
+        String date=  response.data["data"][i]["attendance_date"];
+        var d1=  date.split("-");
+        int year=int.parse(d1[0]),month=int.parse(d1[1]),day=int.parse(d1[2]);
         _markedDateMap.add(
             DateTime(year, month, day),
             Event(
@@ -125,8 +130,8 @@ if(response.data["data"][i]["attendance_date"]!=null)
   Future<dynamic> fetchEmployList()  async {
     Dio dio=Dio();
     var formData = FormData.fromMap({
-      'emp_id':"2",
-      "attendance_date":"2022-09-28"
+      'emp_id':userId,
+      "attendance_date":"${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}"
     });
     print(formData.fields);
     var response = await dio.post('http://training.virash.in/dayStatusForEmployee', data:formData);
@@ -143,11 +148,11 @@ if(response.data["data"][i]["attendance_date"]!=null)
 
   @override
   void initState() {
-    fetchCourseList();
-
+    year=DateTime.now().year;
+    day=DateTime.now().day;
+    month=DateTime.now().month;
     /// Add more events to _markedDateMap EventList
-
-
+    fetchCourseList();
     super.initState();
   }
 
@@ -160,9 +165,9 @@ if(response.data["data"][i]["attendance_date"]!=null)
       todayBorderColor: Colors.green,
       onDayPressed: (date, events) {
         this.setState(() => _currentDate2 = date);
-        events.forEach((event) => print(event.title));
+        events.forEach((event) => {day=date.day,year=date.year,month=date.month});
       },
-      showOnlyCurrentMonthDate: true,
+      showOnlyCurrentMonthDate: false,
       weekendTextStyle: TextStyle(
         color: Colors.red,
       ),
@@ -172,6 +177,7 @@ if(response.data["data"][i]["attendance_date"]!=null)
 //      firstDayOfWeek: 4,
       markedDatesMap: _markedDateMap,
       selectedDateTime: _currentDate2,
+      targetDateTime: _targetDateTime,
       customGridViewPhysics: NeverScrollableScrollPhysics(),
       markedDateCustomTextStyle: TextStyle(
         fontSize: 18,
@@ -192,8 +198,6 @@ if(response.data["data"][i]["attendance_date"]!=null)
       selectedDayTextStyle: TextStyle(
         color: Colors.yellow,
       ),
-      minSelectedDate: _currentDate.subtract(Duration(days: 30)),
-      maxSelectedDate: _currentDate.add(Duration(days: 30)),
       prevDaysTextStyle: TextStyle(
         fontSize: 16,
         color: Colors.pinkAccent,
@@ -240,24 +244,33 @@ if(response.data["data"][i]["attendance_date"]!=null)
                     TextButton(
                       child: Text('PREV'),
                       onPressed: () {
+                        _markedDateMap.clear();
                         print(_targetDateTime.month);  print(DateTime.now().month);
                         setState(() {
                           _targetDateTime = DateTime(
                               _targetDateTime.year, _targetDateTime.month - 1);
                           _currentMonth =
                               DateFormat.yMMM().format(_targetDateTime);
+                          year=_targetDateTime.year;
+                          month=_targetDateTime.month;
+                          fetchCourseList();
                         });
                       },
                     ),
                     _targetDateTime.month<DateTime.now().month?TextButton(
                       child: Text('NEXT'),
                       onPressed: () {
+                        _markedDateMap.clear();
                         print(_targetDateTime.month);
                         setState(() {
+
                           _targetDateTime = DateTime(
                               _targetDateTime.year, _targetDateTime.month + 1);
                           _currentMonth =
                               DateFormat.yMMM().format(_targetDateTime);
+                          year=_targetDateTime.year;
+                          month=_targetDateTime.month;
+                          fetchCourseList();
                         });
                       },
                     ):Container()
@@ -495,7 +508,7 @@ if(response.data["data"][i]["attendance_date"]!=null)
                             snapshot.data["data"][0]["task"]!=null?
                             Container(
                               width: w,
-                              child: ListView.builder(
+                              child:  snapshot.data["data"][0]["task"].length>0?ListView.builder(
                                   shrinkWrap: true,
                                   itemCount: snapshot.data["data"][0]["task"].length,
                                   itemBuilder: (BuildContext context, int index){
@@ -610,7 +623,7 @@ if(response.data["data"][i]["attendance_date"]!=null)
                                       ],
                                     ));
 
-                                  }),
+                                  }):Image.asset("assets/no_data.png"),
                             ): Image.asset("assets/no_data.png"),
                           ],
                         ):Image.asset("assets/no_data.png");
