@@ -7,9 +7,10 @@ import '../virash_app_theme.dart';
 class MediterranesnDietView extends StatelessWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
+  final String outtime,intime;
 
   const MediterranesnDietView(
-      {Key? key, this.animationController, this.animation})
+      {Key? key, this.animationController, this.animation,required this.intime,required this.outtime})
       : super(key: key);
 
   @override
@@ -19,7 +20,7 @@ class MediterranesnDietView extends StatelessWidget {
       builder: (BuildContext context, Widget? child) {
         return FadeTransition(
           opacity: animation!,
-          child: new Transform(
+          child: Transform(
             transform: new Matrix4.translationValues(
                 0.0, 30 * (1.0 - animation!.value), 0.0),
             child: Padding(
@@ -77,7 +78,7 @@ class MediterranesnDietView extends StatelessWidget {
                                               padding: const EdgeInsets.only(
                                                   left: 4, bottom: 2),
                                               child: Text(
-                                                'Eaten',
+                                                'in-time',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontFamily:
@@ -107,7 +108,7 @@ class MediterranesnDietView extends StatelessWidget {
                                                       const EdgeInsets.only(
                                                           left: 4, bottom: 3),
                                                   child: Text(
-                                                    '${(1127 * animation!.value).toInt()}',
+                                                    intime,
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:
@@ -160,7 +161,7 @@ class MediterranesnDietView extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           color: HexColor('#F56E98')
                                               .withOpacity(0.5),
-                                          borderRadius: BorderRadius.all(
+                                          borderRadius: const BorderRadius.all(
                                               Radius.circular(4.0)),
                                         ),
                                       ),
@@ -176,7 +177,7 @@ class MediterranesnDietView extends StatelessWidget {
                                               padding: const EdgeInsets.only(
                                                   left: 4, bottom: 2),
                                               child: Text(
-                                                'Burned',
+                                                'out-time',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontFamily:
@@ -206,7 +207,7 @@ class MediterranesnDietView extends StatelessWidget {
                                                       const EdgeInsets.only(
                                                           left: 4, bottom: 3),
                                                   child: Text(
-                                                    '${(102 * animation!.value).toInt()}',
+                                                    outtime,
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontFamily:

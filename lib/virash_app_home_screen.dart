@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:Virash/training/training_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,27 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
       }
     });
   }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Are you sure?'),
+        content: const Text('Do you really want to exit this app'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child:  Text('No'),
+          ),
+          TextButton(
+            onPressed: () => exit(0),
+            child:  Text('Yes'),
+          ),
+        ],
+      ),
+    )) ?? false;
+  }
+
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   Widget tabBody = Container(
     color: VirashAppTheme.background,
@@ -69,61 +92,64 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: VirashAppTheme.background,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: widget.isLoading?Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(
-                color: primaryColor,
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text("Loading...")
-            ],
-          ),
-        ):FutureBuilder<bool>(
-          future: getData(),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            if (!snapshot.hasData) {
-              return const SizedBox();
-            } else {
-              return net?Stack(
-                children: <Widget>[
-                  tabBody,
-                  bottomBar(),
-                ],
-              ):SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "assets/no_internet.png",
-                        height: 300,
-                        width: 300,
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 14.0),
-                        child: Text(
-                          "Looks like you got disconnected, Please check your Internet connection",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: primaryColor,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Container(
+        color: VirashAppTheme.background,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: widget.isLoading?Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  color: primaryColor,
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Text("Loading...")
+              ],
+            ),
+          ):FutureBuilder<bool>(
+            future: getData(),
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              if (!snapshot.hasData) {
+                return const SizedBox();
+              } else {
+                return net?Stack(
+                  children: <Widget>[
+                    tabBody,
+                    bottomBar(),
+                  ],
+                ):SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/no_internet.png",
+                          height: 300,
+                          width: 300,
                         ),
-                      )
-                    ],
-                  ));
-            }
-          },
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 14.0),
+                          child: Text(
+                            "Looks like you got disconnected, Please check your Internet connection",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: primaryColor,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ));
+              }
+            },
+          ),
         ),
       ),
     );
@@ -158,17 +184,19 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
                       MyHomeScreen(animationController: animationController);
                 });
               });
-            } else if (index == 1 ) {
-              animationController?.reverse().then<dynamic>((data) {
-                if (!mounted) {
-                  return;
-                }
-                setState(() {
-                  tabBody =
-                      TrainingScreen(animationController: animationController);
-                });
-              });
-            }else if (index == 2 ) {
+             }
+    // else if (index == 1 ) {
+            //   animationController?.reverse().then<dynamic>((data) {
+            //     if (!mounted) {
+            //       return;
+            //     }
+            //     setState(() {
+            //       tabBody =
+            //           TrainingScreen(animationController: animationController);
+            //     });
+            //   });
+            // }
+               else if (index == 2 ) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
