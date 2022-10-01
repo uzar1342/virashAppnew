@@ -297,6 +297,7 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                             year=_targetDateTime.year;
                             month=_targetDateTime.month;
                             FetchAttendence();
+                            _currentDate2=_targetDateTime;
                           });
                         },
                       ),
@@ -329,6 +330,7 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                             year=_targetDateTime.year;
                             month=_targetDateTime.month;
                             FetchAttendence();
+                            _currentDate2=_targetDateTime;
                           });
                         },
                       ),
@@ -570,7 +572,7 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                                                               MaterialPageRoute(
                                                                   builder:
                                                                       (context) =>
-                                                                      DateTimePicker(id: userId, date: "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",)
+                                                                      DateTimePicker(id: widget.id, date: "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",)
                                                               ));
                                                         },
                                                         child: Container(
