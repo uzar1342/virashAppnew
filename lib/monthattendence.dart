@@ -1,5 +1,8 @@
+import 'dart:collection';
+
 import 'package:Virash/globals.dart';
 import 'package:Virash/viewimage.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
@@ -41,6 +44,30 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
     ),
   );
 
+  bool net = true;
+  var subscription;
+  checkinternet() async {
+
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        setState(() {
+          setState(() {
+
+            net = false;
+
+          });
+        });
+      } else {
+        setState(() {
+          net = true;
+        });
+      }
+    });
+  }
+
+
   final EventList<Event> _markedDateMap =  EventList<Event>(
     events: {
        DateTime.now(): [
@@ -60,7 +87,8 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
     },
   );
   bool isLoading = true;
-  Future<dynamic> fetchCourseList()  async {
+  final Map<String, String> planets = HashMap();
+  Future<dynamic> FetchAttendence()  async {
     Dio dio=Dio();
     var formData = FormData.fromMap({
       'emp_id':widget.id,
@@ -111,6 +139,7 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
             ));
       }else if(response.data["data"][i]["Presentee"]=="Holiday")
       {
+        planets.addAll({response.data["data"][i]["attendance_date"]:response.data["data"][i]["occassion"]});
         String date=  response.data["data"][i]["attendance_date"];
         var d1=  date.split("-");
         int year=int.parse(d1[0]),month=int.parse(d1[1]),day=int.parse(d1[2]);
@@ -160,14 +189,19 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
 
   @override
   void initState() {
+    checkinternet();
     year=DateTime.now().year;
     day=DateTime.now().day;
     month=DateTime.now().month;
     /// Add more events to _markedDateMap EventList
-    fetchCourseList();
+    FetchAttendence();
     super.initState();
   }
-
+@override
+  void dispose() {
+  subscription.cancel;
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -235,7 +269,7 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
         appBar:  AppBar(
           title:  Text("Monthly Attendence"),
         ),
-        body: SingleChildScrollView(
+        body: net?SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -262,7 +296,7 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                                 DateFormat.yMMM().format(_targetDateTime);
                             year=_targetDateTime.year;
                             month=_targetDateTime.month;
-                            fetchCourseList();
+                            FetchAttendence();
                           });
                         },
                       ),
@@ -294,7 +328,7 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                                 DateFormat.yMMM().format(_targetDateTime);
                             year=_targetDateTime.year;
                             month=_targetDateTime.month;
-                            fetchCourseList();
+                            FetchAttendence();
                           });
                         },
                       ),
@@ -312,406 +346,442 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
               ),
               Container(
                 width: w,
-                height: h*0.35,
-                margin: EdgeInsets.symmetric(horizontal: 16.0),
-                child: _calendarCarouselNoHeader,
-              ), //
-              FutureBuilder<dynamic>(
-                future: fetchEmployList(), // async work
-                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
-                    default:
-                      if (snapshot.hasError)
-                        return SafeArea(child:Text('Error: ${snapshot.error}'));
-                      else {
-                        Color primaryColor = const Color(0xff1f7396);
-                        return   snapshot.data["success"].toString().trim()=="1"?
-                         Column(
-                          children: [
-                            InkWell(
-                              onTap:()=>{
-                              },
-                              child: Container(
-                                child:
-                                Container(
-                                  width: w,
-                                  margin: const EdgeInsets.all(5.0),
-                                  child: Card(
-                                    elevation: 3.0,
-                                    shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(14.0))),
-                                    child:            Column(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment
-                                              .spaceBetween,
-                                          children: [
-                                            Row(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment
-                                                  .center,
+                child: Column(
+                  children: [
+                    Container(
+                      width: w,
+                      height: h*0.4,
+                      margin: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: _calendarCarouselNoHeader,
+                    ), //
+                    FutureBuilder<dynamic>(
+                      future: fetchEmployList(), // async work
+                      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
+                          default:
+                            if (snapshot.hasError)
+                              return SafeArea(child:Text('Error: ${snapshot.error}'));
+                            else {
+                              Color primaryColor = const Color(0xff1f7396);
+                              bool holiday=planets.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}");
+                              print(holiday);
+                              return !holiday?Container(
+                                child: snapshot.data["success"].toString().trim()=="1"?
+                                 Column(
+                                  children: [
+                                    InkWell(
+                                      onTap:()=>{
+                                      },
+                                      child: Container(
+                                        child:
+                                        Container(
+                                          width: w,
+                                          margin: const EdgeInsets.all(5.0),
+                                          child: Card(
+                                            elevation: 3.0,
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(14.0))),
+                                            child:            Column(
                                               mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .start,
+                                              MainAxisAlignment.spaceEvenly,
                                               children: [
-
-                                                SizedBox(
-                                                  width: w * 0.02,
-                                                ),
-                                                Text(
-                                                  widget.name,
-                                                  style: const TextStyle(
-                                                      color: Colors
-                                                          .black54,
-                                                      fontWeight:
-                                                      FontWeight
-                                                          .bold,
-                                                      fontSize: 16.0),
-                                                )
-                                              ],
-                                            ),
-                                            GestureDetector(
-                                              onTap: (){
-                                              },
-                                              child: Container(
-                                                padding:
-                                                const EdgeInsets
-                                                    .all(5.0),
-                                                height: h * 0.04,
-                                                decoration:  BoxDecoration(
-                                                    color:  snapshot.data["data"][0]["attendance_status"]=="Full Day"?Colors
-                                                        .red:Colors
-                                                        .green,
-                                                    borderRadius: BorderRadius
-                                                        .all(Radius
-                                                        .circular(
-                                                        20.0))),
-                                                child: Row(
+                                                Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                                   children: [
-                                                    const FaIcon(
-                                                      FontAwesomeIcons
-                                                          .globe,
-                                                      color: Colors
-                                                          .white,
-                                                      size: 20.0,
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .center,
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .start,
+                                                      children: [
+
+                                                        SizedBox(
+                                                          width: w * 0.02,
+                                                        ),
+                                                        Text(
+                                                          widget.name,
+                                                          style: const TextStyle(
+                                                              color: Colors
+                                                                  .black54,
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold,
+                                                              fontSize: 16.0),
+                                                        )
+                                                      ],
                                                     ),
-                                                    SizedBox(
-                                                      width:
-                                                      w * 0.01,
-                                                    ),
-                                                    Text(
-                                                      snapshot.data["data"][0]["attendance_status"].toString(),
-                                                      style: const TextStyle(
+                                                    GestureDetector(
+                                                      onTap: (){
+                                                      },
+                                                      child: Container(
+                                                        padding:
+                                                        const EdgeInsets
+                                                            .all(5.0),
+                                                        height: h * 0.04,
+                                                        decoration:  BoxDecoration(
+                                                            color:  snapshot.data["data"][0]["attendance_status"]=="Full Day"?Colors
+                                                                .green:snapshot.data["data"][0]["attendance_status"]=="Half Day"?Colors
+                                                                .orange:Colors.red,
+                                                            borderRadius: BorderRadius
+                                                                .all(Radius
+                                                                .circular(
+                                                                20.0))),
+                                                        child: Row(
+                                                          children: [
+                                                            const FaIcon(
+                                                              FontAwesomeIcons
+                                                                  .globe,
+                                                              color: Colors
+                                                                  .white,
+                                                              size: 20.0,
+                                                            ),
+                                                            SizedBox(
+                                                              width:
+                                                              w * 0.01,
+                                                            ),
+                                                            Text(
+                                                              snapshot.data["data"][0]["attendance_status"].toString(),
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    )
+
+                                                  ],
+                                                ),
+                                                const Divider(),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons
+                                                              .access_time_filled,
                                                           color: Colors
-                                                              .white,
+                                                              .green.shade200,
+                                                        ),
+                                                        SizedBox(
+                                                          width: w * 0.01,
+                                                        ),
+                                                        Text(
+
+                                                            snapshot.data["data"][0]["in_time"],
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .black54)),
+                                                      ],
+                                                    ),
+                                                    const Text(
+                                                      "To",
+                                                      style: TextStyle(
+                                                          color: Colors.black38,
+                                                          fontSize: 15.0,
                                                           fontWeight:
-                                                          FontWeight
-                                                              .bold),
+                                                          FontWeight.bold),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons
+                                                              .access_time_filled,
+                                                          color: Colors
+                                                              .red.shade200,
+                                                        ),
+                                                        SizedBox(
+                                                          width: w * 0.01,
+                                                        ),
+                                                        Text(
+
+                                                            snapshot.data["data"][0]["out_time"].toString(),
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .black54)),
+                                                      ],
                                                     )
                                                   ],
                                                 ),
-                                              ),
-                                            )
-
-                                          ],
-                                        ),
-                                        const Divider(),
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment
-                                              .spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons
-                                                      .access_time_filled,
-                                                  color: Colors
-                                                      .green.shade200,
-                                                ),
-                                                SizedBox(
-                                                  width: w * 0.01,
-                                                ),
-                                                Text(
-
-                                                    snapshot.data["data"][0]["in_time"],
-                                                    style: const TextStyle(
-                                                        color: Colors
-                                                            .black54)),
+                                                Divider(),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                    viewimage(inimage: snapshot.data["data"][0]["in_image"].toString(), outimage: snapshot.data["data"][0]["out_image"].toString(),)));
+                                                      },
+                                                      child: Container(
+                                                        padding:
+                                                        EdgeInsets.all(8.0),
+                                                        decoration:
+                                                        BoxDecoration(
+                                                          color: primaryColor,
+                                                          borderRadius:
+                                                          const BorderRadius.all(
+                                                            Radius.circular(
+                                                                14.0),
+                                                          ),
+                                                        ),
+                                                        child: Row(children: const [
+                                                          Icon(
+                                                            Icons.assignment,
+                                                            color: Colors.white,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 5.0,
+                                                          ),
+                                                          Text(
+                                                            "View Image",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                          )
+                                                        ]),
+                                                      ),
+                                                    ),
+                                                    snapshot.data["data"][0]["out_time"]==null?SizedBox(width: 10,):Container(),
+                                                    snapshot.data["data"][0]["out_time"]==null?  Container(
+                                                      child: employee_role=="Admin"||employee_role=="Super Admin"?InkWell(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                      DateTimePicker(id: userId, date: "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",)
+                                                              ));
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                          EdgeInsets.all(8.0),
+                                                          decoration:
+                                                          BoxDecoration(
+                                                            color: primaryColor,
+                                                            borderRadius:
+                                                            const BorderRadius.all(
+                                                              Radius.circular(
+                                                                  14.0),
+                                                            ),
+                                                          ),
+                                                          child: Row(children: const [
+                                                            Icon(
+                                                              Icons.punch_clock_rounded,
+                                                              color: Colors.white,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 5.0,
+                                                            ),
+                                                            Text(
+                                                              "Mark Outtime",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                            )
+                                                          ]),
+                                                        ),
+                                                      ):Container(),
+                                                    ):Container(),
+                                                  ],
+                                                )
                                               ],
                                             ),
-                                            const Text(
-                                              "To",
-                                              style: TextStyle(
-                                                  color: Colors.black38,
-                                                  fontSize: 15.0,
-                                                  fontWeight:
-                                                  FontWeight.bold),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons
-                                                      .access_time_filled,
-                                                  color: Colors
-                                                      .red.shade200,
-                                                ),
-                                                SizedBox(
-                                                  width: w * 0.01,
-                                                ),
-                                                Text(
 
-                                                    snapshot.data["data"][0]["out_time"].toString(),
-                                                    style: const TextStyle(
-                                                        color: Colors
-                                                            .black54)),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        Divider(),
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.end,
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder:
-                                                            (context) =>
-                                                            viewimage(inimage: snapshot.data["data"][0]["in_image"].toString(), outimage: snapshot.data["data"][0]["out_image"].toString(),)));
-                                              },
-                                              child: Container(
-                                                padding:
-                                                EdgeInsets.all(8.0),
-                                                decoration:
-                                                BoxDecoration(
-                                                  color: primaryColor,
-                                                  borderRadius:
-                                                  const BorderRadius.all(
-                                                    Radius.circular(
-                                                        14.0),
-                                                  ),
-                                                ),
-                                                child: Row(children: const [
-                                                  Icon(
-                                                    Icons.assignment,
-                                                    color: Colors.white,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 5.0,
-                                                  ),
-                                                  Text(
-                                                    "View Image",
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .white,
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold),
-                                                  )
-                                                ]),
-                                              ),
-                                            ),
-                                            snapshot.data["data"][0]["out_time"]==null?SizedBox(width: 10,):Container(),
-                                            snapshot.data["data"][0]["out_time"]==null?  Container(
-                                              child: employee_role=="Admin"||employee_role=="Super Admin"?InkWell(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder:
-                                                              (context) =>
-                                                              DateTimePicker(id: userId, date: "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",)
-                                                      ));
-                                                },
-                                                child: Container(
-                                                  padding:
-                                                  EdgeInsets.all(8.0),
-                                                  decoration:
-                                                  BoxDecoration(
-                                                    color: primaryColor,
-                                                    borderRadius:
-                                                    const BorderRadius.all(
-                                                      Radius.circular(
-                                                          14.0),
-                                                    ),
-                                                  ),
-                                                  child: Row(children: const [
-                                                    Icon(
-                                                      Icons.punch_clock_rounded,
-                                                      color: Colors.white,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 5.0,
-                                                    ),
-                                                    Text(
-                                                      "Mark Outtime",
-                                                      style: TextStyle(
-                                                          color: Colors
-                                                              .white,
-                                                          fontWeight:
-                                                          FontWeight
-                                                              .bold),
-                                                    )
-                                                  ]),
-                                                ),
-                                              ):Container(),
-                                            ):Container(),
-                                          ],
+
+                                          ),
                                         )
-                                      ],
+
+
+
+                                        ,
+                                      ),
+
+
                                     ),
-
-
-                                  ),
-                                )
-
-
-
-                                ,
-                              ),
-
-
-                            ),
-                            SizedBox(height: 50,),
-                            Text("TASK LIST",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                            snapshot.data["data"][0]["task"]!=null?
-                            Container(
-                              width: w,
-                              child:  snapshot.data["data"][0]["task"].length>0?ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: snapshot.data["data"][0]["task"].length,
-                                  itemBuilder: (BuildContext context, int index){
-                                    return Card(elevation: 4,child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-
-                                                  SizedBox(
-                                                    width: w * 0.02,
-                                                  ),
-                                                  Text(
-                                                    "Priority : "+snapshot.data["data"][0]["task"][index]["priority"].toString(),
-                                                    style: const TextStyle(
-                                                        color: Colors
-                                                            .black54,
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold,
-                                                        fontSize: 17.0),
-                                                  )
-                                                ],
-                                              ),
-
-                                            ],
-                                          ),
-                                        ),
-                                        const Divider(),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .spaceBetween,
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment
-                                                    .center,
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .start,
-                                                children: [
-
-                                                  SizedBox(
-                                                    width: w * 0.02,
-                                                  ),
-                                                  Text(
-                                                    "TASK : "+snapshot.data["data"][0]["task"][index]["title"].toString(),
-                                                    style: const TextStyle(
-                                                        color: Colors
-                                                            .black54,
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold,
-                                                        fontSize: 17.0),
-                                                  )
-                                                ],
-                                              ),
-
-                                            ],
-                                          ),
-                                        ),
-
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            width: w,
-                                            color: Color(0xFF91edbf),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
-                                                children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment
-                                                        .center,
+                                    SizedBox(height: 50,),
+                                    Text("TASK LIST",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                    snapshot.data["data"][0]["task"]!=null?
+                                    Container(
+                                      width: w,
+                                      child:  snapshot.data["data"][0]["task"].length>0?ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: snapshot.data["data"][0]["task"].length,
+                                          itemBuilder: (BuildContext context, int index){
+                                            return Card(elevation: 4,child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Row(
                                                     mainAxisAlignment:
                                                     MainAxisAlignment
-                                                        .start,
+                                                        .spaceBetween,
                                                     children: [
+                                                      Row(
+                                                        children: [
 
-                                                      if(snapshot.data["data"][0]["task"][index]["task_status"]=="Completed")
-                                                        Text(
-                                                        "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
-                                                        style: const TextStyle(
-                                                            color: Color(0xFF0e6339),
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .bold,
-                                                            fontSize: 17.0),
+                                                          SizedBox(
+                                                            width: w * 0.02,
+                                                          ),
+                                                          Text(
+                                                            "Priority : "+snapshot.data["data"][0]["task"][index]["priority"].toString(),
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .black54,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 17.0),
+                                                          )
+                                                        ],
                                                       ),
-                                                      SizedBox(width: 2,)
+
                                                     ],
                                                   ),
+                                                ),
+                                                const Divider(),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .start,
+                                                        children: [
 
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ));
+                                                          SizedBox(
+                                                            width: w * 0.02,
+                                                          ),
+                                                          Text(
+                                                            "TASK : "+snapshot.data["data"][0]["task"][index]["title"].toString(),
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .black54,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 17.0),
+                                                          )
+                                                        ],
+                                                      ),
 
-                                  }):Image.asset("assets/no_data.png"),
-                            ): Image.asset("assets/no_data.png"),
-                          ],
-                        ):Image.asset("assets/no_data.png");
-                      }
-                  }
-                },
+                                                    ],
+                                                  ),
+                                                ),
+
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Container(
+                                                    width: w,
+                                                    color: Color(0xFF91edbf),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                        children: [
+                                                          Row(
+                                                            crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                            children: [
+
+                                                              if(snapshot.data["data"][0]["task"][index]["task_status"]=="Completed")
+                                                                Text(
+                                                                "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
+                                                                style: const TextStyle(
+                                                                    color: Color(0xFF0e6339),
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    fontSize: 17.0),
+                                                              ),
+                                                              SizedBox(width: 2,)
+                                                            ],
+                                                          ),
+
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ));
+
+                                          }):Image.asset("assets/no_data.png"),
+                                    ): Image.asset("assets/no_data.png"),
+                                  ],
+                                ):Image.asset("assets/no_data.png"),
+                              ):Center(child: Text(planets["${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}"]!));
+                            }
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
           SizedBox(height: 100,)
             ],
           ),
-        ));
+        ):SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/no_internet.png",
+                  height: 300,
+                  width: 300,
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14.0),
+                  child: Text(
+                    "Looks like you got disconnected, Please check your Internet connection",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            )));
   }
 }

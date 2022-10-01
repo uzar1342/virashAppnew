@@ -1,4 +1,5 @@
 import 'package:Virash/virash_app_home_screen.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,28 @@ class DateTimePicker extends StatefulWidget {
 class _DateTimePickerState extends State<DateTimePicker> {
   late double _height;
   late double _width;
+  bool net = true;
+  var subscription;
+  checkinternet() async {
 
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        setState(() {
+          setState(() {
+
+            net = false;
+
+          });
+        });
+      } else {
+        setState(() {
+          net = true;
+        });
+      }
+    });
+  }
   String _setTime="", setDate="",address="";
 
   late String _hour, _minute, _time;
@@ -95,6 +117,7 @@ async {
   @override
   void initState() {
     getLat();
+    checkinternet();
     _dateController.text = widget.date;
     _timeController.text = formatDate(
         DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute,DateTime.now().second),
@@ -118,7 +141,7 @@ async {
       body: isLoading?Container(
         width: _width,
         height: _height,
-        child: Column(
+        child: net?Column(
           children: <Widget>[
             Column(
               children: <Widget>[
@@ -224,8 +247,16 @@ async {
               var response = await dio.post('http://training.virash.in/outTimeByAdmin', data:formData);
               if (response.statusCode == 200) {
                 print(response.data);
-                Get.off(()=>(DashPage()));
-              } else {
+                if(response.data["success"]=="1")
+                Get.offAll(()=>(VirashAppHomeScreen()));
+                else {
+                  setState(() {
+                    isLoading = true;
+                  });
+                                  Fluttertoast.showToast(
+                                      msg: response.data["message"]);
+                                }
+                              } else {
                 print(response.statusCode);
                 Fluttertoast.showToast(msg: "Please try again later");
                 setState(() {
@@ -237,7 +268,31 @@ async {
 
             }, child: Text("Send"))
           ],
-        ),
+        ):SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/no_internet.png",
+                  height: 300,
+                  width: 300,
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14.0),
+                  child: Text(
+                    "Looks like you got disconnected, Please check your Internet connection",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            )),
       ):Center(child: CircularProgressIndicator()),
     );
   }

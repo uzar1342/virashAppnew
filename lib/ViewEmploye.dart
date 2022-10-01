@@ -1,4 +1,5 @@
 import 'package:Virash/tasknav.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,29 @@ class viewemp extends StatefulWidget {
 
 class _viewempState extends State<viewemp> {
  bool isLoading=true;
+ bool net = true;
+ var subscription;
+ checkinternet() async {
+
+   subscription = Connectivity()
+       .onConnectivityChanged
+       .listen((ConnectivityResult result) {
+     if (result == ConnectivityResult.none) {
+       setState(() {
+         setState(() {
+
+           net = false;
+
+         });
+       });
+     } else {
+       setState(() {
+         net = true;
+       });
+     }
+   });
+ }
+
   fetchemployelist() async {
     print(userId);
     Dio dio=Dio();
@@ -43,14 +67,20 @@ print(formData.fields);
   }
 @override
   void initState() {
+  checkinternet();
   fetchemployelist();
     super.initState();
   }
+ @override
+ void dispose() {
+   subscription.cancel;
+   super.dispose();
+ }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title:Text("VIEW EMPLOYE")),
-      body:FutureBuilder<dynamic>(
+      body:net?FutureBuilder<dynamic>(
         future: fetchemployelist(), // async work
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           switch (snapshot.connectionState) {
@@ -99,7 +129,31 @@ print(formData.fields);
               }
           }
         },
-      )
+      ):SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/no_internet.png",
+                height: 300,
+                width: 300,
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 14.0),
+                child: Text(
+                  "Looks like you got disconnected, Please check your Internet connection",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: primaryColor,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              )
+            ],
+          ))
 
     );
   }
