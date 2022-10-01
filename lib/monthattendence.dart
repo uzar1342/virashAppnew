@@ -24,10 +24,10 @@ class MonthCalendarPage extends StatefulWidget {
   _MonthCalendarPageState createState() => new _MonthCalendarPageState();
 }
 class _MonthCalendarPageState extends State<MonthCalendarPage> {
-  late int year;
+   int year=2022;
   var ocassion=[];
-  late int day;
-  late int month;
+   int day=1;
+   int month=9;
   DateTime _currentDate = DateTime.now();
   DateTime _currentDate2 = DateTime.now();
   String _currentMonth = DateFormat.yMMM().format(DateTime.now());
@@ -37,7 +37,37 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
     decoration: new BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(1000)),
+        border: Border.all(color: Colors.red, width: 2.0)),
+    child: new Icon(
+      Icons.person,
+      color: Colors.amber,
+    ),
+  );
+static Widget _presentIcon = new Container(
+    decoration: new BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(1000)),
+        border: Border.all(color: Colors.green, width: 2.0)),
+    child: new Icon(
+      Icons.person,
+      color: Colors.amber,
+    ),
+  );
+static Widget _weekofIcon = new Container(
+    decoration: new BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(1000)),
         border: Border.all(color: Colors.blue, width: 2.0)),
+    child: new Icon(
+      Icons.person,
+      color: Colors.amber,
+    ),
+  );
+static Widget _holidayIcon = new Container(
+    decoration: new BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(1000)),
+        border: Border.all(color: Colors.purple, width: 2.0)),
     child: new Icon(
       Icons.person,
       color: Colors.amber,
@@ -68,11 +98,11 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
   }
 
 
-  final EventList<Event> _markedDateMap =  EventList<Event>(
+  EventList<Event> _markedDateMap = new EventList<Event>(
     events: {
-       DateTime.now(): [
-         Event(
-          date:  DateTime.now(),
+      new DateTime(2022, 9, 10): [
+        new Event(
+          date: new DateTime(2022, 9, 10),
           title: 'Event 1',
           icon: _eventIcon,
           dot: Container(
@@ -82,12 +112,24 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
             width: 5.0,
           ),
         ),
-
+        new Event(
+          date: new DateTime(2019, 2, 10),
+          title: 'Event 2',
+          icon: _eventIcon,
+        ),
+        new Event(
+          date: new DateTime(2019, 2, 10),
+          title: 'Event 3',
+          icon: _eventIcon,
+        ),
       ],
     },
   );
   bool isLoading = true;
-  final Map<String, String> planets = HashMap();
+  final Map<String, String> Holiyday = HashMap();
+  final Map<String, String> Week = HashMap();
+
+
   Future<dynamic> FetchAttendence()  async {
     Dio dio=Dio();
     var formData = FormData.fromMap({
@@ -113,18 +155,23 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
         _markedDateMap.add(
             DateTime(year, month, day),
             Event(
-              dot: Text(".",style: TextStyle(color: Color(0xff05c902),fontSize: 50)), date: DateTime.now(),
+              dot: Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Container(alignment:Alignment.bottomCenter,child: Text("●",style: TextStyle(color: Colors.green,fontSize: 20))),
+              ),
+              date: DateTime(year, month, day),
             ));
       }
     else if(response.data["data"][i]["Presentee"]=="Absent")
       {
+        Week.addAll({response.data["data"][i]["attendance_date"]:"Absent"});
         String date=  response.data["data"][i]["attendance_date"];
         var d1=  date.split("-");
         int year=int.parse(d1[0]),month=int.parse(d1[1]),day=int.parse(d1[2]);
         _markedDateMap.add(
             DateTime(year, month, day),
             Event(
-              dot: Text(".",style: TextStyle(color: Colors.redAccent,fontSize: 50)), date: DateTime.now(),
+              dot: Text("●",style: TextStyle(color: Colors.redAccent,fontSize: 20)), date: DateTime.now(),
             ));
       }
     else if(response.data["data"][i]["Presentee"]=="Week off")
@@ -135,11 +182,11 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
         _markedDateMap.add(
             DateTime(year, month, day),
             Event(
-              dot: Text(".",style: TextStyle(color: Color(0xff022FFE),fontSize: 50)), date: DateTime.now(),
+              dot: Text("●",style: TextStyle(color: Colors.blue,fontSize: 20)), date: DateTime.now(),
             ));
       }else if(response.data["data"][i]["Presentee"]=="Holiday")
       {
-        planets.addAll({response.data["data"][i]["attendance_date"]:response.data["data"][i]["occassion"]});
+        Holiyday.addAll({response.data["data"][i]["attendance_date"]:response.data["data"][i]["occassion"]});
         String date=  response.data["data"][i]["attendance_date"];
         var d1=  date.split("-");
         int year=int.parse(d1[0]),month=int.parse(d1[1]),day=int.parse(d1[2]);
@@ -147,7 +194,7 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
         _markedDateMap.add(
             DateTime(year, month, day),
             Event(
-              dot: Text(".",style: TextStyle(color: Color(0xff5D10B9),fontSize: 50)), date: DateTime.now(),
+              dot: Text("●",style: TextStyle(color: Color(0xff5D10B9),fontSize: 20)), date: DateTime.now(),
             ));
       }
 
@@ -213,21 +260,22 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
         this.setState(() => _currentDate2 = date);
         events.forEach((event) => {day=date.day,year=date.year,month=date.month});
       },
-      daysHaveCircularBorder: false,
       showOnlyCurrentMonthDate: false,
+      childAspectRatio: 0.8,
       weekendTextStyle: TextStyle(
         color: Colors.red,
       ),
       thisMonthDayBorderColor: Colors.grey,
       weekFormat: false,
       isScrollable: false,
+      daysHaveCircularBorder: false,
 //      firstDayOfWeek: 4,
       markedDatesMap: _markedDateMap,
       selectedDateTime: _currentDate2,
       targetDateTime: _targetDateTime,
       customGridViewPhysics: NeverScrollableScrollPhysics(),
       markedDateCustomTextStyle: TextStyle(
-        fontSize: 18,
+        fontSize: 15,
         color: Colors.blue,
       ),
       showHeader: false,
@@ -338,7 +386,7 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                       width: w*0.3,
                       alignment: Alignment.centerRight,
                       child: TextButton(
-                        child: Text('NEXT'),
+                        child: Text('NEXT',style: TextStyle(color: Color(0xff656161)),),
                         onPressed: () {
                         },
                       ),
@@ -352,7 +400,7 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                   children: [
                     Container(
                       width: w,
-                      height: h*0.4,
+                      height: h*0.45,
                       margin: EdgeInsets.symmetric(horizontal: 16.0),
                       child: _calendarCarouselNoHeader,
                     ), //
@@ -366,8 +414,8 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                               return SafeArea(child:Text('Error: ${snapshot.error}'));
                             else {
                               Color primaryColor = const Color(0xff1f7396);
-                              bool holiday=planets.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}");
-                              print(holiday);
+                              bool holiday=Holiyday.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}");
+                              print(Week);
                               return !holiday?Container(
                                 child: snapshot.data["success"].toString().trim()=="1"?
                                  Column(
@@ -517,6 +565,69 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                                                     )
                                                   ],
                                                 ),
+                                                const Divider(),
+                                                snapshot.data["data"][0]["remaining_hours"]!=null?Container(
+                                                  child: int.parse(snapshot.data["data"][0]["remaining_hours"])>0?Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Text("Remaining hours: "),
+                                                          SizedBox(
+                                                            width: w * 0.01,
+                                                          ),
+                                                          Text(
+                                                              snapshot.data["data"][0]["remaining_hours"].toString()+" H/M/S",
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .black54)),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ):Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Text("Extra Hours: "),
+                                                          SizedBox(
+                                                            width: w * 0.01,
+                                                          ),
+                                                          Text(
+                                                              snapshot.data["data"][0]["extra_hours"].toString()+" H/M/S",
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .black54)),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                ):Container(),
+                                                const Divider(),
+                                               Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Text("Late : "),
+                                                        SizedBox(
+                                                          width: w * 0.01,
+                                                        ),
+                                                        Text(
+                                                            snapshot.data["data"][0]["late"].toString()+" H/M/S",
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .black54)),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
                                                 Divider(),
                                                 Row(
                                                   mainAxisAlignment:
@@ -565,48 +676,51 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                                                     ),
                                                     snapshot.data["data"][0]["out_time"]==null?SizedBox(width: 10,):Container(),
                                                     snapshot.data["data"][0]["out_time"]==null?  Container(
-                                                      child: employee_role=="Admin"||employee_role=="Super Admin"?InkWell(
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                      DateTimePicker(id: widget.id, date: "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",)
-                                                              ));
-                                                        },
-                                                        child: Container(
-                                                          padding:
-                                                          EdgeInsets.all(8.0),
-                                                          decoration:
-                                                          BoxDecoration(
-                                                            color: primaryColor,
-                                                            borderRadius:
-                                                            const BorderRadius.all(
-                                                              Radius.circular(
-                                                                  14.0),
+                                                      child: employee_role=="Admin"||employee_role=="Super Admin"?
+                                                      widget.id!=userId?Container(
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                        DateTimePicker(id: widget.id, date: "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",)
+                                                                ));
+                                                          },
+                                                          child: Container(
+                                                            padding:
+                                                            EdgeInsets.all(8.0),
+                                                            decoration:
+                                                            BoxDecoration(
+                                                              color: primaryColor,
+                                                              borderRadius:
+                                                              const BorderRadius.all(
+                                                                Radius.circular(
+                                                                    14.0),
+                                                              ),
                                                             ),
+                                                            child: Row(children: const [
+                                                              Icon(
+                                                                Icons.punch_clock_rounded,
+                                                                color: Colors.white,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 5.0,
+                                                              ),
+                                                              Text(
+                                                                "Mark Outtime",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                              )
+                                                            ]),
                                                           ),
-                                                          child: Row(children: const [
-                                                            Icon(
-                                                              Icons.punch_clock_rounded,
-                                                              color: Colors.white,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5.0,
-                                                            ),
-                                                            Text(
-                                                              "Mark Outtime",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                            )
-                                                          ]),
                                                         ),
-                                                      ):Container(),
+                                                      ):Container():Container(),
                                                     ):Container(),
                                                   ],
                                                 )
@@ -685,15 +799,18 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                                                           SizedBox(
                                                             width: w * 0.02,
                                                           ),
-                                                          Text(
-                                                            "TASK : "+snapshot.data["data"][0]["task"][index]["title"].toString(),
-                                                            style: const TextStyle(
-                                                                color: Colors
-                                                                    .black54,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold,
-                                                                fontSize: 17.0),
+                                                          Container(
+                                                            width: w*0.8,
+                                                            child: Text(
+                                                              "TASK : "+snapshot.data["data"][0]["task"][index]["title"].toString(),
+                                                              softWrap: true,maxLines:8,style: const TextStyle(
+                                                                  color: Colors
+                                                                      .black54,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                            ),
                                                           )
                                                         ],
                                                       ),
@@ -706,7 +823,9 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                                                   padding: const EdgeInsets.all(8.0),
                                                   child: Container(
                                                     width: w,
-                                                    color: Color(0xFF91edbf),
+                                                    color: snapshot.data["data"][0]["task"][index]["task_status"]=="Completed"?
+                                                    Color(0xFF91b7ed):snapshot.data["data"][0]["task"][index]["task_status"]=="Pending"?Color(0xFFedc791):
+                                                    snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected"?Color(0xFFed9c91):Color(0xff91edbf),
                                                     child: Padding(
                                                       padding: const EdgeInsets.all(8.0),
                                                       child: Row(
@@ -727,12 +846,40 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                                                                 Text(
                                                                 "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
                                                                 style: const TextStyle(
-                                                                    color: Color(0xFF0e6339),
+                                                                    color: Color(0xff0e1163),
                                                                     fontWeight:
                                                                     FontWeight
                                                                         .bold,
                                                                     fontSize: 17.0),
-                                                              ),
+                                                              )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Pending")
+                                                                Text(
+                                                                  "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
+                                                                  style: const TextStyle(
+                                                                      color: Color(
+                                                                          0xff63400e),
+                                                                      fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      fontSize: 17.0),
+                                                                )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected")
+                                                                  Text(
+                                                                    "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
+                                                                    style: const TextStyle(
+                                                                        color: Color(0xff63190e),
+                                                                        fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        fontSize: 17.0),
+                                                                  )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Approved")
+                                                                  Text(
+                                                                    "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
+                                                                    style: const TextStyle(
+                                                                        color: Color(0xff0e6339),
+                                                                        fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        fontSize: 17.0),
+                                                                  ),
                                                               SizedBox(width: 2,)
                                                             ],
                                                           ),
@@ -748,8 +895,291 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
                                           }):Image.asset("assets/no_data.png"),
                                     ): Image.asset("assets/no_data.png"),
                                   ],
-                                ):Image.asset("assets/no_data.png"),
-                              ):Center(child: Text(planets["${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}"]!));
+                                ):Week.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}")?
+                                Card(
+                                  elevation: 3.0,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(14.0))),
+                                  child:            Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment
+                                            .spaceBetween,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment
+                                                .center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .start,
+                                            children: [
+
+                                              SizedBox(
+                                                width: w * 0.02,
+                                              ),
+                                              Text(
+                                                widget.name,
+                                                style: const TextStyle(
+                                                    color: Colors
+                                                        .black54,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .bold,
+                                                    fontSize: 16.0),
+                                              )
+                                            ],
+                                          ),
+                                          GestureDetector(
+                                            onTap: (){
+                                            },
+                                            child: Container(
+                                              padding:
+                                              const EdgeInsets
+                                                  .all(5.0),
+                                              height: h * 0.04,
+                                              decoration:  BoxDecoration(
+                                                  color:  Colors.red,
+                                                  borderRadius: BorderRadius
+                                                      .all(Radius
+                                                      .circular(
+                                                      20.0))),
+                                              child: Row(
+                                                children: [
+                                                  const FaIcon(
+                                                    FontAwesomeIcons
+                                                        .globe,
+                                                    color: Colors
+                                                        .white,
+                                                    size: 20.0,
+                                                  ),
+                                                  SizedBox(
+                                                    width:
+                                                    w * 0.01,
+                                                  ),
+                                                  Text(
+                                                    "Absent",
+                                                    style: const TextStyle(
+                                                        color: Colors
+                                                            .white,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .bold),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          )
+
+                                        ],
+                                      ),
+
+                                    ],
+                                  ),
+                                ):Card(
+                                  elevation: 3.0,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(14.0))),
+                                  child:            Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment
+                                            .spaceBetween,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment
+                                                .center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .start,
+                                            children: [
+
+                                              SizedBox(
+                                                width: w * 0.02,
+                                              ),
+                                              Text(
+                                                widget.name,
+                                                style: const TextStyle(
+                                                    color: Colors
+                                                        .black54,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .bold,
+                                                    fontSize: 16.0),
+                                              )
+                                            ],
+                                          ),
+                                          GestureDetector(
+                                            onTap: (){
+                                            },
+                                            child: Container(
+                                              padding:
+                                              const EdgeInsets
+                                                  .all(5.0),
+                                              height: h * 0.04,
+                                              decoration:  BoxDecoration(
+                                                  color:  Color(0xff05b0ff),
+                                                  borderRadius: BorderRadius
+                                                      .all(Radius
+                                                      .circular(
+                                                      20.0))),
+                                              child: Row(
+                                                children: [
+                                                  const FaIcon(
+                                                    FontAwesomeIcons
+                                                        .globe,
+                                                    color: Colors
+                                                        .white,
+                                                    size: 20.0,
+                                                  ),
+                                                  SizedBox(
+                                                    width:
+                                                    w * 0.01,
+                                                  ),
+                                                  Text(
+                                                    "Week Off",
+                                                    style: const TextStyle(
+                                                        color: Colors
+                                                            .white,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .bold),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          )
+
+                                        ],
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
+                              ):Center(child: Card(
+                                elevation: 3.0,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(14.0))),
+                                child:            Column(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment
+                                          .spaceBetween,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment
+                                              .center,
+                                          mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .start,
+                                          children: [
+
+                                            SizedBox(
+                                              width: w * 0.02,
+                                            ),
+                                            Text(
+                                              widget.name,
+                                              style: const TextStyle(
+                                                  color: Colors
+                                                      .black54,
+                                                  fontWeight:
+                                                  FontWeight
+                                                      .bold,
+                                                  fontSize: 16.0),
+                                            )
+                                          ],
+                                        ),
+                                        GestureDetector(
+                                          onTap: (){
+                                          },
+                                          child: Container(
+                                            padding:
+                                            const EdgeInsets
+                                                .all(5.0),
+                                            height: h * 0.04,
+                                            decoration:  BoxDecoration(
+                                                color:  Colors.purple,
+                                                borderRadius: BorderRadius
+                                                    .all(Radius
+                                                    .circular(
+                                                    20.0))),
+                                            child: Row(
+                                              children: [
+                                                const FaIcon(
+                                                  FontAwesomeIcons
+                                                      .globe,
+                                                  color: Colors
+                                                      .white,
+                                                  size: 20.0,
+                                                ),
+                                                SizedBox(
+                                                  width:
+                                                  w * 0.01,
+                                                ),
+                                                Text(
+                                                  "Holiday",
+                                                  style: const TextStyle(
+                                                      color: Colors
+                                                          .white,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        )
+
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment
+                                          .spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons
+                                                  .home,
+                                              color: Colors
+                                                  .green.shade200,
+                                            ),
+                                            SizedBox(
+                                              width: w * 0.01,
+                                            ),
+                                            Text(
+
+                                                Holiyday["${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}"]!,
+                                                style: const TextStyle(
+                                                    color: Colors
+                                                        .black54)),
+                                          ],
+                                        ),
+
+                                      ],
+                                    ),
+
+                                  ],
+                                ),
+
+
+                              ),);
                             }
                         }
                       },

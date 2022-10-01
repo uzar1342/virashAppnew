@@ -20,32 +20,32 @@ class TabIconData {
 
   static List<TabIconData> tabIconsList = <TabIconData>[
     TabIconData(
-      imagePath: 'assets/fitness_app/tab_1.png',
-      selectedImagePath: 'assets/fitness_app/tab_1s.png',
+      imagePath: 'asset/hhome.png',
+      selectedImagePath: 'asset/home.png',
       index: 0,
       isSelected: true,
       lable: "Home",
       animationController: null,
     ),
     TabIconData(
-      imagePath: 'assets/fitness_app/tab_2.png',
-      selectedImagePath: 'assets/fitness_app/tab_2s.png',
+      imagePath: 'asset/mortarboa.png',
+      selectedImagePath: 'asset/mortarboard.png',
       index: 1,
       lable: "",
       isSelected: false,
       animationController: null,
     ),
     TabIconData(
-      imagePath: 'assets/fitness_app/tab_3.png',
-      selectedImagePath: 'assets/fitness_app/tab_3s.png',
+      imagePath: 'asset/hchecklist.png',
+      selectedImagePath: 'asset/checklist.png',
       index: 2,
       lable: "",
       isSelected: false,
       animationController: null,
     ),
     TabIconData(
-      imagePath: 'assets/fitness_app/tab_4.png',
-      selectedImagePath: 'assets/fitness_app/tab_4s.png',
+      imagePath: 'asset/hcalendar.png',
+      selectedImagePath: 'asset/calendar.png',
       index: 3,
       lable: "",
       isSelected: false,
@@ -84,7 +84,8 @@ class TabIconData {
       lable: "rejected",
       isSelected: false,
       animationController: null,
-    ),TabIconData(
+    ),
+    TabIconData(
       imagePath: 'assets/fitness_app/tab_4.png',
       selectedImagePath: 'assets/fitness_app/tab_4s.png',
       index: 4,
@@ -116,7 +117,8 @@ class TabIconData {
       lable: "rejected",
       isSelected: false,
       animationController: null,
-    ),TabIconData(
+    ),
+    TabIconData(
       imagePath: 'assets/fitness_app/tab_4.png',
       selectedImagePath: 'assets/fitness_app/tab_4s.png',
       index: 4,

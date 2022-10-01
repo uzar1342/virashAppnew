@@ -94,7 +94,8 @@ class _TaskNavState extends State<TaskNav>
               CircularProgressIndicator()
             ],
           ),
-        ):FutureBuilder<bool>(
+        ):
+        FutureBuilder<bool>(
           future: getData(),
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (!snapshot.hasData) {
@@ -102,7 +103,6 @@ class _TaskNavState extends State<TaskNav>
             } else {
               return SingleChildScrollView(
                 child:Column(
-
                   children: [
                     Container(
                       height: h*0.9,

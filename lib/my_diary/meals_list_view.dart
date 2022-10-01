@@ -175,7 +175,7 @@ class MealsView extends StatelessWidget {
                                        (context) =>
                                        employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"?
                                            // EmpTask(emoid: userId, status: '',)
-                                       EmpTaskNav(id: userId,)
+                                       EmpTaskNav()
                                            :viewemp(type: 'T',)
                                    )
                                )
@@ -191,7 +191,6 @@ class MealsView extends StatelessWidget {
                                 )
                               }else if(position==3)
                               {
-
                                 Navigator.push(context,
                                     MaterialPageRoute(builder:
                                         (context) =>

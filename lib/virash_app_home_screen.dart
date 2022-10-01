@@ -1,8 +1,11 @@
 import 'package:Virash/training/training_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'ViewEmploye.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'bottom_navigation_view/TaskBottomBarView.dart';
+import 'empnav.dart';
+import 'monthattendence.dart';
 import 'virash_app_theme.dart';
 import 'globals.dart';
 import 'models/tabIcon_data.dart';
@@ -145,7 +148,7 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
           });
             },
           changeIndex: (int index) {
-            if (index == 0 || index == 2) {
+            if (index == 0 ) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
@@ -155,7 +158,7 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
                       MyHomeScreen(animationController: animationController);
                 });
               });
-            } else if (index == 1 || index == 3) {
+            } else if (index == 1 ) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
@@ -163,6 +166,38 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
                 setState(() {
                   tabBody =
                       TrainingScreen(animationController: animationController);
+                });
+              });
+            }else if (index == 2 ) {
+              animationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+
+
+                  employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"?tabBody =  EmpTaskNav():
+                  tabBody=viewemp(type: 'T',);
+
+
+
+
+                });
+              });
+            }else if (index == 3 ) {
+              animationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+
+
+                  employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"?tabBody = MonthCalendarPage(id: userId, name: employee_name,):
+                  tabBody=viewemp(type: 'A',);
+
+
+
+
                 });
               });
             }

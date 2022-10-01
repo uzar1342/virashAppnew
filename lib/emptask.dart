@@ -93,7 +93,6 @@ class _EmpTaskState extends State<EmpTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title:Text("VIEW EMPLOYEE")),
         body:RefreshIndicator(
           key: _refreshIndicatorKey,
           color: Colors.white,
@@ -278,11 +277,13 @@ class _EmpTaskState extends State<EmpTask> {
                                       SizedBox(
                                         width: w * 0.01,
                                       ),
-                                      Text(
-                                          snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
-                                          style: const TextStyle(
-                                              color: Colors
-                                                  .black54)),
+                                      Expanded(
+                                        child: Text(
+                                            snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
+                                            maxLines: 8,style: const TextStyle(
+                                                color: Colors
+                                                    .black54)),
+                                      ),
                                     ],
                                   ),
                                   Divider(),

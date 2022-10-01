@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
+import 'AllTodayTask.dart';
 import 'CalendarPage.dart';
 import 'Faculty_tabbar.dart';
 import 'OuttimeForm.dart';
@@ -81,7 +82,7 @@ class _DashPageState extends State<DashPage> {
           body: _page == 0
               ? const CoursesPage()
               : _page == 1
-                  ?  TodayBatch(day: 'Today')
+                  ?  AllEmpTask(emoid: '3',)
                   : _page == 2
                       ? Container(height:size.height*0.97,child: const Tabbar())
                       : Center(

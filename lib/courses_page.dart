@@ -295,7 +295,7 @@ class _CoursesPageState extends State<CoursesPage> {
                                             children: [
                                               Container(
                                                 height: h * 0.06,
-                                                width: h * 0.06,
+                                                width: w*0.15,
                                                 decoration: const BoxDecoration(
                                                   // image: DecorationImage(
                                                   //     image: NetworkImage(
@@ -332,53 +332,56 @@ class _CoursesPageState extends State<CoursesPage> {
                                                   ),
                                                 ),
                                               ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
+                                              Container(
+                                                width: w*0.5,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
 
-                                                  Container(
-                                                    width: 300,
-                                                    child: RichText(
-                                                      overflow: TextOverflow.ellipsis,
-                                                      strutStyle: StrutStyle(fontSize: 17.0),
-                                                      text: TextSpan(
-                                                          style:  const TextStyle(
-                                                              color: Colors.black87,
-                                                              fontWeight:
-                                                              FontWeight.bold,
-                                                            fontSize: 18
-                                                             ),
-                                                          text: studentCourseList["data"][index]
-                                                          ['course_name']),
-                                                    ),
-                                                  )
-                                                  ,
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        studentCourseList["data"][index]
-                                                            ['course_duration'].toString()+" hour",
-                                                        style: const TextStyle(
-                                                            color:
-                                                                Colors.black38,
-                                                            fontWeight:
+                                                    Container(
+                                                      width: w,
+                                                      child: RichText(
+                                                        overflow: TextOverflow.ellipsis,
+                                                        strutStyle: StrutStyle(fontSize: 17.0),
+                                                        text: TextSpan(
+                                                            style:  const TextStyle(
+                                                                color: Colors.black87,
+                                                                fontWeight:
                                                                 FontWeight.bold,
-                                                            fontSize: 13.0),
+                                                              fontSize: 18
+                                                               ),
+                                                            text: studentCourseList["data"][index]
+                                                            ['course_name']),
                                                       ),
-                                                      SizedBox(
-                                                        width: w * 0.01,
-                                                      ),
-                                                      SizedBox(
-                                                        width: w * 0.01,
-                                                      ),
+                                                    )
+                                                    ,
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          studentCourseList["data"][index]
+                                                              ['course_duration'].toString()+" hour",
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.black38,
+                                                              fontWeight:
+                                                                  FontWeight.bold,
+                                                              fontSize: 13.0),
+                                                        ),
+                                                        SizedBox(
+                                                          width: w * 0.01,
+                                                        ),
+                                                        SizedBox(
+                                                          width: w * 0.01,
+                                                        ),
 
-                                                    ],
-                                                  ),
-                                                ],
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),
