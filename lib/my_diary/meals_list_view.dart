@@ -53,54 +53,7 @@ class _MealsListViewState extends State<MealsListView>
           child: Transform(
             transform: Matrix4.translationValues(
                 0.0, 30 * (1.0 - widget.mainScreenAnimation!.value), 0.0),
-            child: Container(
-              height: 216,
-              width: double.infinity,
-              child: ListView.builder(
-                padding: const EdgeInsets.only(
-                    top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: 1,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  final int count =
-                      mealsListData.length > 10 ? 10 : mealsListData.length;
-                  final Animation<double> animation =
-                      Tween<double>(begin: 0.0, end: 1.0).animate(
-                          CurvedAnimation(
-                              parent: animationController!,
-                              curve: Interval((1 / count) * index, 1.0,
-                                  curve: Curves.fastOutSlowIn)));
-                  animationController?.forward();
-                  return Row(
-                    children: [
-                      MealsView(
-                        position: 0,
-                        mealsListData: mealsListData[0],
-                        animation: animation,
-                        animationController: animationController!,
-                      ),
-                      employee_role!="Faculty"?MealsView(
-                        position: 1,
-                        mealsListData: mealsListData[1],
-                        animation: animation,
-                        animationController: animationController!,
-                      ):Container(),
-                      employee_role!="Developer"?MealsView(
-                        position: 2,
-                        mealsListData: mealsListData[2],
-                        animation: animation,
-                        animationController: animationController!,
-                      ):Container(),employee_role!="Faculty"?MealsView(
-                        position: 3,
-                        mealsListData: mealsListData[3],
-                        animation: animation,
-                        animationController: animationController!,
-                      ):Container(),
-                    ],
-                  );
-                },
-              ),
-            ),
+            child:Container()
           ),
         );
       },

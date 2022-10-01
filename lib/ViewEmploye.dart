@@ -78,6 +78,8 @@ print(formData.fields);
  }
   @override
   Widget build(BuildContext context) {
+   var h=MediaQuery.of(context).size.height;
+   var w=MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(title:Text("VIEW EMPLOYE")),
       body:net?FutureBuilder<dynamic>(
@@ -90,41 +92,50 @@ print(formData.fields);
                 return SafeArea(child:Text('Error: ${snapshot.error}'));
               } else {
                 Color primaryColor = const Color(0xff1f7396);
-                return   snapshot.data["success"].toString().trim()=="1"?ListView.builder(
-                  itemCount: snapshot.data["data"].length,
-                  itemBuilder: (context, position) {
-                    return InkWell(
-                      onTap:()=>{
-                        if(widget.type=="T")
-                          {
-                            Navigator.push(context, MaterialPageRoute(builder: (c)=>
-                                TaskNav(id: snapshot.data["data"][position]["emp_id"].toString(),))
-                            )
-                          }
-                        else if(widget.type=="A")
-                          {
-                            Navigator.push(context, MaterialPageRoute(builder: (c)=>
-                                MonthCalendarPage(name: snapshot.data["data"][position]["emp_name"].toString(), id: snapshot.data["data"][position]["emp_id"].toString(),))
-                            )
-                          }
-                        },
-                      child: Card(
-                        shape:RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0)
-                        ),
-                        elevation: 5,
-                        child: Padding(
+                return   snapshot.data["success"].toString().trim()=="1"?
+                Container(
+                  height: h*0.8,
+                  child: ListView.builder(
+                    itemCount: snapshot.data["data"].length,
+                    physics: ScrollPhysics(),
+                    itemBuilder: (context, position) {
+                      return
+                        Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            leading: Icon(Icons.person),
-                            title: Text(snapshot.data["data"][position]["emp_name"]),
+                          child: InkWell(
+                          onTap:()=>{
+                            if(widget.type=="T")
+                              {
+                                Navigator.push(context, MaterialPageRoute(builder: (c)=>
+                                    TaskNav(id: snapshot.data["data"][position]["emp_id"].toString(),))
+                                )
+                              }
+                            else if(widget.type=="A")
+                              {
+                                Navigator.push(context, MaterialPageRoute(builder: (c)=>
+                                    MonthCalendarPage(name: snapshot.data["data"][position]["emp_name"].toString(), id: snapshot.data["data"][position]["emp_id"].toString(),))
+                                )
+                              }
+                            },
+                          child: Card(
+                            shape:RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0)
+                            ),
+                            elevation: 5,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                leading: Icon(Icons.person),
+                                title: Text(snapshot.data["data"][position]["emp_name"]),
+                              ),
+                            ),
                           ),
-                        ),
                       ),
-                    );
+                        );
 
 
-                  },
+                    },
+                  ),
                 ):Image.asset("assets/no_data.png");
               }
           }

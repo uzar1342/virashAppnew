@@ -400,7 +400,7 @@ static Widget _holidayIcon = new Container(
                   children: [
                     Container(
                       width: w,
-                      height: h*0.45,
+                      height: h*0.6,
                       margin: EdgeInsets.symmetric(horizontal: 16.0),
                       child: _calendarCarouselNoHeader,
                     ), //
