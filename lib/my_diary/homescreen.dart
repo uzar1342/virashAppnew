@@ -211,306 +211,300 @@ return response.data;
                     } else {
                       Color primaryColor = const Color(0xff1f7396);
                       print("3"+snapshot.data.toString());
-                      return   snapshot.data["success"].toString().trim()=="1"?ListView.builder(
-                        itemCount: snapshot.data["data"].length,
-                        itemBuilder: (context, position) {
-                          return    Container(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: VirashAppTheme.white,
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(8.0),
-                                      bottomLeft: Radius.circular(8.0),
-                                      bottomRight: Radius.circular(8.0),
-                                      topRight: Radius.circular(68.0)),
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: VirashAppTheme.grey.withOpacity(0.2),
-                                        offset: Offset(1.1, 1.1),
-                                        blurRadius: 10.0),
-                                  ],
-                                ),
-                                child: Column(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(top: 16, left: 16, right: 16),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8, right: 8, top: 4),
-                                              child: Column(
+                      return   snapshot.data["success"].toString().trim()=="1"? Container(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: VirashAppTheme.white,
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(8.0),
+                                  bottomLeft: Radius.circular(8.0),
+                                  bottomRight: Radius.circular(8.0),
+                                  topRight: Radius.circular(68.0)),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    color: VirashAppTheme.grey.withOpacity(0.2),
+                                    offset: Offset(1.1, 1.1),
+                                    blurRadius: 10.0),
+                              ],
+                            ),
+                            child: Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding:
+                                  const EdgeInsets.only(top: 16, left: 16, right: 16),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 8, right: 8, top: 4),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Row(
                                                 children: <Widget>[
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        height: 48,
-                                                        width: 2,
-                                                        decoration: BoxDecoration(
-                                                          color: HexColor('#87A0E5')
-                                                              .withOpacity(0.5),
-                                                          borderRadius: BorderRadius.all(
-                                                              Radius.circular(4.0)),
+                                                  Container(
+                                                    height: 48,
+                                                    width: 2,
+                                                    decoration: BoxDecoration(
+                                                      color: HexColor('#87A0E5')
+                                                          .withOpacity(0.5),
+                                                      borderRadius: BorderRadius.all(
+                                                          Radius.circular(4.0)),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                      children: <Widget>[
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(
+                                                              left: 4, bottom: 2),
+                                                          child: Text(
+                                                            'in-time',
+                                                            textAlign: TextAlign.center,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                              VirashAppTheme.fontName,
+                                                              fontWeight: FontWeight.w500,
+                                                              fontSize: 16,
+                                                              letterSpacing: -0.1,
+                                                              color: VirashAppTheme.grey
+                                                                  .withOpacity(0.5),
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Column(
+                                                        Row(
                                                           mainAxisAlignment:
                                                           MainAxisAlignment.center,
                                                           crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
+                                                          CrossAxisAlignment.end,
                                                           children: <Widget>[
+                                                            SizedBox(
+                                                              width: 28,
+                                                              height: 28,
+                                                              child: Icon(Icons.access_time_filled_outlined,color: Colors.blue,),
+                                                            ),
                                                             Padding(
-                                                              padding: const EdgeInsets.only(
-                                                                  left: 4, bottom: 2),
+                                                              padding:
+                                                              const EdgeInsets.only(
+                                                                  left: 4, bottom: 3),
                                                               child: Text(
-                                                                'in-time',
+                                                                intime,
                                                                 textAlign: TextAlign.center,
                                                                 style: TextStyle(
                                                                   fontFamily:
-                                                                  VirashAppTheme.fontName,
-                                                                  fontWeight: FontWeight.w500,
+                                                                  VirashAppTheme
+                                                                      .fontName,
+                                                                  fontWeight:
+                                                                  FontWeight.w600,
                                                                   fontSize: 16,
-                                                                  letterSpacing: -0.1,
-                                                                  color: VirashAppTheme.grey
-                                                                      .withOpacity(0.5),
+                                                                  color: VirashAppTheme
+                                                                      .darkerText,
                                                                 ),
                                                               ),
                                                             ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment.center,
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment.end,
-                                                              children: <Widget>[
-                                                                SizedBox(
-                                                                  width: 28,
-                                                                  height: 28,
-                                                                  child: Icon(Icons.access_time_filled_outlined,color: Colors.blue,),
-                                                                ),
-                                                                Padding(
-                                                                  padding:
-                                                                  const EdgeInsets.only(
-                                                                      left: 4, bottom: 3),
-                                                                  child: Text(
-                                                                    intime,
-                                                                    textAlign: TextAlign.center,
-                                                                    style: TextStyle(
-                                                                      fontFamily:
-                                                                      VirashAppTheme
-                                                                          .fontName,
-                                                                      fontWeight:
-                                                                      FontWeight.w600,
-                                                                      fontSize: 16,
-                                                                      color: VirashAppTheme
-                                                                          .darkerText,
-                                                                    ),
-                                                                  ),
-                                                                ),
 
-                                                              ],
-                                                            )
                                                           ],
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        height: 48,
-                                                        width: 2,
-                                                        decoration: BoxDecoration(
-                                                          color: HexColor('#F56E98')
-                                                              .withOpacity(0.5),
-                                                          borderRadius: const BorderRadius.all(
-                                                              Radius.circular(4.0)),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment.center,
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
-                                                          children: <Widget>[
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(
-                                                                  left: 4, bottom: 2),
-                                                              child: Text(
-                                                                'out-time',
-                                                                textAlign: TextAlign.center,
-                                                                style: TextStyle(
-                                                                  fontFamily:
-                                                                  VirashAppTheme.fontName,
-                                                                  fontWeight: FontWeight.w500,
-                                                                  fontSize: 16,
-                                                                  letterSpacing: -0.1,
-                                                                  color: VirashAppTheme.grey
-                                                                      .withOpacity(0.5),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment.center,
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment.end,
-                                                              children: <Widget>[
-                                                                SizedBox(
-                                                                  width: 28,
-                                                                  height: 28,
-                                                                  child: Icon(Icons.access_time_filled_outlined
-                                                                  ,color: Colors.pink,),
-                                                                ),
-                                                                Padding(
-                                                                  padding:
-                                                                  const EdgeInsets.only(
-                                                                      left: 4, bottom: 3),
-                                                                  child: Text(
-                                                                    outtime,
-                                                                    textAlign: TextAlign.center,
-                                                                    style: TextStyle(
-                                                                      fontFamily:
-                                                                      VirashAppTheme
-                                                                          .fontName,
-                                                                      fontWeight:
-                                                                      FontWeight.w600,
-                                                                      fontSize: 16,
-                                                                      color: VirashAppTheme
-                                                                          .darkerText,
-                                                                    ),
-                                                                  ),
-                                                                ),
-
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
-                                                      )
-                                                    ],
+                                                        )
+                                                      ],
+                                                    ),
                                                   )
                                                 ],
                                               ),
-                                            ),
+                                              SizedBox(
+                                                height: 8,
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  Container(
+                                                    height: 48,
+                                                    width: 2,
+                                                    decoration: BoxDecoration(
+                                                      color: HexColor('#F56E98')
+                                                          .withOpacity(0.5),
+                                                      borderRadius: const BorderRadius.all(
+                                                          Radius.circular(4.0)),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                      children: <Widget>[
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(
+                                                              left: 4, bottom: 2),
+                                                          child: Text(
+                                                            'out-time',
+                                                            textAlign: TextAlign.center,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                              VirashAppTheme.fontName,
+                                                              fontWeight: FontWeight.w500,
+                                                              fontSize: 16,
+                                                              letterSpacing: -0.1,
+                                                              color: VirashAppTheme.grey
+                                                                  .withOpacity(0.5),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment.center,
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment.end,
+                                                          children: <Widget>[
+                                                            SizedBox(
+                                                              width: 28,
+                                                              height: 28,
+                                                              child: Icon(Icons.access_time_filled_outlined
+                                                                ,color: Colors.pink,),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                              const EdgeInsets.only(
+                                                                  left: 4, bottom: 3),
+                                                              child: Text(
+                                                                outtime,
+                                                                textAlign: TextAlign.center,
+                                                                style: TextStyle(
+                                                                  fontFamily:
+                                                                  VirashAppTheme
+                                                                      .fontName,
+                                                                  fontWeight:
+                                                                  FontWeight.w600,
+                                                                  fontSize: 16,
+                                                                  color: VirashAppTheme
+                                                                      .darkerText,
+                                                                ),
+                                                              ),
+                                                            ),
+
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            ],
                                           ),
-                                          // Padding(
-                                          //   padding: const EdgeInsets.only(right: 16),
-                                          //   child: Center(
-                                          //     child: Stack(
-                                          //       clipBehavior: Clip.none,
-                                          //       children: <Widget>[
-                                          //         Padding(
-                                          //           padding: const EdgeInsets.all(8.0),
-                                          //           child: Container(
-                                          //             width: 100,
-                                          //             height: 100,
-                                          //             decoration: BoxDecoration(
-                                          //               color: FitnessAppTheme.white,
-                                          //               borderRadius: BorderRadius.all(
-                                          //                 Radius.circular(100.0),
-                                          //               ),
-                                          //               border: new Border.all(
-                                          //                   width: 4,
-                                          //                   color: FitnessAppTheme
-                                          //                       .nearlyDarkBlue
-                                          //                       .withOpacity(0.2)),
-                                          //             ),
-                                          //             child: Column(
-                                          //               mainAxisAlignment:
-                                          //                   MainAxisAlignment.center,
-                                          //               crossAxisAlignment:
-                                          //                   CrossAxisAlignment.center,
-                                          //               children: <Widget>[
-                                          //                 Text(
-                                          //                   '${(1503 * animation!.value).toInt()}',
-                                          //                   textAlign: TextAlign.center,
-                                          //                   style: TextStyle(
-                                          //                     fontFamily:
-                                          //                         FitnessAppTheme.fontName,
-                                          //                     fontWeight: FontWeight.normal,
-                                          //                     fontSize: 24,
-                                          //                     letterSpacing: 0.0,
-                                          //                     color: FitnessAppTheme
-                                          //                         .nearlyDarkBlue,
-                                          //                   ),
-                                          //                 ),
-                                          //                 Text(
-                                          //                   'Kcal left',
-                                          //                   textAlign: TextAlign.center,
-                                          //                   style: TextStyle(
-                                          //                     fontFamily:
-                                          //                         FitnessAppTheme.fontName,
-                                          //                     fontWeight: FontWeight.bold,
-                                          //                     fontSize: 12,
-                                          //                     letterSpacing: 0.0,
-                                          //                     color: FitnessAppTheme.grey
-                                          //                         .withOpacity(0.5),
-                                          //                   ),
-                                          //                 ),
-                                          //               ],
-                                          //             ),
-                                          //           ),
-                                          //         ),
-                                          //         Padding(
-                                          //           padding: const EdgeInsets.all(4.0),
-                                          //           child: CustomPaint(
-                                          //             painter: CurvePainter(
-                                          //                 colors: [
-                                          //                   FitnessAppTheme.nearlyDarkBlue,
-                                          //                   HexColor("#8A98E8"),
-                                          //                   HexColor("#8A98E8")
-                                          //                 ],
-                                          //                 angle: 140 +
-                                          //                     (360 - 140) *
-                                          //                         (1.0 - animation!.value)),
-                                          //             child: SizedBox(
-                                          //               width: 108,
-                                          //               height: 108,
-                                          //             ),
-                                          //           ),
-                                          //         )
-                                          //       ],
-                                          //     ),
-                                          //   ),
-                                          // )
-                                          AnalogClock(
-                                            decoration: BoxDecoration(
-                                                border: Border.all(width: 2.0, color: Colors.black),
-                                                color: Colors.transparent,
-                                                shape: BoxShape.circle),
-                                            width: 100.0,
-                                            height: 100,
-                                            isLive: true,
-                                            hourHandColor: Colors.black,
-                                            minuteHandColor: Colors.black,
-                                            showSecondHand: true,
-                                            numberColor: Colors.black87,
-                                            showNumbers: true,
-                                            showAllNumbers: true,
-                                            textScaleFactor: 1.4,
-                                            showTicks: true,
-                                            showDigitalClock: true,
-                                            datetime: DateTime.now(),
-                                          )
-                                        ],
+                                        ),
                                       ),
-                                    ),
-
-                                  ],
+                                      // Padding(
+                                      //   padding: const EdgeInsets.only(right: 16),
+                                      //   child: Center(
+                                      //     child: Stack(
+                                      //       clipBehavior: Clip.none,
+                                      //       children: <Widget>[
+                                      //         Padding(
+                                      //           padding: const EdgeInsets.all(8.0),
+                                      //           child: Container(
+                                      //             width: 100,
+                                      //             height: 100,
+                                      //             decoration: BoxDecoration(
+                                      //               color: FitnessAppTheme.white,
+                                      //               borderRadius: BorderRadius.all(
+                                      //                 Radius.circular(100.0),
+                                      //               ),
+                                      //               border: new Border.all(
+                                      //                   width: 4,
+                                      //                   color: FitnessAppTheme
+                                      //                       .nearlyDarkBlue
+                                      //                       .withOpacity(0.2)),
+                                      //             ),
+                                      //             child: Column(
+                                      //               mainAxisAlignment:
+                                      //                   MainAxisAlignment.center,
+                                      //               crossAxisAlignment:
+                                      //                   CrossAxisAlignment.center,
+                                      //               children: <Widget>[
+                                      //                 Text(
+                                      //                   '${(1503 * animation!.value).toInt()}',
+                                      //                   textAlign: TextAlign.center,
+                                      //                   style: TextStyle(
+                                      //                     fontFamily:
+                                      //                         FitnessAppTheme.fontName,
+                                      //                     fontWeight: FontWeight.normal,
+                                      //                     fontSize: 24,
+                                      //                     letterSpacing: 0.0,
+                                      //                     color: FitnessAppTheme
+                                      //                         .nearlyDarkBlue,
+                                      //                   ),
+                                      //                 ),
+                                      //                 Text(
+                                      //                   'Kcal left',
+                                      //                   textAlign: TextAlign.center,
+                                      //                   style: TextStyle(
+                                      //                     fontFamily:
+                                      //                         FitnessAppTheme.fontName,
+                                      //                     fontWeight: FontWeight.bold,
+                                      //                     fontSize: 12,
+                                      //                     letterSpacing: 0.0,
+                                      //                     color: FitnessAppTheme.grey
+                                      //                         .withOpacity(0.5),
+                                      //                   ),
+                                      //                 ),
+                                      //               ],
+                                      //             ),
+                                      //           ),
+                                      //         ),
+                                      //         Padding(
+                                      //           padding: const EdgeInsets.all(4.0),
+                                      //           child: CustomPaint(
+                                      //             painter: CurvePainter(
+                                      //                 colors: [
+                                      //                   FitnessAppTheme.nearlyDarkBlue,
+                                      //                   HexColor("#8A98E8"),
+                                      //                   HexColor("#8A98E8")
+                                      //                 ],
+                                      //                 angle: 140 +
+                                      //                     (360 - 140) *
+                                      //                         (1.0 - animation!.value)),
+                                      //             child: SizedBox(
+                                      //               width: 108,
+                                      //               height: 108,
+                                      //             ),
+                                      //           ),
+                                      //         )
+                                      //       ],
+                                      //     ),
+                                      //   ),
+                                      // )
+                                      AnalogClock(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(width: 2.0, color: Colors.black),
+                                            color: Colors.transparent,
+                                            shape: BoxShape.circle),
+                                        width: 100.0,
+                                        height: 100,
+                                        isLive: true,
+                                        hourHandColor: Colors.black,
+                                        minuteHandColor: Colors.black,
+                                        showSecondHand: true,
+                                        numberColor: Colors.black87,
+                                        showNumbers: true,
+                                        showAllNumbers: true,
+                                        textScaleFactor: 1.4,
+                                        showTicks: true,
+                                        showDigitalClock: true,
+                                        datetime: DateTime.now(),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              )
-                          );
 
+                              ],
+                            ),
+                          )
 
-                        },
                       ):Image.asset("assets/no_data.png");
                     }
                 }

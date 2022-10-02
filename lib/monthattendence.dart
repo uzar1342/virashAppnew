@@ -334,7 +334,7 @@ static Widget _holidayIcon = new Container(
     return  Scaffold(
         appBar:  AppBar(
           backgroundColor: Color(0xff1f7396),
-          title:  Text("Monthly Attendence"),
+          title:  const Text("Monthly Status"),
         ),
         body: net?SingleChildScrollView(
           child: Column(

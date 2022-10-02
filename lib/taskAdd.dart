@@ -63,21 +63,21 @@ class _TaskState extends State<Task> {
               color: Colors.red.shade200,
             ),
             hintText: "Task",
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
               color: Colors.black26,
               fontWeight: FontWeight.bold,
               fontSize: 14.0,
             ),
             filled: true,
             fillColor: Colors.white,
-            border: OutlineInputBorder(
+            border: const OutlineInputBorder(
               gapPadding: 9,
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.all(
                   Radius.circular(12.0)),
             ),
             contentPadding:
-            EdgeInsets.symmetric(
+            const EdgeInsets.symmetric(
                 horizontal: 20.0,
                 vertical: 16.0)),
       ),
@@ -95,13 +95,28 @@ class Priorety extends StatefulWidget {
 }
 
 class _PrioretyState extends State<Priorety> {
-  String _value = "low";
+  String _value = "Low";
+
+
 
   @override
   void initState() {
+    item.add( DropdownMenuItem(
+      value: "Low",
+      child: Text("Low"),
+    ));
+    item.add( DropdownMenuItem(
+      value: "medium",
+      child: Text("medium"),
+    ));
+    item.add( DropdownMenuItem(
+      value: "high",
+      child: Text("high"),
+    ));
+
     super.initState();
-    _value= widget.cartItem.itemName!=""?widget.cartItem.itemName:"low";
-    widget.cartItem.itemName="low";
+    _value= widget.cartItem.itemName!=""?widget.cartItem.itemName:"Low";
+    widget.cartItem.itemName="Low";
   }
 
   @override
@@ -111,6 +126,9 @@ class _PrioretyState extends State<Priorety> {
     }
     super.didUpdateWidget(oldWidget);
   }
+
+   final List<DropdownMenuItem<String>> item=[];
+
 
   @override
   Widget build(BuildContext context) {
@@ -135,18 +153,20 @@ class _PrioretyState extends State<Priorety> {
             ),
             dropdownColor: Colors.blueGrey,
             isExpanded: false,
-              items: const [
-                DropdownMenuItem(
-                  child: Text("low"),
-                  value: "low",
-                ),
-                DropdownMenuItem(
-                  child: Text("medium"),
-                  value: "medium",
-                ),
-                DropdownMenuItem(child: Text("high"), value: "high"),
-
-              ],
+               items: item
+            // const [
+              //   DropdownMenuItem(
+              //     value: "low",
+              //     child: Text("low"),
+              //   ),
+              //   DropdownMenuItem(
+              //     value: "medium",
+              //     child: Text("medium"),
+              //   ),
+              //   DropdownMenuItem(value: "high", child: Text("high")),
+              //
+              // ]
+               ,
               onChanged: (value) {
         setState(() {
         _value = value.toString();
@@ -201,6 +221,10 @@ class CartWidget extends StatefulWidget {
 }
 
 class _CartWidgetState extends State<CartWidget> {
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -263,6 +287,8 @@ class _MyHomePageState extends State<MyHomePage> {
       Fluttertoast.showToast(msg: "Unable to send task");
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {

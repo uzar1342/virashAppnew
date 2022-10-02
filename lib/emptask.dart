@@ -96,7 +96,7 @@ class _EmpTaskState extends State<EmpTask> {
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
         body:Container(
-          height: h*0.8,
+          height: employee_role=="Super Admin"||employee_role=="Admin"?h:h*0.8,
           child: RefreshIndicator(
             key: _refreshIndicatorKey,
             color: Colors.white,
