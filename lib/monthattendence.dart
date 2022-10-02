@@ -26,6 +26,7 @@ class MonthCalendarPage extends StatefulWidget {
 class _MonthCalendarPageState extends State<MonthCalendarPage> {
    int year=2022;
   var ocassion=[];
+  bool monthloader=true;
    int day=1;
    int month=9;
   DateTime _currentDate = DateTime.now();
@@ -128,9 +129,13 @@ static Widget _holidayIcon = new Container(
   bool isLoading = true;
   final Map<String, String> Holiyday = HashMap();
   final Map<String, String> Week = HashMap();
+  final Map<String, String> Weekoff = HashMap();
 
 
   Future<dynamic> FetchAttendence()  async {
+    setState(() {
+      monthloader=false;
+    });
     Dio dio=Dio();
     var formData = FormData.fromMap({
       'emp_id':widget.id,
@@ -141,8 +146,6 @@ static Widget _holidayIcon = new Container(
     if (response.statusCode == 200) {
       if(response.data!=null)
         {
-
-
           int i, num=int.parse(response.data["data"].length.toString());
        for(i=0;i<num;i++)
          {
@@ -178,6 +181,7 @@ static Widget _holidayIcon = new Container(
       }
     else if(response.data["data"][i]["Presentee"]=="Week off")
       {
+        Weekoff.addAll({response.data["data"][i]["attendance_date"]:"Week off"});
         String date=  response.data["data"][i]["attendance_date"];
         var d1=  date.split("-");
         int year=int.parse(d1[0]),month=int.parse(d1[1]),day=int.parse(d1[2]);
@@ -217,14 +221,14 @@ static Widget _holidayIcon = new Container(
 
         }
       setState(() {
-        isLoading = false;
+        monthloader = true;
       });
       print(response.data);
     } else {
       print(response.statusCode);
       Fluttertoast.showToast(msg: "Please try again later");
       setState(() {
-        isLoading = false;
+        monthloader = true;
       });
     }
   }
@@ -273,6 +277,7 @@ static Widget _holidayIcon = new Container(
         this.setState(() => _currentDate2 = date);
         events.forEach((event) => {day=date.day,year=date.year,month=date.month});
       },
+      selectedDayButtonColor: Color(0xffc4cfa1),
       showOnlyCurrentMonthDate: false,
       childAspectRatio: 0.8,
       weekendTextStyle: TextStyle(
@@ -416,7 +421,7 @@ static Widget _holidayIcon = new Container(
                       width: w,
                       height: h*0.6,
                       margin: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: _calendarCarouselNoHeader,
+                      child: monthloader?_calendarCarouselNoHeader:Center(child: CircularProgressIndicator()),
                     ), //
                     FutureBuilder<dynamic>(
                       future: fetchEmployList(), // async work
@@ -995,7 +1000,9 @@ static Widget _holidayIcon = new Container(
 
                                     ],
                                   ),
-                                ):Card(
+                                ):
+                                Weekoff.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}")?
+                                Card(
                                   elevation: 3.0,
                                   shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
@@ -1062,6 +1069,90 @@ static Widget _holidayIcon = new Container(
                                                   ),
                                                   Text(
                                                     "Week Off",
+                                                    style: const TextStyle(
+                                                        color: Colors
+                                                            .white,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .bold),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          )
+
+                                        ],
+                                      ),
+
+                                    ],
+                                  ),
+                                ):Card(
+                                  elevation: 3.0,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(14.0))),
+                                  child:            Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment
+                                            .spaceBetween,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment
+                                                .center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .start,
+                                            children: [
+
+                                              SizedBox(
+                                                width: w * 0.02,
+                                              ),
+                                              Text(
+                                                widget.name,
+                                                style: const TextStyle(
+                                                    color: Colors
+                                                        .black54,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .bold,
+                                                    fontSize: 16.0),
+                                              )
+                                            ],
+                                          ),
+                                          GestureDetector(
+                                            onTap: (){
+                                            },
+                                            child: Container(
+                                              padding:
+                                              const EdgeInsets
+                                                  .all(5.0),
+                                              height: h * 0.04,
+                                              decoration:  BoxDecoration(
+                                                  color:  Colors.grey,
+                                                  borderRadius: BorderRadius
+                                                      .all(Radius
+                                                      .circular(
+                                                      20.0))),
+                                              child: Row(
+                                                children: [
+                                                  const FaIcon(
+                                                    FontAwesomeIcons
+                                                        .globe,
+                                                    color: Colors
+                                                        .white,
+                                                    size: 20.0,
+                                                  ),
+                                                  SizedBox(
+                                                    width:
+                                                    w * 0.01,
+                                                  ),
+                                                  Text(
+                                                    "N/A",
                                                     style: const TextStyle(
                                                         color: Colors
                                                             .white,
