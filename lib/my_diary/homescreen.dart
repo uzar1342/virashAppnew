@@ -99,14 +99,6 @@ return response.data;
 
   void addAllListData() {
     const int count = 9;
-
-
-
-
-
-
-
-
   }
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
@@ -212,11 +204,11 @@ return response.data;
               future: viewattendence(), // async work
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 switch (snapshot.connectionState) {
-                  case ConnectionState.waiting: return Center(child: Text('Loading....'));
+                  case ConnectionState.waiting: return const Center(child: CircularProgressIndicator());
                   default:
-                    if (snapshot.hasError)
+                    if (snapshot.hasError) {
                       return SafeArea(child:Text('Error: ${snapshot.error}'));
-                    else {
+                    } else {
                       Color primaryColor = const Color(0xff1f7396);
                       print("3"+snapshot.data.toString());
                       return   snapshot.data["success"].toString().trim()=="1"?ListView.builder(
@@ -226,7 +218,7 @@ return response.data;
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: VirashAppTheme.white,
-                                  borderRadius: BorderRadius.only(
+                                  borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(8.0),
                                       bottomLeft: Radius.circular(8.0),
                                       bottomRight: Radius.circular(8.0),
@@ -297,7 +289,7 @@ return response.data;
                                                                 SizedBox(
                                                                   width: 28,
                                                                   height: 28,
-                                                                  child: Icon(Icons.access_time_filled_outlined),
+                                                                  child: Icon(Icons.access_time_filled_outlined,color: Colors.blue,),
                                                                 ),
                                                                 Padding(
                                                                   padding:
@@ -375,7 +367,8 @@ return response.data;
                                                                 SizedBox(
                                                                   width: 28,
                                                                   height: 28,
-                                                                  child: Icon(Icons.access_time_filled_outlined),
+                                                                  child: Icon(Icons.access_time_filled_outlined
+                                                                  ,color: Colors.pink,),
                                                                 ),
                                                                 Padding(
                                                                   padding:

@@ -298,7 +298,12 @@ class _EmpTaskState extends State<EmpTask> {
                                           child: SizedBox(
                                               height: 24 ,
                                               width: 24,
-                                              child: Image.asset("assets/assignment.png",)),
+                                              child: Icon(
+                                                Icons
+                                                    .person,
+                                                color: Colors
+                                                    .red.shade200,
+                                              )),
                                         )
                                         ,
                                         SizedBox(

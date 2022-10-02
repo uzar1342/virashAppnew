@@ -141,6 +141,8 @@ static Widget _holidayIcon = new Container(
     if (response.statusCode == 200) {
       if(response.data!=null)
         {
+
+
           int i, num=int.parse(response.data["data"].length.toString());
        for(i=0;i<num;i++)
          {
@@ -195,6 +197,17 @@ static Widget _holidayIcon = new Container(
             DateTime(year, month, day),
             Event(
               dot: Text("●",style: TextStyle(color: Color(0xff5D10B9),fontSize: 20)), date: DateTime.now(),
+            ));
+      }else if(response.data["data"][i]["Presentee"]=="N/A")
+      {
+        String date=  response.data["data"][i]["attendance_date"];
+        var d1=  date.split("-");
+        int year=int.parse(d1[0]),month=int.parse(d1[1]),day=int.parse(d1[2]);
+        ocassion.add(day);
+        _markedDateMap.add(
+            DateTime(year, month, day),
+            Event(
+              dot: Text("●",style: TextStyle(color: Colors.grey,fontSize: 20)), date: DateTime.now(),
             ));
       }
 
@@ -315,6 +328,7 @@ static Widget _holidayIcon = new Container(
     double w = MediaQuery.of(context).size.width;
     return  Scaffold(
         appBar:  AppBar(
+          backgroundColor: Color(0xff1f7396),
           title:  Text("Monthly Attendence"),
         ),
         body: net?SingleChildScrollView(
@@ -567,7 +581,8 @@ static Widget _holidayIcon = new Container(
                                                 ),
                                                 const Divider(),
                                                 snapshot.data["data"][0]["remaining_hours"]!=null?Container(
-                                                  child: int.parse(snapshot.data["data"][0]["remaining_hours"])>0?Row(
+                                                  child: snapshot.data["data"][0]["remaining_hours"]!="0"
+                                                      ?Row(
                                                     mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
@@ -1154,21 +1169,14 @@ static Widget _holidayIcon = new Container(
                                       children: [
                                         Row(
                                           children: [
-                                            Icon(
-                                              Icons
-                                                  .home,
-                                              color: Colors
-                                                  .green.shade200,
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                  Holiyday["${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}"]!,
+                                                  style: const TextStyle(
+                                                      color: Colors
+                                                          .black54)),
                                             ),
-                                            SizedBox(
-                                              width: w * 0.01,
-                                            ),
-                                            Text(
-
-                                                Holiyday["${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}"]!,
-                                                style: const TextStyle(
-                                                    color: Colors
-                                                        .black54)),
                                           ],
                                         ),
 
