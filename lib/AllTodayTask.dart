@@ -38,7 +38,7 @@ class _AllEmpTaskState extends State<AllEmpTask> {
     print(widget.emoid);
     Dio dio=Dio();
     var formData = FormData.fromMap({
-      "emp_id":"3"
+      "emp_id":widget.emoid
     });
     print(formData.fields);
     var response = await dio.post('http://training.virash.in/allEmployeeTodaysTask', data: formData);

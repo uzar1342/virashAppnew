@@ -1,3 +1,4 @@
+import 'package:Virash/configs/globals.dart';
 import 'package:flutter/material.dart';
 
 class TabIconData {
@@ -36,8 +37,42 @@ class TabIconData {
       animationController: null,
     ),
     TabIconData(
-      imagePath: 'asset/hchecklist.png',
-      selectedImagePath: 'asset/checklist.png',
+      imagePath: "asset/hchecklist.png",
+      selectedImagePath: "asset/checklist.png",
+      index: 2,
+      lable: "",
+      isSelected: false,
+      animationController: null,
+    ),
+    TabIconData(
+      imagePath: 'asset/hcalendar.png',
+      selectedImagePath: 'asset/calendar.png',
+      index: 3,
+      lable: "",
+      isSelected: false,
+      animationController: null,
+    ),
+  ];
+  static List<TabIconData> tabIconsList1 = <TabIconData>[
+    TabIconData(
+      imagePath: 'asset/hhome.png',
+      selectedImagePath: 'asset/home.png',
+      index: 0,
+      isSelected: true,
+      lable: "Home",
+      animationController: null,
+    ),
+    TabIconData(
+      imagePath: 'asset/mortarboa.png',
+      selectedImagePath: 'asset/mortarboard.png',
+      index: 1,
+      lable: "",
+      isSelected: false,
+      animationController: null,
+    ),
+    TabIconData(
+      imagePath: "asset/hgraduating-student.png",
+      selectedImagePath: "asset/graduating-student.png",
       index: 2,
       lable: "",
       isSelected: false,

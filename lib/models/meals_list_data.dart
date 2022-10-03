@@ -7,7 +7,6 @@ class MealsListData {
     this.meals,
     this.kacl = 0,
   });
-
   String imagePath;
   String titleTxt;
   String startColor;
@@ -26,15 +25,15 @@ class MealsListData {
     ),
     MealsListData(
       imagePath: 'assets/completed-task.png',
-      titleTxt: 'View Task',
+      titleTxt: "Today's Task",
       kacl: 602,
       meals: <String>['Salmon,', 'Mixed veggies,', 'Avocado'],
       startColor: '#738AE6',
       endColor: '#5C5EDD',
     ),
      MealsListData(
-       imagePath: 'assets/fitness_app/snack.png',
-       titleTxt: 'Facalty',
+       imagePath: 'asset/university.png',
+       titleTxt: 'Faculty',
       kacl: 0,
       meals: <String>['Recommend:', '800 kcal'],
       startColor: '#FE95B6',

@@ -15,13 +15,45 @@ class _viewimageState extends State<viewimage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text("InImage"),
-          Expanded(
-            child: GestureDetector(onTap:(){
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text("InImage"),
+            Expanded(
+              child: GestureDetector(onTap:(){
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(
+                        "View Image",
+                        style: TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      content: Container(
+                        height: context.height * 0.4,
+                        child: SingleChildScrollView(
+                          child: Form(
+                            child: Column(
+                              children: [
+                               Image.network(widget.inimage)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ));
+
+
+
+              },child: Center(child: Image.network(widget.inimage))),
+            ),
+            Text("outImage"),
+          Expanded( child:GestureDetector(
+            onTap: (){
+
               showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
@@ -37,7 +69,7 @@ class _viewimageState extends State<viewimage> {
                         child: Form(
                           child: Column(
                             children: [
-                             Image.network(widget.inimage)
+                              Image.network(widget.outimage)
                             ],
                           ),
                         ),
@@ -47,40 +79,10 @@ class _viewimageState extends State<viewimage> {
 
 
 
-            },child: Image.network(widget.inimage)),
-          ),
-          Text("outImage"),
-        Expanded( child:GestureDetector(
-          onTap: (){
-
-            showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text(
-                    "View Image",
-                    style: TextStyle(
-                        color: primaryColor,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  content: Container(
-                    height: context.height * 0.4,
-                    child: SingleChildScrollView(
-                      child: Form(
-                        child: Column(
-                          children: [
-                            Image.network(widget.outimage)
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ));
-
-
-
-          }, child: Image.network(widget.outimage),
-         )
-        )],
+            }, child: Center(child: Image.network(widget.outimage)),
+           )
+          )],
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../main.dart';
+import '../AllTodayTask.dart';
 import '../CalendarPage.dart';
 import '../ViewEmploye.dart';
 import '../dash_page.dart';
@@ -87,6 +88,7 @@ class MealsView extends StatelessWidget {
                     padding: const EdgeInsets.only(
                         top: 32, left: 8, right: 8, bottom: 16),
                     child: Container(
+                      width: MediaQuery.of(context).size.width*0.4,
                       decoration: BoxDecoration(
                         boxShadow: <BoxShadow>[
                           BoxShadow(
@@ -117,7 +119,7 @@ class MealsView extends StatelessWidget {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder:
                                         (context) =>
-                                        CalendarPage()
+                                        CalendarPage(id: userId,)
                                     )
                                 )
                               }
@@ -126,10 +128,7 @@ class MealsView extends StatelessWidget {
                                Navigator.push(context,
                                    MaterialPageRoute(builder:
                                        (context) =>
-                                       employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"?
-                                           // EmpTask(emoid: userId, status: '',)
-                                       EmpTaskNav()
-                                           :viewemp(type: 'T',)
+                                       AllEmpTask(emoid: userId,)
                                    )
                                )
                              }
@@ -142,24 +141,13 @@ class MealsView extends StatelessWidget {
 
                                     )
                                 )
-                              }else if(position==3)
-                              {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder:
-                                        (context) =>
-                                    employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"?
-                                    // EmpTask(emoid: userId, status: '',)
-                                    MonthCalendarPage(id: userId, name: employee_name,)
-                                        :viewemp(type: 'A',)
-                                    )
-                                )
                               }
                           },
                         child: Padding(
                           padding: const EdgeInsets.only(
                               top: 54, left: 16, right: 16, bottom: 8),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
@@ -173,83 +161,8 @@ class MealsView extends StatelessWidget {
                                   color: VirashAppTheme.white,
                                 ),
                               ),
-                              Expanded(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 8, bottom: 8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        mealsListData!.meals!.join('\n'),
-                                        style: TextStyle(
-                                          fontFamily: VirashAppTheme.fontName,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 10,
-                                          letterSpacing: 0.2,
-                                          color: VirashAppTheme.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              mealsListData?.kacl != 0
-                                  ?  Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        children: <Widget>[
-                                          Text(
-                                            mealsListData!.kacl.toString(),
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontFamily: VirashAppTheme.fontName,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 24,
-                                              letterSpacing: 0.2,
-                                              color: VirashAppTheme.white,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 4, bottom: 3),
-                                            child: Text(
-                                              'kcal',
-                                              style: TextStyle(
-                                                fontFamily:
-                                                    VirashAppTheme.fontName,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 10,
-                                                letterSpacing: 0.2,
-                                                color: VirashAppTheme.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )
 
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                        color: VirashAppTheme.nearlyWhite,
-                                        shape: BoxShape.circle,
-                                        boxShadow: <BoxShadow>[
-                                          BoxShadow(
-                                              color: VirashAppTheme.nearlyBlack
-                                                  .withOpacity(0.4),
-                                              offset: Offset(8.0, 8.0),
-                                              blurRadius: 8.0),
-                                        ],
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Icon(
-                                          Icons.add,
-                                          color: HexColor(mealsListData!.endColor),
-                                          size: 24,
-                                        ),
-                                      ),
-                                    ),
+
                             ],
                           ),
                         ),

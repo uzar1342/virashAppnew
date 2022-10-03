@@ -274,6 +274,7 @@ static Widget _holidayIcon = new Container(
     final _calendarCarouselNoHeader = CalendarCarousel<Event>(
       todayBorderColor: Colors.black,
       onDayPressed: (date, events) {
+        if(_targetDateTime.year==date.year&&_targetDateTime.month==date.month)
         this.setState(() => _currentDate2 = date);
         events.forEach((event) => {day=date.day,year=date.year,month=date.month});
       },
@@ -599,7 +600,7 @@ static Widget _holidayIcon = new Container(
                                                             width: w * 0.01,
                                                           ),
                                                           Text(
-                                                              snapshot.data["data"][0]["remaining_hours"].toString()+" H/M/S",
+                                                              snapshot.data["data"][0]["remaining_hours"].toString(),
                                                               style: const TextStyle(
                                                                   color: Colors
                                                                       .black54)),
@@ -618,7 +619,7 @@ static Widget _holidayIcon = new Container(
                                                             width: w * 0.01,
                                                           ),
                                                           Text(
-                                                              snapshot.data["data"][0]["extra_hours"].toString()+" H/M/S",
+                                                              snapshot.data["data"][0]["extra_hours"].toString(),
                                                               style: const TextStyle(
                                                                   color: Colors
                                                                       .black54)),
@@ -640,7 +641,7 @@ static Widget _holidayIcon = new Container(
                                                           width: w * 0.01,
                                                         ),
                                                         Text(
-                                                            snapshot.data["data"][0]["late"].toString()+" H/M/S",
+                                                            snapshot.data["data"][0]["late"].toString(),
                                                             style: const TextStyle(
                                                                 color: Colors
                                                                     .black54)),

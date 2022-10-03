@@ -9,14 +9,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'OuttimeForm.dart';
 import 'globals.dart';
 import 'googlemap.dart';
 import 'no_internet_page.dart';
 
 
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({Key? key,}) : super(key: key);
-
+   CalendarPage( {required this.id, Key? key,}) : super(key: key);
+String id;
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
@@ -98,6 +99,7 @@ class _CalendarPageState extends State<CalendarPage> {
       "role":   employee_role,
       "emp_id":  userId
     });
+    print(widget.id);
     print(formData.fields);
     var response = await dio.post('http://training.virash.in/allEmployeesAttendanceDetails', data: formData);
     if(response.statusCode==200)
@@ -186,115 +188,115 @@ class _CalendarPageState extends State<CalendarPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      TableCalendar(
-                        focusedDay: focusedDay,
-                        firstDay: DateTime.utc(2018),
-                        lastDay: DateTime.now(),
-                        rowHeight: 60,
-                        eventLoader: _getEventsForDay,
-                        startingDayOfWeek: StartingDayOfWeek.monday,
-                        calendarStyle: CalendarStyle(
-                          isTodayHighlighted: true,
-                          todayDecoration: BoxDecoration(
-                              color: Colors.orange.shade200,
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(10)),
-                          selectedDecoration: BoxDecoration(
-                              color: primaryColor,
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(10)),
-                          defaultDecoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(10)),
-                          weekendDecoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Color(0xffd9d9d9),
-                              borderRadius: BorderRadius.circular(10)),
-                          disabledDecoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Color(0xffd8d8db),
-                              borderRadius: BorderRadius.circular(10)),
-                          holidayDecoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(10)),
-                          outsideDecoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(10)),
-                          markersAnchor: 1.2,
-                          markersMaxCount: 5,
-                        ),
-                        calendarBuilders: CalendarBuilders(
-                            singleMarkerBuilder: (context, date, event) {
-                              return Container(
-                                width: 4,
-                                height: 4,
-                                margin: const EdgeInsets.symmetric(horizontal: 0.5),
-                                decoration: const BoxDecoration(
-                                  color: Colors.amber,
-                                  shape: BoxShape.circle,
-                                ),
-                              );
-                            }),
-                        //Day Change and focus change
-                        selectedDayPredicate: (day) {
-                          return isSameDay(selectedDay, day);
-                        },
-                        onDaySelected: (DateTime selectday, DateTime focusDay) {
-                          print(selectday.day);
-                          setState(() {
-                            day=selectday.day;
-                            month=selectday.month;
-                            year=selectday.year;
-                            selectedDay = selectday;
-                            focusedDay = focusDay;
-                          });
-                          _selectedEvents.value = _getEventsForDay(selectday);
-                        },
-                        daysOfWeekVisible: true,
-                        headerStyle: HeaderStyle(
-                            formatButtonDecoration: BoxDecoration(
-                                border: Border.all(color: primaryColor, width: 1),
-                                borderRadius: BorderRadius.circular(15)),
-                            formatButtonTextStyle: TextStyle(
-                                color: primaryColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400),
-                            titleCentered: true,
-                            titleTextStyle: TextStyle(
-                                color: primaryColor,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18),
-                            leftChevronIcon: Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade300,
-                                  borderRadius:
-                                  const BorderRadius.all(Radius.circular(8)),
-                                ),
-                                child: const Icon(
-                                  Icons.chevron_left_outlined,
-                                  color: Colors.grey,
-                                  size: 26,
-                                )),
-                            rightChevronIcon: Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade300,
-                                  borderRadius:
-                                  const BorderRadius.all(Radius.circular(8)),
-                                ),
-                                child: const Icon(Icons.chevron_right_outlined,
-                                    color: Colors.grey, size: 26)),
-                            formatButtonVisible: true),
-                        onPageChanged: (focusedDay) {
-                          focusedDay = focusedDay;
-                        },
-                        //Format of Calendar week month 2weeks
-                        calendarFormat: CalendarFormat.week,
-                      ),
+                      // TableCalendar(
+                      //   focusedDay: focusedDay,
+                      //   firstDay: DateTime.utc(2018),
+                      //   lastDay: DateTime.now(),
+                      //   rowHeight: 60,
+                      //   eventLoader: _getEventsForDay,
+                      //   startingDayOfWeek: StartingDayOfWeek.monday,
+                      //   calendarStyle: CalendarStyle(
+                      //     isTodayHighlighted: true,
+                      //     todayDecoration: BoxDecoration(
+                      //         color: Colors.orange.shade200,
+                      //         shape: BoxShape.rectangle,
+                      //         borderRadius: BorderRadius.circular(10)),
+                      //     selectedDecoration: BoxDecoration(
+                      //         color: primaryColor,
+                      //         shape: BoxShape.rectangle,
+                      //         borderRadius: BorderRadius.circular(10)),
+                      //     defaultDecoration: BoxDecoration(
+                      //         color: Colors.white,
+                      //         shape: BoxShape.rectangle,
+                      //         borderRadius: BorderRadius.circular(10)),
+                      //     weekendDecoration: BoxDecoration(
+                      //         shape: BoxShape.rectangle,
+                      //         color: Color(0xffd9d9d9),
+                      //         borderRadius: BorderRadius.circular(10)),
+                      //     disabledDecoration: BoxDecoration(
+                      //         shape: BoxShape.rectangle,
+                      //         color: Color(0xffd8d8db),
+                      //         borderRadius: BorderRadius.circular(10)),
+                      //     holidayDecoration: BoxDecoration(
+                      //         shape: BoxShape.rectangle,
+                      //         color: Colors.green,
+                      //         borderRadius: BorderRadius.circular(10)),
+                      //     outsideDecoration: BoxDecoration(
+                      //         shape: BoxShape.rectangle,
+                      //         color: Colors.grey.shade200,
+                      //         borderRadius: BorderRadius.circular(10)),
+                      //     markersAnchor: 1.2,
+                      //     markersMaxCount: 5,
+                      //   ),
+                      //   calendarBuilders: CalendarBuilders(
+                      //       singleMarkerBuilder: (context, date, event) {
+                      //         return Container(
+                      //           width: 4,
+                      //           height: 4,
+                      //           margin: const EdgeInsets.symmetric(horizontal: 0.5),
+                      //           decoration: const BoxDecoration(
+                      //             color: Colors.amber,
+                      //             shape: BoxShape.circle,
+                      //           ),
+                      //         );
+                      //       }),
+                      //   //Day Change and focus change
+                      //   selectedDayPredicate: (day) {
+                      //     return isSameDay(selectedDay, day);
+                      //   },
+                      //   onDaySelected: (DateTime selectday, DateTime focusDay) {
+                      //     print(selectday.day);
+                      //     setState(() {
+                      //       day=selectday.day;
+                      //       month=selectday.month;
+                      //       year=selectday.year;
+                      //       selectedDay = selectday;
+                      //       focusedDay = focusDay;
+                      //     });
+                      //     _selectedEvents.value = _getEventsForDay(selectday);
+                      //   },
+                      //   daysOfWeekVisible: true,
+                      //   headerStyle: HeaderStyle(
+                      //       formatButtonDecoration: BoxDecoration(
+                      //           border: Border.all(color: primaryColor, width: 1),
+                      //           borderRadius: BorderRadius.circular(15)),
+                      //       formatButtonTextStyle: TextStyle(
+                      //           color: primaryColor,
+                      //           fontSize: 12,
+                      //           fontWeight: FontWeight.w400),
+                      //       titleCentered: true,
+                      //       titleTextStyle: TextStyle(
+                      //           color: primaryColor,
+                      //           fontWeight: FontWeight.w700,
+                      //           fontSize: 18),
+                      //       leftChevronIcon: Container(
+                      //           padding: const EdgeInsets.all(4),
+                      //           decoration: BoxDecoration(
+                      //             color: Colors.grey.shade300,
+                      //             borderRadius:
+                      //             const BorderRadius.all(Radius.circular(8)),
+                      //           ),
+                      //           child: const Icon(
+                      //             Icons.chevron_left_outlined,
+                      //             color: Colors.grey,
+                      //             size: 26,
+                      //           )),
+                      //       rightChevronIcon: Container(
+                      //           padding: const EdgeInsets.all(4),
+                      //           decoration: BoxDecoration(
+                      //             color: Colors.grey.shade300,
+                      //             borderRadius:
+                      //             const BorderRadius.all(Radius.circular(8)),
+                      //           ),
+                      //           child: const Icon(Icons.chevron_right_outlined,
+                      //               color: Colors.grey, size: 26)),
+                      //       formatButtonVisible: true),
+                      //   onPageChanged: (focusedDay) {
+                      //     focusedDay = focusedDay;
+                      //   },
+                      //   //Format of Calendar week month 2weeks
+                      //   calendarFormat: CalendarFormat.week,
+                      // ),
 
                     Expanded(
                         child: FutureBuilder<dynamic>(
@@ -479,14 +481,17 @@ class _CalendarPageState extends State<CalendarPage> {
                                                       SizedBox(
                                                         width: w * 0.01,
                                                       ),
-                                                      Text(
-                                                          snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
-                                                          style: const TextStyle(
-                                                              color: Colors
-                                                                  .black54)),
+                                                      Container(
+                                                        width: w*0.8,
+                                                        child: Text(
+                                                            snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
+                                                            maxLines: 8,style: const TextStyle(
+                                                                color: Colors
+                                                                    .black54)),
+                                                      ),
                                                     ],
                                                   ),
-                                                  const Divider(),
+                                                  Divider(),
                                                   Row(
                                                     mainAxisAlignment:
                                                     MainAxisAlignment.end,
@@ -532,6 +537,54 @@ class _CalendarPageState extends State<CalendarPage> {
                                                           ]),
                                                         ),
                                                       ),
+                                                      snapshot.data["data"][position]["out_time"]==null?SizedBox(width: 10,):Container(),
+                                                      snapshot.data["data"][position]["out_time"]==null?  Container(
+                                                        child: employee_role=="Admin"||employee_role=="Super Admin"||employee_role=="Faculty & Admin"?
+                                                        widget.id!=snapshot.data["data"][position]["emp_id"].toString().trim()?Container(
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                          DateTimePicker(id: widget.id, date: "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",)
+                                                                  ));
+                                                            },
+                                                            child: Container(
+                                                              padding:
+                                                              EdgeInsets.all(8.0),
+                                                              decoration:
+                                                              BoxDecoration(
+                                                                color: primaryColor,
+                                                                borderRadius:
+                                                                const BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      14.0),
+                                                                ),
+                                                              ),
+                                                              child: Row(children: const [
+                                                                Icon(
+                                                                  Icons.punch_clock_rounded,
+                                                                  color: Colors.white,
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 5.0,
+                                                                ),
+                                                                Text(
+                                                                  "Mark Outtime",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                                )
+                                                              ]),
+                                                            ),
+                                                          ),
+                                                        ):Container():Container(),
+                                                      ):Container(),
                                                     ],
                                                   )
                                                 ],

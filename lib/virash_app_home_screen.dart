@@ -66,6 +66,8 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
   }
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+   List<TabIconData> tabIconsList1 = TabIconData.tabIconsList1;
+
   Widget tabBody = Container(
     color: VirashAppTheme.background,
   );
@@ -167,10 +169,10 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
           child: SizedBox(),
         ),
         BottomBarView(
-          tabIconsList: tabIconsList,
+          tabIconsList: employee_role=="Admin"||employee_role=="Super Admin"||employee_role=="Faculty & Admin"?tabIconsList1:tabIconsList,
           addClick: () {
             setState(() {
-            widget.isLoading=true;
+            widget.isLoading=!widget.isLoading;
           });
             },
           changeIndex: (int index) {
@@ -204,7 +206,7 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
                 setState(() {
 
 
-                  employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"?tabBody =  EmpTaskNav():
+                  employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"||employee_role=="Intern"?tabBody =  EmpTaskNav():
                   tabBody=viewemp(type: 'T',);
 
 
@@ -213,19 +215,15 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
                 });
               });
             }else if (index == 3 ) {
+              if( employee_role!="Super Admin"&& employee_role!="Admin"&&employee_role!="Faculty & Admin")
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
                 }
+
                 setState(() {
-
-
                   employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"?tabBody = MonthCalendarPage(id: userId, name: employee_name,):
                   tabBody=viewemp(type: 'A',);
-
-
-
-
                 });
               });
             }

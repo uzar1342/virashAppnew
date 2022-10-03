@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'globals.dart';
 
-
+final List<DropdownMenuItem<String>> item=[];
 class Taskadd extends StatefulWidget {
    Taskadd({Key? key,required this.empid}) : super(key: key);
     String empid;
@@ -101,18 +101,7 @@ class _PrioretyState extends State<Priorety> {
 
   @override
   void initState() {
-    item.add( DropdownMenuItem(
-      value: "Low",
-      child: Text("Low"),
-    ));
-    item.add( DropdownMenuItem(
-      value: "medium",
-      child: Text("medium"),
-    ));
-    item.add( DropdownMenuItem(
-      value: "high",
-      child: Text("high"),
-    ));
+
 
     super.initState();
     _value= widget.cartItem.itemName!=""?widget.cartItem.itemName:"Low";
@@ -127,7 +116,7 @@ class _PrioretyState extends State<Priorety> {
     super.didUpdateWidget(oldWidget);
   }
 
-   final List<DropdownMenuItem<String>> item=[];
+
 
 
   @override
@@ -289,7 +278,45 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 
+  ADDtaskpriorety() async {
+    setState(() {
+      loder=true;
+    });
+    Dio dio=Dio();
+    var response = await dio.post('http://training.virash.in/showPriority');
+    print(response.data.length);
 
+
+
+    if (response.statusCode == 200) {
+      if(response.data["data"]!=null)
+      {
+        int len=int.parse(response.data["data"].length.toString());
+        for(int i=0;i<len;i++)
+        {
+          item.add(DropdownMenuItem(
+            value: response.data["data"][i].toString(),
+            child: Text(response.data["data"][i].toString()),
+          )) ;
+        }
+      }
+      setState(() {
+        loder=false;
+      });
+
+    }
+    else {
+      setState(() {
+        loder=false;
+      });
+      Fluttertoast.showToast(msg: "Unable to send task");
+    }
+  }
+  @override
+  void initState() {
+    ADDtaskpriorety();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

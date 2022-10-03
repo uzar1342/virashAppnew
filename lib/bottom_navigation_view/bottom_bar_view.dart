@@ -59,7 +59,7 @@ class _BottomBarViewState extends State<BottomBarView>
           SizedBox(
             height: 10.0,
           ),
-          Text("Loading...")
+         CircularProgressIndicator()
         ],
       ),
     ):Stack(
@@ -126,7 +126,7 @@ class _BottomBarViewState extends State<BottomBarView>
                             ),
                             Expanded(
                               child: TabIcons(
-                                  tabIconData: widget.tabIconsList?[3],
+                                  tabIconData: widget.tabIconsList![3],
                                   removeAllSelect: () {
                                     setRemoveAllSelection(
                                         widget.tabIconsList?[3]);
@@ -196,7 +196,6 @@ class _BottomBarViewState extends State<BottomBarView>
                             if(net)
                               {
                           camra(),
-                          widget.addClick?.call(),
                           }
                               else
                                 {
@@ -252,6 +251,7 @@ class _BottomBarViewState extends State<BottomBarView>
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
+    widget.addClick?.call();
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 

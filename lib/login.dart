@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                                 controller: Emailcon,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: "Email or Phone number",
+                                    hintText: "Username",
                                     hintStyle: TextStyle(color: Colors.grey[400])
                                 ),
                               ),

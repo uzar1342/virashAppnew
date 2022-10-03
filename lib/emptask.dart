@@ -173,8 +173,6 @@ class _EmpTaskState extends State<EmpTask> {
                                         ),
                                         GestureDetector(
                                           onTap: (){
-
-
                                           },
                                           child: Container(
                                             padding:
@@ -186,7 +184,7 @@ class _EmpTaskState extends State<EmpTask> {
                                                 color: snapshot.data["data"][position]["priority"]=="high"?
                                                   Colors
                                                     .red:snapshot.data["data"][position]["priority"]=="medium"?Colors
-                                                    .yellow:Colors
+                                                    .blue:Colors
                                                     .green,
                                                 borderRadius: const BorderRadius
                                                     .all(Radius

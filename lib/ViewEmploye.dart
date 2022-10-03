@@ -104,29 +104,64 @@ print(formData.fields);
                           padding: const EdgeInsets.all(8.0),
                           child: InkWell(
                           onTap:()=>{
-                            if(widget.type=="T")
-                              {
-                                Navigator.push(context, MaterialPageRoute(builder: (c)=>
-                                    TaskNav(id: snapshot.data["data"][position]["emp_id"].toString(),))
-                                )
-                              }
-                            else if(widget.type=="A")
-                              {
-                                Navigator.push(context, MaterialPageRoute(builder: (c)=>
-                                    MonthCalendarPage(name: snapshot.data["data"][position]["emp_name"].toString(), id: snapshot.data["data"][position]["emp_id"].toString(),))
-                                )
-                              }
+
                             },
                           child: Card(
                             shape:RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15.0)
                             ),
                             elevation: 5,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ListTile(
-                                leading: Icon(Icons.person),
-                                title: Text(snapshot.data["data"][position]["emp_name"]),
+                            child: ListTile(
+                              leading: Icon(Icons.person),
+                              title: Text(snapshot.data["data"][position]["emp_name"]),
+                              trailing: PopupMenuButton<int>(
+                                icon: Container(child:Icon(Icons.more_vert)),
+                                itemBuilder: (context) => [
+                                  // PopupMenuItem 1
+                                  PopupMenuItem(
+                                    value: 1,
+                                    // row with 2 children
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.task),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text("Add Task")
+                                      ],
+                                    ),
+                                  ),
+                                  // PopupMenuItem 2
+                                  PopupMenuItem(
+                                    value: 2,
+                                    // row with two children
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.calendar_month),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text("Monthly Status")
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                offset: Offset(0, 40),
+                                color: Colors.white,
+                                elevation: 2,
+                                // on selected we show the dialog box
+                                onSelected: (value) {
+                                  // if value 1 show dialog
+                                  if (value == 1) {
+                                    Navigator.push(context, MaterialPageRoute(builder: (c)=>
+                                        TaskNav(id: snapshot.data["data"][position]["emp_id"].toString(),)));
+                                    // if value 2 show dialog
+                                  } else if (value == 2) {
+                                      Navigator.push(context, MaterialPageRoute(builder: (c)=>
+                                          MonthCalendarPage(name: snapshot.data["data"][position]["emp_name"].toString(), id: snapshot.data["data"][position]["emp_id"].toString(),))
+                                      );
+                                  }
+                                },
                               ),
                             ),
                           ),
