@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -112,150 +113,205 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: AppBar(title:  Text(widget.title.toString())),
         body: net?Container(
-          child: loader?Column(
-            children: [
-              Expanded(
-                flex: 6,
-                child: widget.camraloader?
-                FutureBuilder<void>(
-                  future: _initializeControllerFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      // If the Future is complete, display the preview.
-                      return CameraPreview(_controller);
-                    } else {
-                      // Otherwise, display a loading indicator.
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                  },
-                ): Image.file(File(image!.path)),
-              ),
-              SizedBox(height: 20),
-               Expanded(
-                flex: 1,
-                  child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize:const mi.Size(double.infinity, 80),
-                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                              primary: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
+          child: loader?SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                      padding: const EdgeInsets.only(top: 0.0),
+                      height: h * 0.09,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              _onWillPop();
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                // top: 10.0,
+                                left: 15.0,
+                              ),
+                              //padding: const EdgeInsets.only(left: 5.0),
+                              height: h * 0.05,
+                              width: h * 0.05,
+                              decoration: BoxDecoration(
+                                // color: primaryColor,
+                                  border: Border.all(color: Colors.black26, width: 1.0),
+                                  borderRadius:
+                                  const BorderRadius.all(Radius.circular(12.0))),
+                              child: const Icon(
+                                Icons.arrow_back_ios_new,
+                                color: Colors.black87,
+                                size: 18.0,
                               ),
                             ),
-                            onPressed: () async {
-                              try {
-                                // Ensure that the camera is initialized.
-                                await _initializeControllerFuture;
-                                // Attempt to take a picture and get the file `image`
-                                // where it was saved.
-                                image = await _controller.takePicture();
+                          ),
+                          Text(
+                            widget.title,
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => const AttendancePage()));
+                            },
+                            icon: const FaIcon(
+                              FontAwesomeIcons.chartArea,
+                              color: Colors.white,
+                              size: 25,
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+                Expanded(
+                  flex: 6,
+                  child: widget.camraloader?
+                  FutureBuilder<void>(
+                    future: _initializeControllerFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // If the Future is complete, display the preview.
+                        return CameraPreview(_controller);
+                      } else {
+                        // Otherwise, display a loading indicator.
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ): Image.file(File(image!.path)),
+                ),
+                SizedBox(height: 5),
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Align(
+                       alignment: Alignment.topCenter,
+                       child: ElevatedButton(
+                           style: ElevatedButton.styleFrom(
+                             fixedSize: Size(w*0.8, h*0.078),
+                             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                             primary: Colors.green,
+                             shape: RoundedRectangleBorder(
+                               borderRadius: BorderRadius.circular(6),
+                             ),
+                           ),
 
-                                if (!mounted) return;
-                                // If the picture was taken, display it on a new screen.
+                           onPressed: () async {
+                             try {
+                               // Ensure that the camera is initialized.
+                               await _initializeControllerFuture;
 
-                              setState(() {
-                                widget.camraloader=false;
-                              });
+                               image = await _controller.takePicture();
 
-                                if(attendence.trim()=="True")
-                                {
-                                  return showDialog(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title:  const Text('Are you sure?'),
-                                      content:  const Text('Do you want Logout'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () =>
-                                          {
-                                          setState(() {
-                                          widget.camraloader=true;
-                                          }),
-                                            Navigator.of(context).pop(false)},
-                                          child:  const Text('No'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () =>
-                                              {
-                                                if(net)
-                                                  {
-                                                  Navigator.of(context).pop(false),
+                               if (!mounted) return;
+                               // If the picture was taken, display it on a new screen.
 
-                                                    Logout_attendence(image!),
-                                                  }
-                                                else
-                                                  {
-                                                  Navigator.of(context).pop(false),
-                                                  Fluttertoast.showToast(msg: "No Internet")
-                                                  }
-                                              },
-                                              child:  const Text('Yes'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
+                             setState(() {
+                               widget.camraloader=false;
+                             });
 
-                                }
-                                else
-                                {
-                                  return
-                                    showDialog(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text('Are you sure?'),
-                                      content: const Text('Do you want Login'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () =>
-                                          {setState(() {
-                                            widget.camraloader=true;
-                                          }),
-                                            Navigator.of(context).pop(false)},
-                                          child:  const Text('No'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () =>  {
-                                Navigator.of(context).pop(false),
-                                if(net)
-                                {
-                                setState(() {
-                                loader=false;
-                                }),
-                                  //Login_attendence(image!),
-                                  Login_attendence(image!),
-                                }
-                                else
-                                {
-                                Fluttertoast.showToast(msg: "No Internet")
-                                }
-                                },
-                                          child:  const Text('Yes'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }
+                               if(attendence.trim()=="True")
+                               {
+                                 return showDialog(
+                                   barrierDismissible: false,
+                                   context: context,
+                                   builder: (context) => AlertDialog(
+                                     title:  const Text('Are you sure?'),
+                                     content:  const Text('Do you want Logout'),
+                                     actions: <Widget>[
+                                       TextButton(
+                                         onPressed: () =>
+                                         {
+                                         setState(() {
+                                         widget.camraloader=true;
+                                         }),
+                                           Navigator.of(context).pop(false)},
+                                         child:  const Text('No'),
+                                       ),
+                                       TextButton(
+                                         onPressed: () =>
+                                             {
+                                               if(net)
+                                                 {
+                                                 Navigator.of(context).pop(false),
 
-                              } catch (e) {
-                                // If an error occurs, log the error to the console.
-                                print(e);
-                              }
-                            }
-                            , child: Text(widget.title,style: const TextStyle(fontSize: 25),)),
-                      )))
+                                                   Logout_attendence(image!),
+                                                 }
+                                               else
+                                                 {
+                                                 Navigator.of(context).pop(false),
+                                                 Fluttertoast.showToast(msg: "No Internet")
+                                                 }
+                                             },
+                                             child:  const Text('Yes'),
+                                       ),
+                                     ],
+                                   ),
+                                 );
 
-            ],
+                               }
+                               else
+                               {
+                                 return
+                                   showDialog(
+                                   barrierDismissible: false,
+                                   context: context,
+                                   builder: (context) => AlertDialog(
+                                     title: const Text('Are you sure?'),
+                                     content: const Text('Do you want Login'),
+                                     actions: <Widget>[
+                                       TextButton(
+                                         onPressed: () =>
+                                         {setState(() {
+                                           widget.camraloader=true;
+                                         }),
+                                           Navigator.of(context).pop(false)},
+                                         child:  const Text('No'),
+                                       ),
+                                       TextButton(
+                                         onPressed: () =>  {
+                               Navigator.of(context).pop(false),
+                               if(net)
+                               {
+                               setState(() {
+                               loader=false;
+                               }),
+                                 //Login_attendence(image!),
+                                 Login_attendence(image!),
+                               }
+                               else
+                               {
+                               Fluttertoast.showToast(msg: "No Internet")
+                               }
+                               },
+                                         child:  const Text('Yes'),
+                                       ),
+                                     ],
+                                   ),
+                                 );
+                               }
+
+                             } catch (e) {
+                               // If an error occurs, log the error to the console.
+                               print(e);
+                             }
+                           }
+                           , child: Text(widget.title,style: const TextStyle(fontSize: 25),))),
+                 )
+
+              ],
+            ),
           ):Center(child: CircularProgressIndicator()),
         ):SafeArea(
             child: Column(

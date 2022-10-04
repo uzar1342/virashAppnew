@@ -187,17 +187,17 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
                 });
               });
              }
-    // else if (index == 1 ) {
-            //   animationController?.reverse().then<dynamic>((data) {
-            //     if (!mounted) {
-            //       return;
-            //     }
-            //     setState(() {
-            //       tabBody =
-            //           TrainingScreen(animationController: animationController);
-            //     });
-            //   });
-            // }
+    else if (index == 1 ) {
+              animationController?.reverse().then<dynamic>((data) {
+                if (!mounted) {
+                  return;
+                }
+                setState(() {
+                  tabBody =
+                      TrainingScreen(animationController: animationController);
+                });
+              });
+            }
                else if (index == 2 ) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) {

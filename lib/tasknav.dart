@@ -14,9 +14,9 @@ import 'models/tabIcon_data.dart';
 import 'my_diary/homescreen.dart';
 
 class TaskNav extends StatefulWidget {
-  TaskNav({Key? key,required this.id}) : super(key: key);
+  TaskNav({Key? key,required this.id,required this.name}) : super(key: key);
   bool isLoading = false;
-  String id;
+  String id,name;
   @override
   _TaskNavState createState() => _TaskNavState();
 }
@@ -187,7 +187,7 @@ class _TaskNavState extends State<TaskNav>
             }
             setState(() {
               tabBody =
-                  ApprovedTask(emoid: widget.id,);
+                  ApprovedTask(emoid: widget.id, name: widget.name,);
               // EmpTask(emoid: widget.id, status: 'complete',);
                  // CompTask(emoid: widget.id);
             });

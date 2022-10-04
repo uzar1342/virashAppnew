@@ -1,8 +1,11 @@
+import 'dart:convert';
+import 'dart:io' as Io;
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'globals.dart';
 
 final List<DropdownMenuItem<String>> item=[];
@@ -211,8 +214,23 @@ class CartWidget extends StatefulWidget {
 
 class _CartWidgetState extends State<CartWidget> {
 
-
-
+  final ImagePicker _picker = ImagePicker();
+addimg()
+async {
+  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  final bytes = await Io.File(image!.path.toString()).readAsBytes();
+// or
+  String img64 = base64Encode(bytes);
+  print(img64);
+}
+picimg()
+async {
+  final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+  final bytes = await Io.File(photo!.path.toString()).readAsBytes();
+// or
+  String img64 = base64Encode(bytes);
+  print(img64);
+}
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +255,9 @@ class _CartWidgetState extends State<CartWidget> {
           ],
         ),
         Task(cartItem: widget.cart[widget.index]),
-        
+        ElevatedButton(onPressed: (){
+          picimg();
+        }, child: Text("send image"))
       ],
     );
   }
@@ -253,29 +273,32 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 
-
   Sendtask(task) async {
-    print(task);
-    setState(() {
-     loder=true;
-    });
-    Dio dio=Dio();
-    var response = await dio.post('http://training.virash.in/provide_task', data: task);
-    if (response.statusCode == 200) {
-      setState(() {
-        cart.clear();
-        loder=false;
-      });
-      print(response.data.length);
-      Fluttertoast.showToast(msg: "Sucessfull Send");
-    }
-    else {
-      setState(() {
-        loder=false;
-      });
-      Fluttertoast.showToast(msg: "Unable to send task");
-    }
+
+        print(task);
+        setState(() {
+          loder=true;
+        });
+        Dio dio=Dio();
+        var response = await dio.post('http://training.virash.in/provide_task', data: task);
+        if (response.statusCode == 200) {
+          setState(() {
+            cart.clear();
+            loder=false;
+          });
+          print(response.data.length);
+          Fluttertoast.showToast(msg: "Sucessfull Send");
+        }
+        else {
+          setState(() {
+            loder=false;
+          });
+          Fluttertoast.showToast(msg: "Unable to send task");
+        }
+
+
   }
+
 
 
   ADDtaskpriorety() async {
@@ -318,133 +341,193 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
   @override
+  void dispose() {
+    item.clear();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
+    var h=MediaQuery.of(context).size.height;
+    var w=MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          IconButton(
-            onPressed: () {
-              cart.add(CartItem(
-                  productType: "",
-                  itemName: "",
-                  flavor: ""));
-              setState(() {
-              });
-            },
-            icon: const Icon(Icons.add),
-          ),
-          IconButton(
-            onPressed: () {
-             var count=0;
-              var data=[];
-              cart.forEach((element) {
-                if(element.flavor.trim()!="")
-                  {
-                    var item={"task":element.flavor,"priority":element.itemName};
-                    data.add(item);
-                  }
-                else
-                  {
-                    count++;
-                  }
-
-              });
-              if(count==0)
-                {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: new Text('Are you sure?'),
-                      content: new Text('Do you want ADD Task'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(false),
-                          child: new Text('No'),
+      body: !loder?SafeArea(
+        child: Column(
+          children: <Widget>[
+            Container(
+                padding: const EdgeInsets.only(top: 0.0),
+                height: h * 0.09,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          // top: 10.0,
+                          left: 15.0,
                         ),
-                        TextButton(
-                          onPressed: () => {
-                            Navigator.of(context).pop(false),
-                            Sendtask({
-                              "emp_id": userId,
-                              "assigned_to": widget.empid,
-                              "tasks": data
-                            })
-                          },
-                          child: new Text('Yes'),
+                        //padding: const EdgeInsets.only(left: 5.0),
+                        height: h * 0.05,
+                        width: h * 0.05,
+                        decoration: BoxDecoration(
+                          // color: primaryColor,
+                            border: Border.all(color: Colors.black26, width: 1.0),
+                            borderRadius:
+                            const BorderRadius.all(Radius.circular(12.0))),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.black87,
+                          size: 18.0,
                         ),
-                      ],
+                      ),
                     ),
-                  );
-                }
-              else
-                {
-                  Fluttertoast.showToast(msg: "Fill Task");
-                }
+                    Text(
+                      widget.title,
+                      style: TextStyle(
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.bold,
+                          color: primaryColor),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const AttendancePage()));
+                      },
+                      icon: const FaIcon(
+                        FontAwesomeIcons.chartArea,
+                        color: Colors.white,
+                        size: 25,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        cart.add(CartItem(
+                            productType: "",
+                            itemName: "",
+                            flavor: ""));
+                        setState(() {
+                        });
+                      },
+                      icon: const Icon(Icons.add),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        var count=0;
+                        var data=[];
+                        cart.forEach((element) {
+                          if(element.flavor.trim()!="")
+                          {
+                            var item={"task":element.flavor,"priority":element.itemName};
+                            data.add(item);
+                          }
+                          else
+                          {
+                            count++;
+                          }
+
+                        });
+                        if(count==0)
+                        {
+                          if(data.length>0)
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: new Text('Are you sure?'),
+                                content: new Text('Do you want ADD Task'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(false),
+                                    child: new Text('No'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => {
+                                      Navigator.of(context).pop(false),
+                                      Sendtask({
+                                        "emp_id": userId,
+                                        "assigned_to": widget.empid,
+                                        "tasks": data
+                                      })
+                                    },
+                                    child: new Text('Yes'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          else
+                            Fluttertoast.showToast(msg: "Add Task");
+                        }
+                        else
+                        {
+                          Fluttertoast.showToast(msg: "Fill Task");
+                        }
 
 
 
-    },icon: const Icon(Icons.send),
-          )
-        ],
-      ),
-      body: !loder?Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-                key: UniqueKey(),
-                itemCount: cart.length,
-                itemBuilder: (BuildContext ctxt, int index) {
-                  return ListTile(
-                    title: CartWidget(
-                        cart: cart, index: index, callback: refresh),
-                  );
-                }),
-          ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //   children: [
-          //     ElevatedButton(
-          //       onPressed: () {
-          //         cart.add(CartItem(
-          //             productType: "",
-          //             itemName: "",
-          //             flavor: ""));
-          //         setState(() {
-          //         });
-          //       },
-          //       child: Text("Add Task"),
-          //     ),
-          //     Padding(
-          //       padding: const EdgeInsets.all(8.0),
-          //       child: Align(
-          //         alignment: Alignment.centerRight,
-          //         child: FloatingActionButton(
-          //           onPressed: () {
-          //            var data=[];
-          //             cart.forEach((element) {
-          //               var item={"task":element.itemName,"priority":element.flavor};
-          //               data.add(item);
-          //             });
-          //             Sendtask({"emp_id":userId,"assigned_to":widget.empid,"tasks":data});
-          //           },
-          //           backgroundColor: Colors.green,
-          //           child: const Icon(Icons.navigation),
-          //         ),
-          //       ),
-          //     ),
-          //     // RaisedButton(
-          //     //   onPressed: () {
-          //     //     for (int i = 0; i < cart.length; i++) {
-          //     //       print(cart[i].itemName);
-          //     //     }
-          //     //   },
-          //     //   child: Text("Print Pizza"),
-          //     // ),
-          //   ],
-          // )
-        ],
+                      },icon: const Icon(Icons.send),
+                    )
+
+                  ],
+                )),
+            Expanded(
+              child: ListView.builder(
+                  key: UniqueKey(),
+                  itemCount: cart.length,
+                  itemBuilder: (BuildContext ctxt, int index) {
+                    return ListTile(
+                      title: CartWidget(
+                          cart: cart, index: index, callback: refresh),
+                    );
+                  }),
+            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: [
+            //     ElevatedButton(
+            //       onPressed: () {
+            //         cart.add(CartItem(
+            //             productType: "",
+            //             itemName: "",
+            //             flavor: ""));
+            //         setState(() {
+            //         });
+            //       },
+            //       child: Text("Add Task"),
+            //     ),
+            //     Padding(
+            //       padding: const EdgeInsets.all(8.0),
+            //       child: Align(
+            //         alignment: Alignment.centerRight,
+            //         child: FloatingActionButton(
+            //           onPressed: () {
+            //            var data=[];
+            //             cart.forEach((element) {
+            //               var item={"task":element.itemName,"priority":element.flavor};
+            //               data.add(item);
+            //             });
+            //             Sendtask({"emp_id":userId,"assigned_to":widget.empid,"tasks":data});
+            //           },
+            //           backgroundColor: Colors.green,
+            //           child: const Icon(Icons.navigation),
+            //         ),
+            //       ),
+            //     ),
+            //     // RaisedButton(
+            //     //   onPressed: () {
+            //     //     for (int i = 0; i < cart.length; i++) {
+            //     //       print(cart[i].itemName);
+            //     //     }
+            //     //   },
+            //     //   child: Text("Print Pizza"),
+            //     // ),
+            //   ],
+            // )
+          ],
+        ),
       ):Center(child: CircularProgressIndicator(),),
     );
   }

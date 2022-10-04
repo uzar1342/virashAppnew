@@ -70,6 +70,7 @@ dependencies:
   cached_network_image: ^3.2.0
   webview_flutter: ^3.0.0
   video_player: ^2.2.11
+  image_picker: ^0.8.5+3
   chewie: ^1.2.2
   youtube_player_flutter: ^8.0.0
   youtube_player_iframe: ^2.2.2

@@ -1,5 +1,4 @@
 import 'dart:collection';
-
 import 'package:Virash/globals.dart';
 import 'package:Virash/viewimage.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart' show DateFormat;
-
 import 'OuttimeForm.dart';
 
 
@@ -141,7 +139,7 @@ static Widget _holidayIcon = new Container(
       'emp_id':widget.id,
       "month":"${year}-${month>=10?month.toString():"0"+month.toString()}"
     });
-    print(formData.fields);
+    print(formData.fields);print(userId);
     var response = await dio.post('http://training.virash.in/attendance_details', data:formData);
     if (response.statusCode == 200) {
       if(response.data!=null)
@@ -333,477 +331,122 @@ static Widget _holidayIcon = new Container(
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return  Scaffold(
-        appBar:  AppBar(
-          backgroundColor: Color(0xff1f7396),
-          title:  const Text("Monthly Status"),
-        ),
-        body: net?SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                width: w,
-              height: 100,
-              padding: EdgeInsets.all(8),
-                child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: w*0.3,
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
-                        child: Text('PREV'),
-                        onPressed: () {
-                          _markedDateMap.clear();
-                          print(_targetDateTime.month);  print(DateTime.now().month);
-                          setState(() {
-                            _targetDateTime = DateTime(
-                                _targetDateTime.year, _targetDateTime.month - 1);
-                            _currentMonth =
-                                DateFormat.yMMM().format(_targetDateTime);
-                            year=_targetDateTime.year;
-                            month=_targetDateTime.month;
-                            FetchAttendence();
-                            _currentDate2=_targetDateTime;
-                          });
-                        },
-                      ),
-                    ),
-                    Container(
-                      width: w*0.3,
-                      alignment: Alignment.center,
-                      child: Text(
-                        _currentMonth,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24.0,
-                        ),
-                      ),
-                    ),
-                    _targetDateTime.month<DateTime.now().month?Container(
-                      width: w*0.3,
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        child: Text('NEXT'),
-                        onPressed: () {
-                          _markedDateMap.clear();
-                          print(_targetDateTime.month);
-                          setState(() {
-
-                            _targetDateTime = DateTime(
-                                _targetDateTime.year, _targetDateTime.month + 1);
-                            _currentMonth =
-                                DateFormat.yMMM().format(_targetDateTime);
-                            year=_targetDateTime.year;
-                            month=_targetDateTime.month;
-                            FetchAttendence();
-                            _currentDate2=_targetDateTime;
-                          });
-                        },
-                      ),
-                    ):Container(
-                      width: w*0.3,
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        child: Text('NEXT',style: TextStyle(color: Color(0xff656161)),),
-                        onPressed: () {
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                width: w,
-                child: Column(
-                  children: [
-                    Container(
-                      width: w,
-                      height: h*0.6,
-                      margin: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: monthloader?_calendarCarouselNoHeader:Center(child: CircularProgressIndicator()),
-                    ), //
-                    FutureBuilder<dynamic>(
-                      future: fetchEmployList(), // async work
-                      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
-                          default:
-                            if (snapshot.hasError)
-                              return SafeArea(child:Text('Error: ${snapshot.error}'));
-                            else {
-                              Color primaryColor = const Color(0xff1f7396);
-                              bool holiday=Holiyday.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}");
-                              print(Week);
-                              return !holiday?Container(
-                                child: snapshot.data["success"].toString().trim()=="1"?
-                                 Column(
-                                  children: [
-                                    InkWell(
-                                      onTap:()=>{
-                                      },
-                                      child: Container(
-                                        child:
-                                        Container(
-                                          width: w,
-                                          margin: const EdgeInsets.all(5.0),
-                                          child: Card(
-                                            elevation: 3.0,
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(14.0))),
-                                            child:            Column(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      crossAxisAlignment:
-                                                      CrossAxisAlignment
-                                                          .center,
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .start,
-                                                      children: [
-
-                                                        SizedBox(
-                                                          width: w * 0.02,
-                                                        ),
-                                                        Text(
-                                                          widget.name,
-                                                          style: const TextStyle(
-                                                              color: Colors
-                                                                  .black54,
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold,
-                                                              fontSize: 16.0),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: (){
-                                                      },
-                                                      child: Container(
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .all(5.0),
-                                                        height: h * 0.04,
-                                                        decoration:  BoxDecoration(
-                                                            color:  snapshot.data["data"][0]["attendance_status"]=="Full Day"?Colors
-                                                                .green:snapshot.data["data"][0]["attendance_status"]=="Half Day"?Colors
-                                                                .orange:Colors.red,
-                                                            borderRadius: BorderRadius
-                                                                .all(Radius
-                                                                .circular(
-                                                                20.0))),
-                                                        child: Row(
-                                                          children: [
-                                                            const FaIcon(
-                                                              FontAwesomeIcons
-                                                                  .globe,
-                                                              color: Colors
-                                                                  .white,
-                                                              size: 20.0,
-                                                            ),
-                                                            SizedBox(
-                                                              width:
-                                                              w * 0.01,
-                                                            ),
-                                                            Text(
-                                                              snapshot.data["data"][0]["attendance_status"].toString(),
-                                                              style: const TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    )
-
-                                                  ],
-                                                ),
-                                                const Divider(),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons
-                                                              .access_time_filled,
-                                                          color: Colors
-                                                              .green.shade200,
-                                                        ),
-                                                        SizedBox(
-                                                          width: w * 0.01,
-                                                        ),
-                                                        Text(
-
-                                                            snapshot.data["data"][0]["in_time"],
-                                                            style: const TextStyle(
-                                                                color: Colors
-                                                                    .black54)),
-                                                      ],
-                                                    ),
-                                                    const Text(
-                                                      "To",
-                                                      style: TextStyle(
-                                                          color: Colors.black38,
-                                                          fontSize: 15.0,
-                                                          fontWeight:
-                                                          FontWeight.bold),
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons
-                                                              .access_time_filled,
-                                                          color: Colors
-                                                              .red.shade200,
-                                                        ),
-                                                        SizedBox(
-                                                          width: w * 0.01,
-                                                        ),
-                                                        Text(
-
-                                                            snapshot.data["data"][0]["out_time"].toString(),
-                                                            style: const TextStyle(
-                                                                color: Colors
-                                                                    .black54)),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                                const Divider(),
-                                                snapshot.data["data"][0]["remaining_hours"]!=null?Container(
-                                                  child: snapshot.data["data"][0]["remaining_hours"]!="0"
-                                                      ?Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                    children: [
-                                                      Row(
-                                                        children: [
-                                                          Text("Remaining hours: "),
-                                                          SizedBox(
-                                                            width: w * 0.01,
-                                                          ),
-                                                          Text(
-                                                              snapshot.data["data"][0]["remaining_hours"].toString(),
-                                                              style: const TextStyle(
-                                                                  color: Colors
-                                                                      .black54)),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ):Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                    children: [
-                                                      Row(
-                                                        children: [
-                                                          Text("Extra Hours: "),
-                                                          SizedBox(
-                                                            width: w * 0.01,
-                                                          ),
-                                                          Text(
-                                                              snapshot.data["data"][0]["extra_hours"].toString(),
-                                                              style: const TextStyle(
-                                                                  color: Colors
-                                                                      .black54)),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ):Container(),
-                                                const Divider(),
-                                               Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Text("Late : "),
-                                                        SizedBox(
-                                                          width: w * 0.01,
-                                                        ),
-                                                        Text(
-                                                            snapshot.data["data"][0]["late"].toString(),
-                                                            style: const TextStyle(
-                                                                color: Colors
-                                                                    .black54)),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                                Divider(),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                    viewimage(inimage: snapshot.data["data"][0]["in_image"].toString(), outimage: snapshot.data["data"][0]["out_image"].toString(),)));
-                                                      },
-                                                      child: Container(
-                                                        padding:
-                                                        EdgeInsets.all(8.0),
-                                                        decoration:
-                                                        BoxDecoration(
-                                                          color: primaryColor,
-                                                          borderRadius:
-                                                          const BorderRadius.all(
-                                                            Radius.circular(
-                                                                14.0),
-                                                          ),
-                                                        ),
-                                                        child: Row(children: const [
-                                                          Icon(
-                                                            Icons.assignment,
-                                                            color: Colors.white,
-                                                          ),
-                                                          SizedBox(
-                                                            width: 5.0,
-                                                          ),
-                                                          Text(
-                                                            "View Image",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                          )
-                                                        ]),
-                                                      ),
-                                                    ),
-                                                    snapshot.data["data"][0]["out_time"]==null?SizedBox(width: 10,):Container(),
-                                                    snapshot.data["data"][0]["out_time"]==null?  Container(
-                                                      child: employee_role=="Admin"||employee_role=="Super Admin"?
-                                                      widget.id!=userId?Container(
-                                                        child: InkWell(
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                        DateTimePicker(id: widget.id, date: "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",)
-                                                                ));
-                                                          },
-                                                          child: Container(
-                                                            padding:
-                                                            EdgeInsets.all(8.0),
-                                                            decoration:
-                                                            BoxDecoration(
-                                                              color: primaryColor,
-                                                              borderRadius:
-                                                              const BorderRadius.all(
-                                                                Radius.circular(
-                                                                    14.0),
-                                                              ),
-                                                            ),
-                                                            child: Row(children: const [
-                                                              Icon(
-                                                                Icons.punch_clock_rounded,
-                                                                color: Colors.white,
-                                                              ),
-                                                              SizedBox(
-                                                                width: 5.0,
-                                                              ),
-                                                              Text(
-                                                                "Mark Outtime",
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                              )
-                                                            ]),
-                                                          ),
-                                                        ),
-                                                      ):Container():Container(),
-                                                    ):Container(),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-
-
-                                          ),
-                                        )
-
-
-
-                                        ,
-                                      ),
-
-
-                                    ),
-                                    SizedBox(height: 50,),
-                                    Text("TASK LIST",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                                    snapshot.data["data"][0]["task"]!=null?
-                                    Container(
-                                      width: w,
-                                      child:  snapshot.data["data"][0]["task"].length>0?ListView.builder(
-                                        physics: NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemCount: snapshot.data["data"][0]["task"].length,
-                                          itemBuilder: (BuildContext context, int index){
-                                            return Card(elevation: 4,child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                    children: [
-                                                      Row(
-                                                        children: [
-
-                                                          SizedBox(
-                                                            width: w * 0.02,
-                                                          ),
-                                                          Text(
-                                                            "Priority : "+snapshot.data["data"][0]["task"][index]["priority"].toString(),
-                                                            style: const TextStyle(
-                                                                color: Colors
-                                                                    .black54,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold,
-                                                                fontSize: 17.0),
-                                                          )
-                                                        ],
-                                                      ),
-
-                                                    ],
-                                                  ),
-                                                ),
-                                                const Divider(),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Row(
+        body: net?SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: w,
+                  child: Column(
+                    children: [
+                      employee_role=="Admin"||employee_role=="Super Admin"||employee_role=="Faculty & Admin"?Container(
+                          padding: const EdgeInsets.only(top: 0.0),
+                          height: h * 0.09,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(
+                                    // top: 10.0,
+                                    left: 15.0,
+                                  ),
+                                  //padding: const EdgeInsets.only(left: 5.0),
+                                  height: h * 0.05,
+                                  width: h * 0.05,
+                                  decoration: BoxDecoration(
+                                    // color: primaryColor,
+                                      border: Border.all(color: Colors.black26, width: 1.0),
+                                      borderRadius:
+                                      const BorderRadius.all(Radius.circular(12.0))),
+                                  child: const Icon(
+                                    Icons.arrow_back_ios_new,
+                                    color: Colors.black87,
+                                    size: 18.0,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "Monthly Status",
+                                style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: primaryColor),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => const AttendancePage()));
+                                },
+                                icon: const FaIcon(
+                                  FontAwesomeIcons.chartArea,
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
+                              ),
+                            ],
+                          )):Container(
+                          padding: const EdgeInsets.only(top: 0.0),
+                          height: h * 0.09,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Monthly Status",
+                                style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: primaryColor),
+                              ),
+                            ],
+                          )),
+                      Container(
+                        width: w,
+                        height: h*0.6,
+                        margin: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: monthloader?_calendarCarouselNoHeader:Center(child: CircularProgressIndicator()),
+                      ), //
+                      FutureBuilder<dynamic>(
+                        future: fetchEmployList(), // async work
+                        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
+                            default:
+                              if (snapshot.hasError)
+                                return SafeArea(child:Text('Error: ${snapshot.error}'));
+                              else {
+                                Color primaryColor = const Color(0xff1f7396);
+                                bool holiday=Holiyday.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}");
+                                print(Week);
+                                return !holiday?Container(
+                                  child: snapshot.data["success"].toString().trim()=="1"?
+                                  Column(
+                                    children: [
+                                      InkWell(
+                                        onTap:()=>{
+                                        },
+                                        child: Container(
+                                          child:
+                                          Container(
+                                            width: w,
+                                            margin: const EdgeInsets.all(5.0),
+                                            child: Card(
+                                              elevation: 3.0,
+                                              shape: const RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(14.0))),
+                                              child:            Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  Row(
                                                     mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
@@ -820,475 +463,916 @@ static Widget _holidayIcon = new Container(
                                                           SizedBox(
                                                             width: w * 0.02,
                                                           ),
-                                                          Container(
-                                                            width: w*0.8,
-                                                            child: Text(
-                                                              "TASK : "+snapshot.data["data"][0]["task"][index]["title"].toString(),
-                                                              softWrap: true,maxLines:8,style: const TextStyle(
+                                                          Text(
+                                                            widget.name,
+                                                            style: const TextStyle(
+                                                                color: Colors
+                                                                    .black54,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                                fontSize: 16.0),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                          const EdgeInsets
+                                                              .all(5.0),
+                                                          height: h * 0.04,
+                                                          decoration:  BoxDecoration(
+                                                              color:  snapshot.data["data"][0]["attendance_status"]=="Full Day"?Colors
+                                                                  .green:snapshot.data["data"][0]["attendance_status"]=="Half Day"?Colors
+                                                                  .orange:Colors.red,
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                  .circular(
+                                                                  20.0))),
+                                                          child: Row(
+                                                            children: [
+                                                              const FaIcon(
+                                                                FontAwesomeIcons
+                                                                    .globe,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 20.0,
+                                                              ),
+                                                              SizedBox(
+                                                                width:
+                                                                w * 0.01,
+                                                              ),
+                                                              Text(
+                                                                snapshot.data["data"][0]["attendance_status"].toString(),
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+
+                                                    ],
+                                                  ),
+                                                  const Divider(),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons
+                                                                .access_time_filled,
+                                                            color: Colors
+                                                                .green.shade200,
+                                                          ),
+                                                          SizedBox(
+                                                            width: w * 0.01,
+                                                          ),
+                                                          Text(
+
+                                                              snapshot.data["data"][0]["in_time"],
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .black54)),
+                                                        ],
+                                                      ),
+                                                      const Text(
+                                                        "To",
+                                                        style: TextStyle(
+                                                            color: Colors.black38,
+                                                            fontSize: 15.0,
+                                                            fontWeight:
+                                                            FontWeight.bold),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons
+                                                                .access_time_filled,
+                                                            color: Colors
+                                                                .red.shade200,
+                                                          ),
+                                                          SizedBox(
+                                                            width: w * 0.01,
+                                                          ),
+                                                          Text(
+
+                                                              snapshot.data["data"][0]["out_time"].toString(),
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .black54)),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                  const Divider(),
+                                                  snapshot.data["data"][0]["remaining_hours"]!=null?Container(
+                                                    child: snapshot.data["data"][0]["remaining_hours"]!="0"
+                                                        ?Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Text("Remaining hours: "),
+                                                            SizedBox(
+                                                              width: w * 0.01,
+                                                            ),
+                                                            Text(
+                                                                snapshot.data["data"][0]["remaining_hours"].toString(),
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .black54)),
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ):Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Text("Extra Hours: "),
+                                                            SizedBox(
+                                                              width: w * 0.01,
+                                                            ),
+                                                            Text(
+                                                                snapshot.data["data"][0]["extra_hours"].toString(),
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .black54)),
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ):Container(),
+                                                  const Divider(),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Text("Late : "),
+                                                          SizedBox(
+                                                            width: w * 0.01,
+                                                          ),
+                                                          Text(
+                                                              snapshot.data["data"][0]["late"].toString(),
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .black54)),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Divider(),
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .assignment,
+                                                        color: Colors
+                                                            .red.shade200,
+                                                      ),
+                                                      SizedBox(
+                                                        width: w * 0.01,
+                                                      ),
+                                                      Container(
+                                                        width: w*0.8,
+                                                        child: Text(
+                                                            snapshot.data["data"][0]["extra_task"]!=null?snapshot.data["data"][0]["extra_task"].toString():"",
+                                                            maxLines: 8,style: const TextStyle(
+                                                            color: Colors
+                                                                .black54)),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Divider(),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                      viewimage(inimage: snapshot.data["data"][0]["in_image"].toString(), outimage: snapshot.data["data"][0]["out_image"].toString(),)));
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                          EdgeInsets.all(8.0),
+                                                          decoration:
+                                                          BoxDecoration(
+                                                            color: primaryColor,
+                                                            borderRadius:
+                                                            const BorderRadius.all(
+                                                              Radius.circular(
+                                                                  14.0),
+                                                            ),
+                                                          ),
+                                                          child: Row(children: const [
+                                                            Icon(
+                                                              Icons.assignment,
+                                                              color: Colors.white,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 5.0,
+                                                            ),
+                                                            Text(
+                                                              "View Image",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                            )
+                                                          ]),
+                                                        ),
+                                                      ),
+                                                      snapshot.data["data"][0]["out_time"]==null?SizedBox(width: 10,):Container(),
+                                                      snapshot.data["data"][0]["out_time"]=="N/A"?  Container(
+                                                        child: employee_role=="Admin"||employee_role=="Super Admin"||employee_role=="Faculty & Admin"?
+                                                        widget.id!=userId?Container(
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                          DateTimePicker(id: widget.id, date: "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",)
+                                                                  ));
+                                                            },
+                                                            child: Container(
+                                                              padding:
+                                                              EdgeInsets.all(8.0),
+                                                              decoration:
+                                                              BoxDecoration(
+                                                                color: primaryColor,
+                                                                borderRadius:
+                                                                const BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      14.0),
+                                                                ),
+                                                              ),
+                                                              child: Row(children: const [
+                                                                Icon(
+                                                                  Icons.punch_clock_rounded,
+                                                                  color: Colors.white,
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 5.0,
+                                                                ),
+                                                                Text(
+                                                                  "Mark Outtime",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                                )
+                                                              ]),
+                                                            ),
+                                                          ),
+                                                        ):Container():Container(),
+                                                      ):Container(),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+
+
+                                            ),
+                                          )
+
+
+
+                                          ,
+                                        ),
+
+
+                                      ),
+                                      SizedBox(height: 50,),
+                                      Text("TASK LIST",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                      snapshot.data["data"][0]["task"]!=null?
+                                      Container(
+                                        width: w,
+                                        child:  snapshot.data["data"][0]["task"].length>0?ListView.builder(
+                                            physics: NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: snapshot.data["data"][0]["task"].length,
+                                            itemBuilder: (BuildContext context, int index){
+                                              return Card(elevation: 4,child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+
+                                                            SizedBox(
+                                                              width: w * 0.02,
+                                                            ),
+                                                            Text(
+                                                              "Priority : "+snapshot.data["data"][0]["task"][index]["priority"].toString(),
+                                                              style: const TextStyle(
                                                                   color: Colors
                                                                       .black54,
                                                                   fontWeight:
                                                                   FontWeight
                                                                       .bold,
-                                                            ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
+                                                                  fontSize: 17.0),
+                                                            )
+                                                          ],
+                                                        ),
 
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
+                                                  const Divider(),
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                          children: [
 
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Container(
-                                                    width: w,
-                                                    color: snapshot.data["data"][0]["task"][index]["task_status"]=="Completed"?
-                                                    Color(0xFF91b7ed):snapshot.data["data"][0]["task"][index]["task_status"]=="Pending"?Color(0xFFedc791):
-                                                    snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected"?Color(0xFFed9c91):Color(0xff91edbf),
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                        children: [
-                                                          Row(
-                                                            crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                            mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                            children: [
+                                                            SizedBox(
+                                                              width: w * 0.02,
+                                                            ),
+                                                            Container(
+                                                              width: w*0.8,
+                                                              child: Text(
+                                                                "TASK : "+snapshot.data["data"][0]["task"][index]["title"].toString(),
+                                                                softWrap: true,maxLines:8,style: const TextStyle(
+                                                                color: Colors
+                                                                    .black54,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold,
+                                                              ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
 
-                                                              if(snapshot.data["data"][0]["task"][index]["task_status"]=="Completed")
-                                                                Text(
-                                                                "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
-                                                                style: const TextStyle(
-                                                                    color: Color(0xff0e1163),
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                    fontSize: 17.0),
-                                                              )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Pending")
-                                                                Text(
-                                                                  "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
-                                                                  style: const TextStyle(
-                                                                      color: Color(
-                                                                          0xff63400e),
-                                                                      fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                      fontSize: 17.0),
-                                                                )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected")
+                                                      ],
+                                                    ),
+                                                  ),
+
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Container(
+                                                      width: w,
+                                                      color: snapshot.data["data"][0]["task"][index]["task_status"]=="Completed"?
+                                                      Color(0xFF91b7ed):snapshot.data["data"][0]["task"][index]["task_status"]=="Pending"?Color(0xFFedc791):
+                                                      snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected"?Color(0xFFed9c91):Color(0xff91edbf),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                          children: [
+                                                            Row(
+                                                              crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                              mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                              children: [
+
+                                                                if(snapshot.data["data"][0]["task"][index]["task_status"]=="Completed")
                                                                   Text(
                                                                     "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
                                                                     style: const TextStyle(
-                                                                        color: Color(0xff63190e),
+                                                                        color: Color(0xff0e1163),
                                                                         fontWeight:
                                                                         FontWeight
                                                                             .bold,
                                                                         fontSize: 17.0),
-                                                                  )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Approved")
+                                                                  )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Pending")
                                                                   Text(
                                                                     "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
                                                                     style: const TextStyle(
-                                                                        color: Color(0xff0e6339),
+                                                                        color: Color(
+                                                                            0xff63400e),
                                                                         fontWeight:
                                                                         FontWeight
                                                                             .bold,
                                                                         fontSize: 17.0),
-                                                                  ),
-                                                              SizedBox(width: 2,)
-                                                            ],
-                                                          ),
+                                                                  )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected")
+                                                                    Text(
+                                                                      "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
+                                                                      style: const TextStyle(
+                                                                          color: Color(0xff63190e),
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          fontSize: 17.0),
+                                                                    )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Approved")
+                                                                      Text(
+                                                                        "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
+                                                                        style: const TextStyle(
+                                                                            color: Color(0xff0e6339),
+                                                                            fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                            fontSize: 17.0),
+                                                                      ),
+                                                                SizedBox(width: 2,)
+                                                              ],
+                                                            ),
 
-                                                        ],
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
-                                            ));
-
-                                          }):Image.asset("assets/no_data.png"),
-                                    ): Image.asset("assets/no_data.png"),
-                                  ],
-                                ):Week.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}")?
-                                Card(
-                                  elevation: 3.0,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(14.0))),
-                                  child:            Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .spaceBetween,
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment
-                                                .center,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .start,
-                                            children: [
-
-                                              SizedBox(
-                                                width: w * 0.02,
-                                              ),
-                                              Text(
-                                                widget.name,
-                                                style: const TextStyle(
-                                                    color: Colors
-                                                        .black54,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold,
-                                                    fontSize: 16.0),
-                                              )
-                                            ],
-                                          ),
-                                          GestureDetector(
-                                            onTap: (){
-                                            },
-                                            child: Container(
-                                              padding:
-                                              const EdgeInsets
-                                                  .all(5.0),
-                                              height: h * 0.04,
-                                              decoration:  BoxDecoration(
-                                                  color:  Colors.red,
-                                                  borderRadius: BorderRadius
-                                                      .all(Radius
-                                                      .circular(
-                                                      20.0))),
-                                              child: Row(
-                                                children: [
-                                                  const FaIcon(
-                                                    FontAwesomeIcons
-                                                        .globe,
-                                                    color: Colors
-                                                        .white,
-                                                    size: 20.0,
-                                                  ),
-                                                  SizedBox(
-                                                    width:
-                                                    w * 0.01,
-                                                  ),
-                                                  Text(
-                                                    "Absent",
-                                                    style: const TextStyle(
-                                                        color: Colors
-                                                            .white,
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold),
-                                                  )
                                                 ],
-                                              ),
-                                            ),
-                                          )
+                                              ));
 
-                                        ],
-                                      ),
-
+                                            }):Image.asset("assets/no_data.png"),
+                                      ): Image.asset("assets/no_data.png"),
                                     ],
-                                  ),
-                                ):
-                                Weekoff.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}")?
-                                Card(
-                                  elevation: 3.0,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(14.0))),
-                                  child:            Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .spaceBetween,
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment
-                                                .center,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .start,
-                                            children: [
-
-                                              SizedBox(
-                                                width: w * 0.02,
-                                              ),
-                                              Text(
-                                                widget.name,
-                                                style: const TextStyle(
-                                                    color: Colors
-                                                        .black54,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold,
-                                                    fontSize: 16.0),
-                                              )
-                                            ],
-                                          ),
-                                          GestureDetector(
-                                            onTap: (){
-                                            },
-                                            child: Container(
-                                              padding:
-                                              const EdgeInsets
-                                                  .all(5.0),
-                                              height: h * 0.04,
-                                              decoration:  BoxDecoration(
-                                                  color:  Color(0xff05b0ff),
-                                                  borderRadius: BorderRadius
-                                                      .all(Radius
-                                                      .circular(
-                                                      20.0))),
-                                              child: Row(
-                                                children: [
-                                                  const FaIcon(
-                                                    FontAwesomeIcons
-                                                        .globe,
-                                                    color: Colors
-                                                        .white,
-                                                    size: 20.0,
-                                                  ),
-                                                  SizedBox(
-                                                    width:
-                                                    w * 0.01,
-                                                  ),
-                                                  Text(
-                                                    "Week Off",
-                                                    style: const TextStyle(
-                                                        color: Colors
-                                                            .white,
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          )
-
-                                        ],
-                                      ),
-
-                                    ],
-                                  ),
-                                ):Card(
-                                  elevation: 3.0,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(14.0))),
-                                  child:            Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .spaceBetween,
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment
-                                                .center,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .start,
-                                            children: [
-
-                                              SizedBox(
-                                                width: w * 0.02,
-                                              ),
-                                              Text(
-                                                widget.name,
-                                                style: const TextStyle(
-                                                    color: Colors
-                                                        .black54,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold,
-                                                    fontSize: 16.0),
-                                              )
-                                            ],
-                                          ),
-                                          GestureDetector(
-                                            onTap: (){
-                                            },
-                                            child: Container(
-                                              padding:
-                                              const EdgeInsets
-                                                  .all(5.0),
-                                              height: h * 0.04,
-                                              decoration:  BoxDecoration(
-                                                  color:  Colors.grey,
-                                                  borderRadius: BorderRadius
-                                                      .all(Radius
-                                                      .circular(
-                                                      20.0))),
-                                              child: Row(
-                                                children: [
-                                                  const FaIcon(
-                                                    FontAwesomeIcons
-                                                        .globe,
-                                                    color: Colors
-                                                        .white,
-                                                    size: 20.0,
-                                                  ),
-                                                  SizedBox(
-                                                    width:
-                                                    w * 0.01,
-                                                  ),
-                                                  Text(
-                                                    "N/A",
-                                                    style: const TextStyle(
-                                                        color: Colors
-                                                            .white,
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .bold),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          )
-
-                                        ],
-                                      ),
-
-                                    ],
-                                  ),
-                                ),
-                              ):Center(child: Card(
-                                elevation: 3.0,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(14.0))),
-                                child:            Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Row(
+                                  ):Week.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}")?
+                                  Card(
+                                    elevation: 3.0,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(14.0))),
+                                    child:            Column(
                                       mainAxisAlignment:
-                                      MainAxisAlignment
-                                          .spaceBetween,
+                                      MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Row(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment
-                                              .center,
                                           mainAxisAlignment:
                                           MainAxisAlignment
-                                              .start,
+                                              .spaceBetween,
                                           children: [
-
-                                            SizedBox(
-                                              width: w * 0.02,
-                                            ),
-                                            Text(
-                                              widget.name,
-                                              style: const TextStyle(
-                                                  color: Colors
-                                                      .black54,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold,
-                                                  fontSize: 16.0),
-                                            )
-                                          ],
-                                        ),
-                                        GestureDetector(
-                                          onTap: (){
-                                          },
-                                          child: Container(
-                                            padding:
-                                            const EdgeInsets
-                                                .all(5.0),
-                                            height: h * 0.04,
-                                            decoration:  BoxDecoration(
-                                                color:  Colors.purple,
-                                                borderRadius: BorderRadius
-                                                    .all(Radius
-                                                    .circular(
-                                                    20.0))),
-                                            child: Row(
+                                            Row(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment
+                                                  .center,
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .start,
                                               children: [
-                                                const FaIcon(
-                                                  FontAwesomeIcons
-                                                      .globe,
-                                                  color: Colors
-                                                      .white,
-                                                  size: 20.0,
-                                                ),
+
                                                 SizedBox(
-                                                  width:
-                                                  w * 0.01,
+                                                  width: w * 0.02,
                                                 ),
                                                 Text(
-                                                  "Holiday",
+                                                  widget.name,
                                                   style: const TextStyle(
                                                       color: Colors
-                                                          .white,
+                                                          .black54,
                                                       fontWeight:
                                                       FontWeight
-                                                          .bold),
+                                                          .bold,
+                                                      fontSize: 16.0),
                                                 )
                                               ],
                                             ),
-                                          ),
-                                        )
-
-                                      ],
-                                    ),
-                                    const Divider(),
-                                    Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment
-                                          .spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                  Holiyday["${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}"]!,
-                                                  style: const TextStyle(
+                                            GestureDetector(
+                                              onTap: (){
+                                              },
+                                              child: Container(
+                                                padding:
+                                                const EdgeInsets
+                                                    .all(5.0),
+                                                height: h * 0.04,
+                                                decoration:  BoxDecoration(
+                                                    color:  Colors.red,
+                                                    borderRadius: BorderRadius
+                                                        .all(Radius
+                                                        .circular(
+                                                        20.0))),
+                                                child: Row(
+                                                  children: [
+                                                    const FaIcon(
+                                                      FontAwesomeIcons
+                                                          .globe,
                                                       color: Colors
-                                                          .black54)),
-                                            ),
+                                                          .white,
+                                                      size: 20.0,
+                                                    ),
+                                                    SizedBox(
+                                                      width:
+                                                      w * 0.01,
+                                                    ),
+                                                    Text(
+                                                      "Absent",
+                                                      style: const TextStyle(
+                                                          color: Colors
+                                                              .white,
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .bold),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+
                                           ],
                                         ),
 
                                       ],
                                     ),
+                                  ):
+                                  Weekoff.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}")?
+                                  Card(
+                                    elevation: 3.0,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(14.0))),
+                                    child:            Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .spaceBetween,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment
+                                                  .center,
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .start,
+                                              children: [
 
-                                  ],
-                                ),
+                                                SizedBox(
+                                                  width: w * 0.02,
+                                                ),
+                                                Text(
+                                                  widget.name,
+                                                  style: const TextStyle(
+                                                      color: Colors
+                                                          .black54,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold,
+                                                      fontSize: 16.0),
+                                                )
+                                              ],
+                                            ),
+                                            GestureDetector(
+                                              onTap: (){
+                                              },
+                                              child: Container(
+                                                padding:
+                                                const EdgeInsets
+                                                    .all(5.0),
+                                                height: h * 0.04,
+                                                decoration:  BoxDecoration(
+                                                    color:  Color(0xff05b0ff),
+                                                    borderRadius: BorderRadius
+                                                        .all(Radius
+                                                        .circular(
+                                                        20.0))),
+                                                child: Row(
+                                                  children: [
+                                                    const FaIcon(
+                                                      FontAwesomeIcons
+                                                          .globe,
+                                                      color: Colors
+                                                          .white,
+                                                      size: 20.0,
+                                                    ),
+                                                    SizedBox(
+                                                      width:
+                                                      w * 0.01,
+                                                    ),
+                                                    Text(
+                                                      "Week Off",
+                                                      style: const TextStyle(
+                                                          color: Colors
+                                                              .white,
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .bold),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+
+                                          ],
+                                        ),
+
+                                      ],
+                                    ),
+                                  ):Card(
+                                    elevation: 3.0,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(14.0))),
+                                    child:            Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .spaceBetween,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment
+                                                  .center,
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .start,
+                                              children: [
+
+                                                SizedBox(
+                                                  width: w * 0.02,
+                                                ),
+                                                Text(
+                                                  widget.name,
+                                                  style: const TextStyle(
+                                                      color: Colors
+                                                          .black54,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .bold,
+                                                      fontSize: 16.0),
+                                                )
+                                              ],
+                                            ),
+                                            GestureDetector(
+                                              onTap: (){
+                                              },
+                                              child: Container(
+                                                padding:
+                                                const EdgeInsets
+                                                    .all(5.0),
+                                                height: h * 0.04,
+                                                decoration:  BoxDecoration(
+                                                    color:  Colors.grey,
+                                                    borderRadius: BorderRadius
+                                                        .all(Radius
+                                                        .circular(
+                                                        20.0))),
+                                                child: Row(
+                                                  children: [
+                                                    const FaIcon(
+                                                      FontAwesomeIcons
+                                                          .globe,
+                                                      color: Colors
+                                                          .white,
+                                                      size: 20.0,
+                                                    ),
+                                                    SizedBox(
+                                                      width:
+                                                      w * 0.01,
+                                                    ),
+                                                    Text(
+                                                      "N/A",
+                                                      style: const TextStyle(
+                                                          color: Colors
+                                                              .white,
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .bold),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+
+                                          ],
+                                        ),
+
+                                      ],
+                                    ),
+                                  ),
+                                ):Center(child: Card(
+                                  elevation: 3.0,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(14.0))),
+                                  child:            Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment
+                                            .spaceBetween,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment
+                                                .center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .start,
+                                            children: [
+
+                                              SizedBox(
+                                                width: w * 0.02,
+                                              ),
+                                              Text(
+                                                widget.name,
+                                                style: const TextStyle(
+                                                    color: Colors
+                                                        .black54,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .bold,
+                                                    fontSize: 16.0),
+                                              )
+                                            ],
+                                          ),
+                                          GestureDetector(
+                                            onTap: (){
+                                            },
+                                            child: Container(
+                                              padding:
+                                              const EdgeInsets
+                                                  .all(5.0),
+                                              height: h * 0.04,
+                                              decoration:  BoxDecoration(
+                                                  color:  Colors.purple,
+                                                  borderRadius: BorderRadius
+                                                      .all(Radius
+                                                      .circular(
+                                                      20.0))),
+                                              child: Row(
+                                                children: [
+                                                  const FaIcon(
+                                                    FontAwesomeIcons
+                                                        .globe,
+                                                    color: Colors
+                                                        .white,
+                                                    size: 20.0,
+                                                  ),
+                                                  SizedBox(
+                                                    width:
+                                                    w * 0.01,
+                                                  ),
+                                                  Text(
+                                                    "Holiday",
+                                                    style: const TextStyle(
+                                                        color: Colors
+                                                            .white,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .bold),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          )
+
+                                        ],
+                                      ),
+                                      const Divider(),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment
+                                            .spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                    Holiyday["${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}"]!,
+                                                    style: const TextStyle(
+                                                        color: Colors
+                                                            .black54)),
+                                              ),
+                                            ],
+                                          ),
+
+                                        ],
+                                      ),
+
+                                    ],
+                                  ),
 
 
-                              ),);
-                            }
-                        }
-                      },
-                    ),
-                  ],
+                                ),);
+                              }
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-          SizedBox(height: 100,)
-            ],
+                Container(
+                  width: w,
+                height: 100,
+                padding: EdgeInsets.all(8),
+                  child:  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: w*0.3,
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          child: Text('PREV'),
+                          onPressed: () {
+                            _markedDateMap.clear();
+                            print(_targetDateTime.month);  print(DateTime.now().month);
+                            setState(() {
+                              _targetDateTime = DateTime(
+                                  _targetDateTime.year, _targetDateTime.month - 1);
+                              _currentMonth =
+                                  DateFormat.yMMM().format(_targetDateTime);
+                              year=_targetDateTime.year;
+                              month=_targetDateTime.month;
+                              FetchAttendence();
+                              _currentDate2=_targetDateTime;
+                            });
+                          },
+                        ),
+                      ),
+                      Container(
+                        width: w*0.3,
+                        alignment: Alignment.center,
+                        child: Text(
+                          _currentMonth,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24.0,
+                          ),
+                        ),
+                      ),
+                      _targetDateTime.month<DateTime.now().month?Container(
+                        width: w*0.3,
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          child: Text('NEXT'),
+                          onPressed: () {
+                            _markedDateMap.clear();
+                            print(_targetDateTime.month);
+                            setState(() {
+
+                              _targetDateTime = DateTime(
+                                  _targetDateTime.year, _targetDateTime.month + 1);
+                              _currentMonth =
+                                  DateFormat.yMMM().format(_targetDateTime);
+                              year=_targetDateTime.year;
+                              month=_targetDateTime.month;
+                              FetchAttendence();
+                              _currentDate2=_targetDateTime;
+                            });
+                          },
+                        ),
+                      ):Container(
+                        width: w*0.3,
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          child: Text('NEXT',style: TextStyle(color: Color(0xff656161)),),
+                          onPressed: () {
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+            SizedBox(height: 100,)
+              ],
+            ),
           ),
         ):SafeArea(
             child: Column(
