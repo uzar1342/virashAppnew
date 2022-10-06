@@ -249,20 +249,24 @@ class _pickerImageState extends State<pickerImage> {
   Widget build(BuildContext context) {
     return  selectimg?Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(onPressed: (){
-            setState(() {
-              selectimg=false;
-            });
-            picimg();
-          }, child: Text("Image from camera")),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(onPressed: (){
-            addimg();
-          }, child: Text("Image from gallery")),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(onPressed: (){
+              setState(() {
+                selectimg=false;
+              });
+              picimg();
+            }, child: Text("Image from camera")),
+          ),
+        ), 
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(onPressed: (){
+              addimg();
+            }, child: Text("Image from gallery")),
+          ),
         ),
       ],
     ):Text("Image Selected");

@@ -766,91 +766,97 @@ static Widget _holidayIcon = new Container(
                                                     mainAxisAlignment:
                                                     MainAxisAlignment.end,
                                                     children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                      viewimage(inimage: snapshot.data["data"][0]["in_image"].toString(), outimage: snapshot.data["data"][0]["out_image"].toString(),)));
-                                                        },
-                                                        child: Container(
-                                                          padding:
-                                                          EdgeInsets.all(8.0),
-                                                          decoration:
-                                                          BoxDecoration(
-                                                            color: primaryColor,
-                                                            borderRadius:
-                                                            const BorderRadius.all(
-                                                              Radius.circular(
-                                                                  14.0),
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                        viewimage(inimage: snapshot.data["data"][0]["in_image"].toString(), outimage: snapshot.data["data"][0]["out_image"].toString(),)));
+                                                          },
+                                                          child: Container(
+                                                            padding:
+                                                            EdgeInsets.all(8.0),
+                                                            decoration:
+                                                            BoxDecoration(
+                                                              color: primaryColor,
+                                                              borderRadius:
+                                                              const BorderRadius.all(
+                                                                Radius.circular(
+                                                                    14.0),
+                                                              ),
                                                             ),
+                                                            child: Row(children: const [
+                                                              Icon(
+                                                                Icons.assignment,
+                                                                color: Colors.white,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 5.0,
+                                                              ),
+                                                              Text(
+                                                                "View Image",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                              )
+                                                            ]),
                                                           ),
-                                                          child: Row(children: const [
-                                                            Icon(
-                                                              Icons.assignment,
-                                                              color: Colors.white,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5.0,
-                                                            ),
-                                                            Text(
-                                                              "View Image",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                            )
-                                                          ]),
                                                         ),
                                                       ),
                                                       snapshot.data["data"][0]["out_time"]==null?SizedBox(width: 10,):Container(),
                                                       snapshot.data["data"][0]["out_time"]=="N/A"?  Container(
                                                         child: employee_role=="Admin"||employee_role=="Super Admin"||employee_role=="Faculty & Admin"?
                                                         widget.id!=userId?Container(
-                                                          child: InkWell(
-                                                            onTap: () {
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                          DateTimePicker(id: widget.id, date: "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",)
-                                                                  ));
-                                                            },
-                                                            child: Container(
-                                                              padding:
-                                                              EdgeInsets.all(8.0),
-                                                              decoration:
-                                                              BoxDecoration(
-                                                                color: primaryColor,
-                                                                borderRadius:
-                                                                const BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      14.0),
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.all(8.0),
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                            DateTimePicker(id: widget.id, date: "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",)
+                                                                    ));
+                                                              },
+                                                              child: Container(
+                                                                padding:
+                                                                EdgeInsets.all(8.0),
+                                                                decoration:
+                                                                BoxDecoration(
+                                                                  color: primaryColor,
+                                                                  borderRadius:
+                                                                  const BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        14.0),
+                                                                  ),
                                                                 ),
+                                                                child: Row(children: const [
+                                                                  Icon(
+                                                                    Icons.punch_clock_rounded,
+                                                                    color: Colors.white,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 5.0,
+                                                                  ),
+                                                                  Text(
+                                                                    "Mark Outtime",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                                  )
+                                                                ]),
                                                               ),
-                                                              child: Row(children: const [
-                                                                Icon(
-                                                                  Icons.punch_clock_rounded,
-                                                                  color: Colors.white,
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 5.0,
-                                                                ),
-                                                                Text(
-                                                                  "Mark Outtime",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                                )
-                                                              ]),
                                                             ),
                                                           ),
                                                         ):Container():Container(),

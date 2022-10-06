@@ -261,9 +261,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                                     flex: 4,
                                                     child: GestureDetector(
                                                       onTap: (){
-
                                                         showDialog(
-
                                                             context: context,
                                                             builder: (context) => AlertDialog(
                                                               content: InkWell(
@@ -454,7 +452,6 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                                                         ),
 
                                                                         Row(
-
                                                                           children: [
                                                                             Expanded(
                                                                               child: Container(
@@ -487,7 +484,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                                                                   },
                                                                                   child: Container(
                                                                                     padding:
-                                                                                    EdgeInsets.all(8.0),
+                                                                                    EdgeInsets.all(9.0),
                                                                                     decoration:
                                                                                     BoxDecoration(
                                                                                       color: primaryColor,
@@ -497,19 +494,19 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                                                                             14.0),
                                                                                       ),
                                                                                     ),
-                                                                                    child: Row(children: const [
+                                                                                    child: Row(children:  [
                                                                                       Icon(
                                                                                         Icons.check,
                                                                                         color: Colors.white,
-                                                                                      size: 20,
+                                                                                      size: 18,
                                                                                       ),
                                                                                       SizedBox(
-                                                                                        width: 5.0,
+                                                                                        width: 3.0,
                                                                                       ),
                                                                                       Text(
                                                                                         "Approved Task",
                                                                                         style: TextStyle(
-                                                                                          fontSize: 10,
+                                                                                          fontSize: 8,
                                                                                             color: Colors
                                                                                                 .white,
                                                                                             fontWeight:
@@ -566,7 +563,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                                                                       Icon(
                                                                                         Icons.cancel,
                                                                                         color: Colors.white,
-                                                                                        size: 20,
+                                                                                        size: 18,
                                                                                       ),
 
                                                                                       SizedBox(width: 5.0,),
@@ -575,7 +572,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                                                                         style: TextStyle(
                                                                                             color: Colors
                                                                                                 .white,
-                                                                                            fontSize: 10,
+                                                                                            fontSize: 8,
                                                                                             fontWeight:
                                                                                             FontWeight
                                                                                                 .bold),

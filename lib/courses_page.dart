@@ -159,48 +159,65 @@ class _CoursesPageState extends State<CoursesPage> {
                               ],
                             )
                           : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "Hello,",
-                                      style: TextStyle(
-                                          color: Colors.black38,
-                                          fontSize: 18.0),
-                                    ),
-                                    Text(
-                                      employee_name,
-                                      style: const TextStyle(
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 26.0),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            showSearch = true;
-                                          });
-                                        },
-                                        icon: Icon(
-                                          Icons.search,
-                                          color: primaryColor,
-                                        )),
-                                    IconButton(
-                                        onPressed: () {
+                                Expanded(
+                                  flex: 6,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Hello,",
+                                        style: TextStyle(
+                                            color: Colors.black38,
+                                            fontSize: 18.0),
+                                      ),
 
-                                        },
-                                        icon: Icon(
-                                          Icons.notifications,
-                                          color: primaryColor,
-                                          size: 25,
-                                        ))
-                                  ],
+                                      Container(
+                                        width: w,
+                                        child: RichText(
+                                          overflow: TextOverflow.ellipsis,
+                                          strutStyle: StrutStyle(fontSize: 17.0),
+                                          text: TextSpan(
+                                              style:  const TextStyle(
+                                                  color: Colors.black87,
+                                                  fontWeight:
+                                                  FontWeight.bold,
+                                                  fontSize: 20
+                                              ),
+                                              text: employee_name),
+                                        ),
+                                      )
+
+
+                                    ],
+                                  ),
+                                ), 
+                                Expanded(
+                                  flex: 3,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              showSearch = true;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.search,
+                                            color: primaryColor,
+                                          )),
+                                      IconButton(
+                                          onPressed: () {
+
+                                          },
+                                          icon: Icon(
+                                            Icons.notifications,
+                                            color: primaryColor,
+                                            size: 25,
+                                          ))
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
