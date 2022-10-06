@@ -24,7 +24,6 @@ class _viewempState extends State<viewemp> {
  bool net = true;
  var subscription;
  checkinternet() async {
-
    subscription = Connectivity()
        .onConnectivityChanged
        .listen((ConnectivityResult result) {
@@ -107,7 +106,36 @@ print(formData.fields);
                   case ConnectionState.waiting: return const Center(child: CircularProgressIndicator());
                   default:
                     if (snapshot.hasError) {
-                      return SafeArea(child:Text('Error: ${snapshot.error}'));
+                      return SafeArea(
+                          child: Container(
+                            width: double.infinity,
+                            color: Colors
+                                .white,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  "asset/somthing_went_wrong.png",
+                                  height: 300,
+                                  width: 300,
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                  child: const Text(
+                                    "somthing went wrong",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ));
                     } else {
                       Color primaryColor = const Color(0xff1f7396);
                       return   snapshot.data["success"].toString().trim()=="1"?
@@ -121,9 +149,7 @@ print(formData.fields);
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
-                                onTap:()=>{
-
-                                  },
+                                onTap:()=>{},
                                 child: Card(
                                   shape:RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15.0)
@@ -140,7 +166,7 @@ print(formData.fields);
                                           value: 1,
                                           // row with 2 children
                                           child: Row(
-                                            children: [
+                                            children: const [
                                               Icon(Icons.task),
                                               SizedBox(
                                                 width: 10,

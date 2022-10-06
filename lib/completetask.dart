@@ -113,7 +113,36 @@ class _CompTaskState extends State<CompTask> {
               case ConnectionState.waiting: return Center(child: Text('Loading....'));
               default:
                 if (snapshot.hasError) {
-                  return SafeArea(child:Text('Error: ${snapshot.error}'));
+                  return SafeArea(
+                      child: Container(
+                        width: double.infinity,
+                        color: Colors
+                            .white,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "asset/somthing_went_wrong.png",
+                              height: 300,
+                              width: 300,
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 14.0),
+                              child: const Text(
+                                "somthing went wrong",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ),
+                      ));
                 } else {
                   var w=MediaQuery.of(context).size.width;
                   var h=MediaQuery.of(context).size.height;
@@ -280,11 +309,15 @@ class _CompTaskState extends State<CompTask> {
                                         SizedBox(
                                           width: w * 0.01,
                                         ),
-                                        Text(
-                                            snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
-                                            style: const TextStyle(
-                                                color: Colors
-                                                    .black54)),
+                                        Container(
+                                          width: w*0.8,
+                                          child: Text(
+                                              snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
+                                              maxLines: 20,
+                                              style: const TextStyle(
+                                                  color: Colors
+                                                      .black54)),
+                                        ),
                                       ],
                                     ),
                                     Divider(),

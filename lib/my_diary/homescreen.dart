@@ -64,7 +64,6 @@ return response.data;
 
   @override
   void initState() {
-    viewattendence();
     print(intime);
     topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(

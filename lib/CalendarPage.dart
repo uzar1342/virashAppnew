@@ -305,9 +305,38 @@ class _CalendarPageState extends State<CalendarPage> {
                            switch (snapshot.connectionState) {
                             case ConnectionState.waiting: return Center(child: Text('Loading....'));
                             default:
-                            if (snapshot.hasError)
-                            return SafeArea(child:Text('Error: ${snapshot.error}'));
-                            else {
+                            if (snapshot.hasError) {
+                              return SafeArea(
+                                child: Container(
+                                  width: double.infinity,
+                                  color: Colors
+                                      .white,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        "asset/somthing_went_wrong.png",
+                                        height: 300,
+                                        width: 300,
+                                      ),
+                                      const SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                        child: const Text(
+                                          "somthing went wrong",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ));
+                            } else {
                               Color primaryColor = const Color(0xff1f7396);
                               return   snapshot.data["success"].toString().trim()=="1"?ListView.builder(
                               itemCount: snapshot.data["data"].length,

@@ -185,6 +185,10 @@ class _PrioretyState extends State<Priorety> {
   }
 }
 
+
+
+
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({ Key? key, required this.title,required this.empid}) : super(key: key);
 
@@ -199,8 +203,75 @@ class CartItem {
   String productType;
   String itemName;
   String flavor;
-  CartItem({required this.productType, required this.itemName, required this.flavor});
+  String img;
+  CartItem({required this.productType, required this.itemName, required this.flavor,required this.img});
 }
+
+
+class pickerImage extends StatefulWidget {
+  CartItem cartItem;
+   pickerImage({Key? key,required this.cartItem}) : super(key: key);
+  @override
+  State<pickerImage> createState() => _pickerImageState();
+
+}
+
+class _pickerImageState extends State<pickerImage> {
+  late bool selectimg;
+  final ImagePicker _picker = ImagePicker();
+  addimg()
+  async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery ,imageQuality: 15);
+    final bytes = await Io.File(image!.path.toString()).readAsBytes();
+    String img64 = base64Encode(bytes);
+    print(img64);
+    widget.cartItem.img=img64;
+    setState(() {
+      selectimg=!selectimg;
+    });
+  }
+  picimg()
+  async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera,imageQuality: 15);
+    final bytes = await Io.File(image!.path.toString()).readAsBytes();
+// or
+    String img64 = base64Encode(bytes);
+    print(img64);
+    widget.cartItem.img=img64;
+  }
+
+ @override
+  void initState() {
+    widget.cartItem.img!=""?selectimg=false:selectimg=true;
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return  selectimg?Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(onPressed: (){
+            setState(() {
+              selectimg=false;
+            });
+            picimg();
+          }, child: Text("Image from camera")),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(onPressed: (){
+            addimg();
+          }, child: Text("Image from gallery")),
+        ),
+      ],
+    ):Text("Image Selected");
+  }
+}
+
+
+
+
 
 class CartWidget extends StatefulWidget {
   List<CartItem> cart;
@@ -214,23 +285,6 @@ class CartWidget extends StatefulWidget {
 
 class _CartWidgetState extends State<CartWidget> {
 
-  final ImagePicker _picker = ImagePicker();
-addimg()
-async {
-  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-  final bytes = await Io.File(image!.path.toString()).readAsBytes();
-// or
-  String img64 = base64Encode(bytes);
-  print(img64);
-}
-picimg()
-async {
-  final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
-  final bytes = await Io.File(photo!.path.toString()).readAsBytes();
-// or
-  String img64 = base64Encode(bytes);
-  print(img64);
-}
 
   @override
   Widget build(BuildContext context) {
@@ -255,9 +309,7 @@ async {
           ],
         ),
         Task(cartItem: widget.cart[widget.index]),
-        ElevatedButton(onPressed: (){
-          picimg();
-        }, child: Text("send image"))
+        pickerImage(cartItem: widget.cart[widget.index],)
       ],
     );
   }
@@ -271,10 +323,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void refresh() {
     setState(() {});
   }
-
-
   Sendtask(task) async {
-
         print(task);
         setState(() {
           loder=true;
@@ -298,9 +347,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
   }
-
-
-
   ADDtaskpriorety() async {
     setState(() {
       loder=true;
@@ -409,7 +455,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         cart.add(CartItem(
                             productType: "",
                             itemName: "",
-                            flavor: ""));
+                            flavor: "",
+                          img:""
+                        ));
                         setState(() {
                         });
                       },
@@ -422,7 +470,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         cart.forEach((element) {
                           if(element.flavor.trim()!="")
                           {
-                            var item={"task":element.flavor,"priority":element.itemName};
+                            var item={"task":element.flavor,"priority":element.itemName,"task_img": element.img};
                             data.add(item);
                           }
                           else
@@ -431,9 +479,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           }
 
                         });
+                        print(data);
                         if(count==0)
                         {
-                          if(data.length>0)
+                          if(data.length>0) {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -458,19 +507,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ],
                               ),
                             );
-                          else
+                          } else
                             Fluttertoast.showToast(msg: "Add Task");
                         }
                         else
                         {
                           Fluttertoast.showToast(msg: "Fill Task");
                         }
-
-
-
                       },icon: const Icon(Icons.send),
                     )
-
                   ],
                 )),
             Expanded(
@@ -484,48 +529,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   }),
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //   children: [
-            //     ElevatedButton(
-            //       onPressed: () {
-            //         cart.add(CartItem(
-            //             productType: "",
-            //             itemName: "",
-            //             flavor: ""));
-            //         setState(() {
-            //         });
-            //       },
-            //       child: Text("Add Task"),
-            //     ),
-            //     Padding(
-            //       padding: const EdgeInsets.all(8.0),
-            //       child: Align(
-            //         alignment: Alignment.centerRight,
-            //         child: FloatingActionButton(
-            //           onPressed: () {
-            //            var data=[];
-            //             cart.forEach((element) {
-            //               var item={"task":element.itemName,"priority":element.flavor};
-            //               data.add(item);
-            //             });
-            //             Sendtask({"emp_id":userId,"assigned_to":widget.empid,"tasks":data});
-            //           },
-            //           backgroundColor: Colors.green,
-            //           child: const Icon(Icons.navigation),
-            //         ),
-            //       ),
-            //     ),
-            //     // RaisedButton(
-            //     //   onPressed: () {
-            //     //     for (int i = 0; i < cart.length; i++) {
-            //     //       print(cart[i].itemName);
-            //     //     }
-            //     //   },
-            //     //   child: Text("Print Pizza"),
-            //     // ),
-            //   ],
-            // )
+
           ],
         ),
       ):Center(child: CircularProgressIndicator(),),

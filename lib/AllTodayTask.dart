@@ -143,7 +143,36 @@ class _AllEmpTaskState extends State<AllEmpTask> {
                         case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
                         default:
                           if (snapshot.hasError) {
-                            return SafeArea(child:Text('Error: ${snapshot.error}'));
+                            return SafeArea(
+                                child: Container(
+                                  width: double.infinity,
+                                  color: Colors
+                                      .white,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        "asset/somthing_went_wrong.png",
+                                        height: 300,
+                                        width: 300,
+                                      ),
+                                      const SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                        child: const Text(
+                                          "somthing went wrong",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ));
                           } else {
                             print("object");
                             var w=MediaQuery.of(context).size.width;

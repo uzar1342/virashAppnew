@@ -98,9 +98,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       if (result == ConnectivityResult.none) {
         setState(() {
           setState(() {
-
             net = false;
-
           });
         });
       } else {
@@ -445,7 +443,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text(
+                          child: const Text(
                             "Cancel",
                             style: TextStyle(
                               color: Colors.black54,

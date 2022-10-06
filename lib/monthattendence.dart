@@ -409,6 +409,78 @@ static Widget _holidayIcon = new Container(
                           )),
                       Container(
                         width: w,
+                        height: 100,
+                        padding: EdgeInsets.all(8),
+                        child:  Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              width: w*0.3,
+                              alignment: Alignment.centerLeft,
+                              child: TextButton(
+                                child: Text('PREV'),
+                                onPressed: () {
+                                  _markedDateMap.clear();
+                                  print(_targetDateTime.month);  print(DateTime.now().month);
+                                  setState(() {
+                                    _targetDateTime = DateTime(
+                                        _targetDateTime.year, _targetDateTime.month - 1);
+                                    _currentMonth =
+                                        DateFormat.yMMM().format(_targetDateTime);
+                                    year=_targetDateTime.year;
+                                    month=_targetDateTime.month;
+                                    FetchAttendence();
+                                    _currentDate2=_targetDateTime;
+                                  });
+                                },
+                              ),
+                            ),
+                            Container(
+                              width: w*0.3,
+                              alignment: Alignment.center,
+                              child: Text(
+                                _currentMonth,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24.0,
+                                ),
+                              ),
+                            ),
+                            _targetDateTime.month<DateTime.now().month?Container(
+                              width: w*0.3,
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                child: Text('NEXT'),
+                                onPressed: () {
+                                  _markedDateMap.clear();
+                                  print(_targetDateTime.month);
+                                  setState(() {
+
+                                    _targetDateTime = DateTime(
+                                        _targetDateTime.year, _targetDateTime.month + 1);
+                                    _currentMonth =
+                                        DateFormat.yMMM().format(_targetDateTime);
+                                    year=_targetDateTime.year;
+                                    month=_targetDateTime.month;
+                                    FetchAttendence();
+                                    _currentDate2=_targetDateTime;
+                                  });
+                                },
+                              ),
+                            ):Container(
+                              width: w*0.3,
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                child: Text('NEXT',style: TextStyle(color: Color(0xff656161)),),
+                                onPressed: () {
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: w,
                         height: h*0.6,
                         margin: EdgeInsets.symmetric(horizontal: 16.0),
                         child: monthloader?_calendarCarouselNoHeader:Center(child: CircularProgressIndicator()),
@@ -420,7 +492,36 @@ static Widget _holidayIcon = new Container(
                             case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
                             default:
                               if (snapshot.hasError)
-                                return SafeArea(child:Text('Error: ${snapshot.error}'));
+                                return SafeArea(
+                                    child: Container(
+                                      width: double.infinity,
+                                      color: Colors
+                                          .white,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            "asset/somthing_went_wrong.png",
+                                            height: 300,
+                                            width: 300,
+                                          ),
+                                          const SizedBox(
+                                            height: 10.0,
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                            child: const Text(
+                                              "somthing went wrong",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ));
                               else {
                                 Color primaryColor = const Color(0xff1f7396);
                                 bool holiday=Holiyday.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}");
@@ -654,7 +755,7 @@ static Widget _holidayIcon = new Container(
                                                         width: w*0.8,
                                                         child: Text(
                                                             snapshot.data["data"][0]["extra_task"]!=null?snapshot.data["data"][0]["extra_task"].toString():"",
-                                                            maxLines: 8,style: const TextStyle(
+                                                            maxLines: 20,style: const TextStyle(
                                                             color: Colors
                                                                 .black54)),
                                                       ),
@@ -1298,78 +1399,7 @@ static Widget _holidayIcon = new Container(
                     ],
                   ),
                 ),
-                Container(
-                  width: w,
-                height: 100,
-                padding: EdgeInsets.all(8),
-                  child:  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        width: w*0.3,
-                        alignment: Alignment.centerLeft,
-                        child: TextButton(
-                          child: Text('PREV'),
-                          onPressed: () {
-                            _markedDateMap.clear();
-                            print(_targetDateTime.month);  print(DateTime.now().month);
-                            setState(() {
-                              _targetDateTime = DateTime(
-                                  _targetDateTime.year, _targetDateTime.month - 1);
-                              _currentMonth =
-                                  DateFormat.yMMM().format(_targetDateTime);
-                              year=_targetDateTime.year;
-                              month=_targetDateTime.month;
-                              FetchAttendence();
-                              _currentDate2=_targetDateTime;
-                            });
-                          },
-                        ),
-                      ),
-                      Container(
-                        width: w*0.3,
-                        alignment: Alignment.center,
-                        child: Text(
-                          _currentMonth,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24.0,
-                          ),
-                        ),
-                      ),
-                      _targetDateTime.month<DateTime.now().month?Container(
-                        width: w*0.3,
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          child: Text('NEXT'),
-                          onPressed: () {
-                            _markedDateMap.clear();
-                            print(_targetDateTime.month);
-                            setState(() {
 
-                              _targetDateTime = DateTime(
-                                  _targetDateTime.year, _targetDateTime.month + 1);
-                              _currentMonth =
-                                  DateFormat.yMMM().format(_targetDateTime);
-                              year=_targetDateTime.year;
-                              month=_targetDateTime.month;
-                              FetchAttendence();
-                              _currentDate2=_targetDateTime;
-                            });
-                          },
-                        ),
-                      ):Container(
-                        width: w*0.3,
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          child: Text('NEXT',style: TextStyle(color: Color(0xff656161)),),
-                          onPressed: () {
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ),
             SizedBox(height: 100,)
               ],
             ),
