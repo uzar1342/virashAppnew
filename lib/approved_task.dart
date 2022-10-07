@@ -281,35 +281,46 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                                                           MainAxisAlignment
                                                                               .spaceBetween,
                                                                           children: [
-                                                                            Row(
-                                                                              crossAxisAlignment:
-                                                                              CrossAxisAlignment
-                                                                                  .center,
-                                                                              mainAxisAlignment:
-                                                                              MainAxisAlignment
-                                                                                  .start,
-                                                                              children: [
+                                                                            Expanded(
+                                                                              flex: 3,
+                                                                              child: Row(
+                                                                                crossAxisAlignment:
+                                                                                CrossAxisAlignment
+                                                                                    .center,
+                                                                                mainAxisAlignment:
+                                                                                MainAxisAlignment
+                                                                                    .start,
+                                                                                children: [
 
-                                                                                SizedBox(
-                                                                                  width: w * 0.02,
-                                                                                ),
-                                                                                Text(
-                                                                                  snapshot.data["data"][position]["emp_name"].toString(),
-                                                                                  style: const TextStyle(
-                                                                                      color: Colors
-                                                                                          .black54,
-                                                                                      fontWeight:
-                                                                                      FontWeight
-                                                                                          .bold,
-                                                                                      fontSize: 16.0),
-                                                                                )
-                                                                              ],
-                                                                            ),
-                                                                            GestureDetector(
-                                                                              onTap: (){
+                                                                                  SizedBox(
+                                                                                    width: w * 0.02,
+                                                                                  ),
 
 
-                                                                              },
+                                                                                  Expanded(
+                                                                                    child: Container(
+                                                                                      child: RichText(
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                        strutStyle: StrutStyle(fontSize: 17.0),
+                                                                                        text: TextSpan(
+                                                                                            style:  const TextStyle(
+                                                                                                color: Colors.black87,
+                                                                                                fontWeight:
+                                                                                                FontWeight.bold,
+                                                                                                fontSize: 20
+                                                                                            ),
+                                                                                            text: snapshot.data["data"][position]["emp_name"].toString()),
+                                                                                      ),
+                                                                                    ),
+                                                                                  )
+
+
+
+                                                                                ],
+                                                                              ),
+                                                                            ), 
+                                                                            Expanded(
+                                                                              flex: 2,
                                                                               child: Container(
                                                                                 padding:
                                                                                 const EdgeInsets
@@ -340,7 +351,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                                                                       w * 0.01,
                                                                                     ),
                                                                                     Text(
-                                                                                      snapshot.data["data"][position]["priority"].toString(),
+                                                                                      snapshot.data["data"][position]["priority"].toString().trim(),
                                                                                       style: const TextStyle(
                                                                                           color:
                                                                                           Colors
