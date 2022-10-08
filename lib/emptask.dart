@@ -455,18 +455,17 @@ class _EmpTaskState extends State<EmpTask> {
                                                       context: context,
                                                       builder: (context) => AlertDialog(
                                                         title: Text(
-                                                          "Add Task",
+                                                          "Remark",
                                                           style: TextStyle(
                                                               color: primaryColor,
                                                               fontWeight: FontWeight.bold),
                                                         ),
                                                         content: Container(
-                                                          height: h * 0.4,
                                                           child: SingleChildScrollView(
                                                             child: Form(
                                                               child: Column(
                                                                 children: [
-                                                                  Text("Please fill today's Task",
+                                                                  Text("Enter value in point's",
                                                                       style: TextStyle(
                                                                           color: Colors.black54,
                                                                           fontWeight: FontWeight.bold)),
@@ -487,7 +486,7 @@ class _EmpTaskState extends State<EmpTask> {
                                                                               Icons.assignment,
                                                                               color: Colors.red.shade200,
                                                                             ),
-                                                                            hintText: "Remark",
+                                                                            hintText: "2,3 pending",
                                                                             hintStyle: TextStyle(
                                                                               color: Colors.black26,
                                                                               fontWeight: FontWeight.bold,
@@ -585,14 +584,14 @@ class _EmpTaskState extends State<EmpTask> {
                                                   ),
                                                   child: Row(children: const [
                                                     Icon(
-                                                      Icons.check,
+                                                      Icons.text_snippet,
                                                       color: Colors.white,
                                                     ),
                                                     SizedBox(
                                                       width: 5.0,
                                                     ),
                                                     Text(
-                                                      "check",
+                                                      "Remark",
                                                       style: TextStyle(
                                                           color: Colors
                                                               .white,
@@ -603,60 +602,63 @@ class _EmpTaskState extends State<EmpTask> {
                                                   ]),
                                                 ),
                                               ),
-                                              InkWell(
-                                                onTap: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) => AlertDialog(
-                                                      title:  const Text('Are you sure?'),
-                                                      content:  const Text('Task Completed'),
-                                                      actions: <Widget>[
-                                                        TextButton(
-                                                          onPressed: () => Navigator.of(context).pop(false),
-                                                          child:  const Text('No'),
-                                                        ),
-                                                        TextButton(
-                                                          onPressed: () => {
-                                                            Navigator.of(context).pop(false),
-                                                            updatetask(snapshot.data["data"][position]["task_id"]),
-                                                        setState(() {
-                                                        })},
-                                                        child:  const Text('Yes'),
-                                                        ),
-                                                      ],
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) => AlertDialog(
+                                                        title:  const Text('Are you sure?'),
+                                                        content:  const Text('Task Completed'),
+                                                        actions: <Widget>[
+                                                          TextButton(
+                                                            onPressed: () => Navigator.of(context).pop(false),
+                                                            child:  const Text('No'),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () => {
+                                                              Navigator.of(context).pop(false),
+                                                              updatetask(snapshot.data["data"][position]["task_id"]),
+                                                          setState(() {
+                                                          })},
+                                                          child:  const Text('Yes'),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                     },
+                                                  child: Container(
+                                                    padding:
+                                                    EdgeInsets.all(8.0),
+                                                    decoration:
+                                                    BoxDecoration(
+                                                      color: primaryColor,
+                                                      borderRadius:
+                                                      const BorderRadius.all(
+                                                        Radius.circular(
+                                                            14.0),
+                                                      ),
                                                     ),
-                                                  );
-                                                   },
-                                                child: Container(
-                                                  padding:
-                                                  EdgeInsets.all(8.0),
-                                                  decoration:
-                                                  BoxDecoration(
-                                                    color: primaryColor,
-                                                    borderRadius:
-                                                    const BorderRadius.all(
-                                                      Radius.circular(
-                                                          14.0),
-                                                    ),
+                                                    child: Row(children: const [
+                                                      Icon(
+                                                        Icons.check,
+                                                        color: Colors.white,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5.0,
+                                                      ),
+                                                      Text(
+                                                        "check",
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .white,
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .bold),
+                                                      )
+                                                    ]),
                                                   ),
-                                                  child: Row(children: const [
-                                                    Icon(
-                                                      Icons.check,
-                                                      color: Colors.white,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 5.0,
-                                                    ),
-                                                    Text(
-                                                      "check",
-                                                      style: TextStyle(
-                                                          color: Colors
-                                                              .white,
-                                                          fontWeight:
-                                                          FontWeight
-                                                              .bold),
-                                                    )
-                                                  ]),
                                                 ),
                                               ),
                                             ],

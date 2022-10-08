@@ -207,6 +207,7 @@ class _CompTaskState extends State<CompTask> {
                                             const EdgeInsets
                                                 .all(5.0),
                                             height: h * 0.04,
+
                                             decoration:
                                             BoxDecoration(
                                                 color: snapshot.data["data"][position]["priority"]=="high"?
@@ -234,6 +235,7 @@ class _CompTaskState extends State<CompTask> {
                                                 Text(
                                                   snapshot.data["data"][position]["priority"].toString(),
                                                   style: const TextStyle(
+                                                    fontSize: 15,
                                                       color:
                                                       Colors
                                                           .white,
