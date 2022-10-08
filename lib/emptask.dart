@@ -9,7 +9,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 import 'globals.dart';
-
+String remarks= '';
 class EmpTask extends StatefulWidget {
    EmpTask({Key? key,required this.emoid,required this.status}) : super(key: key);
    String emoid;
@@ -426,6 +426,7 @@ class _EmpTaskState extends State<EmpTask> {
     );
   }
 }
+
 class button extends StatefulWidget {
    button({Key? key,required this.emoid,required this.img,required this.teskid}) : super(key: key);
 String emoid,img,teskid;
@@ -433,13 +434,9 @@ String emoid,img,teskid;
   State<button> createState() => _buttonState();
 }
 
-
-
-String remarks= '';
 class _buttonState extends State<button> {
-
-
   updatetask(taskid) async {
+    remarks= '';
     print(userId);
     var id=[];
     id.add(taskid);
@@ -455,10 +452,9 @@ class _buttonState extends State<button> {
       setState(() {
       });
        remarks= '';
-      return response.data;
+
     } else {
        remarks= '';
-      return response.data;
     }
   }
 
@@ -488,8 +484,10 @@ class _buttonState extends State<button> {
                           color: primaryColor,
                           fontWeight: FontWeight.bold),
                     ),
-                    content: Container(
-                      child: SingleChildScrollView(
+                    content: SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      child: Container(
+                        height: h*0.5,
                         child: Form(
                           child: Column(
                             children: [
@@ -507,7 +505,7 @@ class _buttonState extends State<button> {
                                   elevation: 3.0,
                                   child: TextFormField(
                                     controller: remark,
-                                    maxLines: 20,
+                                    maxLines: 8,
                                     cursorColor: primaryColor,
                                     decoration: InputDecoration(
                                         suffixIcon: Icon(

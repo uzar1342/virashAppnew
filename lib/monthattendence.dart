@@ -341,7 +341,8 @@ static Widget _holidayIcon = new Container(
                   width: w,
                   child: Column(
                     children: [
-                      employee_role=="Admin"||employee_role=="Super Admin"||employee_role=="Faculty & Admin"?Container(
+                      employee_role=="Admin"||employee_role=="Super Admin"||employee_role=="Faculty & Admin"?
+                      Container(
                           padding: const EdgeInsets.only(top: 0.0),
                           height: h * 0.09,
                           child: Row(

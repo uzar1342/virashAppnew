@@ -53,7 +53,6 @@ class _TaskNavState extends State<TaskNav>
     color: VirashAppTheme.background,
   );
 
-
   @override
   void initState() {
     checkinternet();
