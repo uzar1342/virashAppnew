@@ -181,7 +181,6 @@ class _CompTaskState extends State<CompTask> {
                                           MainAxisAlignment
                                               .start,
                                           children: [
-
                                             SizedBox(
                                               width: w * 0.02,
                                             ),
@@ -197,56 +196,48 @@ class _CompTaskState extends State<CompTask> {
                                             )
                                           ],
                                         ),
-                                        GestureDetector(
-                                          onTap: (){
+                                        Container(
+                                          padding:
+                                          const EdgeInsets
+                                              .all(5.0),
+                                          height: h * 0.04,
+                                          decoration:
+                                          BoxDecoration(
+                                              color: snapshot.data["data"][position]["priority"]=="high"?
+                                              Colors
+                                                  .red:snapshot.data["data"][position]["priority"]=="medium"?Colors
+                                                  .yellow:Colors
+                                                  .green,
+                                              borderRadius: const BorderRadius
+                                                  .all(Radius
+                                                  .circular(
+                                                  20.0))),
+                                          child: Row(
+                                            children: [
+                                              const FaIcon(
+                                                FontAwesomeIcons
+                                                    .globe,
+                                                color: Colors
+                                                    .white,
+                                                size: 20.0,
+                                              ),
+                                              SizedBox(
+                                                width:
+                                                w * 0.01,
+                                              ),
+                                              Text(
+                                                snapshot.data["data"][position]["priority"].toString(),
+                                                style: const TextStyle(
+                                                    color:
+                                                    Colors
+                                                        .white,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .bold),
+                                              ),
 
 
-                                          },
-                                          child: Container(
-                                            padding:
-                                            const EdgeInsets
-                                                .all(5.0),
-                                            height: h * 0.04,
-
-                                            decoration:
-                                            BoxDecoration(
-                                                color: snapshot.data["data"][position]["priority"]=="high"?
-                                                Colors
-                                                    .red:snapshot.data["data"][position]["priority"]=="medium"?Colors
-                                                    .yellow:Colors
-                                                    .green,
-                                                borderRadius: const BorderRadius
-                                                    .all(Radius
-                                                    .circular(
-                                                    20.0))),
-                                            child: Row(
-                                              children: [
-                                                const FaIcon(
-                                                  FontAwesomeIcons
-                                                      .globe,
-                                                  color: Colors
-                                                      .white,
-                                                  size: 20.0,
-                                                ),
-                                                SizedBox(
-                                                  width:
-                                                  w * 0.01,
-                                                ),
-                                                Text(
-                                                  snapshot.data["data"][position]["priority"].toString(),
-                                                  style: const TextStyle(
-                                                    fontSize: 15,
-                                                      color:
-                                                      Colors
-                                                          .white,
-                                                      fontWeight:
-                                                      FontWeight
-                                                          .bold),
-                                                ),
-
-
-                                              ],
-                                            ),
+                                            ],
                                           ),
                                         )
 
