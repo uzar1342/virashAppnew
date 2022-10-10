@@ -35,21 +35,32 @@ class _MyHomePageState extends State<MyHomePage> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+          resizeToAvoidBottomInset:false,
           body: SafeArea(
             child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Column(
                 children: [
                   Container(
+                      padding: const EdgeInsets.only(top: 0.0),
+                      height: h * 0.09,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Task Status",
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor),
+                          ),
+                        ],
+                      )),
+                  Container(
                     height: 45,
-                    decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(25.0)
-                    ),
                     child:  TabBar(
                       indicator: BoxDecoration(
                           color: primaryColor,
-                          borderRadius:  BorderRadius.circular(25.0)
                       ) ,
                       labelColor: Colors.white,
                       unselectedLabelColor: Colors.black,
@@ -60,14 +71,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                   ),
-                  Expanded(
+                  SingleChildScrollView(
+                    child: Container(
+                      height: h*0.8,
                       child: TabBarView(
                         children:  [
                         EmpTask(emoid: userId, status: 'Pending',),
                           EmpTask(emoid: userId, status: 'Completed',),
                           EmpTask(emoid: userId, status: 'Rejected',),
                         ],
-                      )
+                      ),
+                    ),
                   )
                 ],
               ),

@@ -99,6 +99,7 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
       child: Container(
         color: VirashAppTheme.background,
         child: Scaffold(
+          resizeToAvoidBottomInset:false,
           backgroundColor: Colors.transparent,
           body: widget.isLoading?Center(
             child: Column(

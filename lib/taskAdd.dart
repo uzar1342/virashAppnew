@@ -99,16 +99,11 @@ class Priorety extends StatefulWidget {
 
 class _PrioretyState extends State<Priorety> {
   String _value = "Low";
-
-
-
   @override
   void initState() {
-
-
     super.initState();
     _value= widget.cartItem.itemName!=""?widget.cartItem.itemName:"Low";
-    widget.cartItem.itemName="Low";
+    widget.cartItem.itemName=_value;
   }
 
   @override
@@ -162,7 +157,7 @@ class _PrioretyState extends State<Priorety> {
               onChanged: (value) {
         setState(() {
         _value = value.toString();
-        widget.cartItem.itemName = value.toString();
+        widget.cartItem.itemName = _value;
         });
         },
             value: _value,
@@ -238,6 +233,9 @@ class _pickerImageState extends State<pickerImage> {
     String img64 = base64Encode(bytes);
     print(img64);
     widget.cartItem.img=img64;
+    setState(() {
+      selectimg=!selectimg;
+    });
   }
 
  @override
@@ -253,9 +251,6 @@ class _pickerImageState extends State<pickerImage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(onPressed: (){
-              setState(() {
-                selectimg=false;
-              });
               picimg();
             }, child: Text("Image from camera")),
           ),
@@ -348,8 +343,6 @@ class _MyHomePageState extends State<MyHomePage> {
           });
           Fluttertoast.showToast(msg: "Unable to send task");
         }
-
-
   }
   ADDtaskpriorety() async {
     setState(() {
@@ -358,9 +351,6 @@ class _MyHomePageState extends State<MyHomePage> {
     Dio dio=Dio();
     var response = await dio.post('http://training.virash.in/showPriority');
     print(response.data.length);
-
-
-
     if (response.statusCode == 200) {
       if(response.data["data"]!=null)
       {
@@ -387,6 +377,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   @override
   void initState() {
+    cart.add(CartItem(
+        productType: "",
+        itemName: "",
+        flavor: "",
+        img:""
+    ));
+    setState(() {
+    });
     ADDtaskpriorety();
     super.initState();
   }
@@ -395,12 +393,14 @@ class _MyHomePageState extends State<MyHomePage> {
     item.clear();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     var h=MediaQuery.of(context).size.height;
     var w=MediaQuery.of(context).size.width;
+    setState(() {
+    });
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       body: !loder?SafeArea(
         child: Column(
           children: <Widget>[
@@ -408,117 +408,98 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.only(top: 0.0),
                 height: h * 0.09,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
+                    Expanded(
+                      flex: 6,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          child: Text(
+                            widget.title,
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
                       child: Container(
-                        margin: const EdgeInsets.only(
-                          // top: 10.0,
-                          left: 15.0,
-                        ),
-                        //padding: const EdgeInsets.only(left: 5.0),
-                        height: h * 0.05,
-                        width: h * 0.05,
-                        decoration: BoxDecoration(
-                          // color: primaryColor,
-                            border: Border.all(color: Colors.black26, width: 1.0),
-                            borderRadius:
-                            const BorderRadius.all(Radius.circular(12.0))),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new,
-                          color: Colors.black87,
-                          size: 18.0,
+                        child: IconButton(
+                          onPressed: () {
+                            cart.add(CartItem(
+                                productType: "",
+                                itemName: "",
+                                flavor: "",
+                              img:""
+                            ));
+                            setState(() {
+                            });
+                          },
+                          icon: const Icon(Icons.add),
                         ),
                       ),
                     ),
-                    Text(
-                      widget.title,
-                      style: TextStyle(
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
-                          color: primaryColor),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => const AttendancePage()));
-                      },
-                      icon: const FaIcon(
-                        FontAwesomeIcons.chartArea,
-                        color: Colors.white,
-                        size: 25,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        cart.add(CartItem(
-                            productType: "",
-                            itemName: "",
-                            flavor: "",
-                          img:""
-                        ));
-                        setState(() {
-                        });
-                      },
-                      icon: const Icon(Icons.add),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        var count=0;
-                        var data=[];
-                        cart.forEach((element) {
-                          if(element.flavor.trim()!="")
-                          {
-                            var item={"task":element.flavor,"priority":element.itemName,"task_img": element.img};
-                            data.add(item);
-                          }
-                          else
-                          {
-                            count++;
-                          }
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        child: IconButton(
+                          onPressed: () {
+                            var count=0;
+                            var data=[];
+                            cart.forEach((element) {
+                              if(element.flavor.trim()!="")
+                              {
+                                var item={"task":element.flavor,"priority":element.itemName,"task_img": element.img};
+                                data.add(item);
+                              }
+                              else
+                              {
+                                count++;
+                              }
 
-                        });
-                        print(data);
-                        if(count==0)
-                        {
-                          if(data.length>0) {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: new Text('Are you sure?'),
-                                content: new Text('Do you want ADD Task'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () => Navigator.of(context).pop(false),
-                                    child: new Text('No'),
+                            });
+                            print(data);
+                            if(count==0)
+                            {
+                              if(data.length>0) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: new Text('Are you sure?'),
+                                    content: new Text('Do you want ADD Task'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => Navigator.of(context).pop(false),
+                                        child: new Text('No'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () => {
+                                          Navigator.of(context).pop(false),
+                                          Sendtask({
+                                            "emp_id": userId,
+                                            "assigned_to": widget.empid,
+                                            "tasks": data
+                                          })
+                                        },
+                                        child: new Text('Yes'),
+                                      ),
+                                    ],
                                   ),
-                                  TextButton(
-                                    onPressed: () => {
-                                      Navigator.of(context).pop(false),
-                                      Sendtask({
-                                        "emp_id": userId,
-                                        "assigned_to": widget.empid,
-                                        "tasks": data
-                                      })
-                                    },
-                                    child: new Text('Yes'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else
-                            Fluttertoast.showToast(msg: "Add Task");
-                        }
-                        else
-                        {
-                          Fluttertoast.showToast(msg: "Fill Task");
-                        }
-                      },icon: const Icon(Icons.send),
+                                );
+                              } else
+                                Fluttertoast.showToast(msg: "Add Task");
+                            }
+                            else
+                            {
+                              Fluttertoast.showToast(msg: "Fill Task");
+                            }
+                          },icon: const Icon(Icons.send),
+                        ),
+                      ),
                     )
                   ],
                 )),

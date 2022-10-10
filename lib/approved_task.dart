@@ -146,56 +146,6 @@ class _ApprovedTaskState extends State<ApprovedTask> {
             child: Column(
               children: [
                 Expanded(
-                  flex: 1,
-                  child: Container(
-                      padding: const EdgeInsets.only(top: 0.0),
-                      height: h * 0.09,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(
-                                // top: 10.0,
-                                left: 15.0,
-                              ),
-                              //padding: const EdgeInsets.only(left: 5.0),
-                              height: h * 0.05,
-                              width: h * 0.05,
-                              decoration: BoxDecoration(
-                                // color: primaryColor,
-                                  border: Border.all(color: Colors.black26, width: 1.0),
-                                  borderRadius:
-                                  const BorderRadius.all(Radius.circular(12.0))),
-                              child: const Icon(
-                                Icons.arrow_back_ios_new,
-                                color: Colors.black87,
-                                size: 18.0,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: w*0.8,
-                            child: RichText(
-                              overflow: TextOverflow.ellipsis,
-                              strutStyle: StrutStyle(fontSize: 17.0),
-                              text: TextSpan(
-                                  style:  const TextStyle(
-                                      color: Color(0xff1f7396),
-                                      fontWeight:
-                                      FontWeight.bold,
-                                      fontSize: 18
-                                  ),
-                                  text: "View "+widget.name),
-                            ),
-                          ),
-                        ],
-                      )),
-                ),
-                Expanded(
                   flex: 9,
                   child: Container(
                     child: FutureBuilder<dynamic>(
@@ -297,22 +247,22 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                                                                   ),
 
 
-                                                                                  Expanded(
-                                                                                    child: Container(
-                                                                                      child: RichText(
-                                                                                        overflow: TextOverflow.ellipsis,
-                                                                                        strutStyle: StrutStyle(fontSize: 17.0),
-                                                                                        text: TextSpan(
-                                                                                            style:  const TextStyle(
-                                                                                                color: Colors.black87,
-                                                                                                fontWeight:
-                                                                                                FontWeight.bold,
-                                                                                                fontSize: 20
-                                                                                            ),
-                                                                                            text: snapshot.data["data"][position]["emp_name"].toString()),
-                                                                                      ),
-                                                                                    ),
-                                                                                  )
+                                                                                  // Expanded(
+                                                                                  //   child: Container(
+                                                                                  //     child: RichText(
+                                                                                  //       overflow: TextOverflow.ellipsis,
+                                                                                  //       strutStyle: StrutStyle(fontSize: 17.0),
+                                                                                  //       text: TextSpan(
+                                                                                  //           style:  const TextStyle(
+                                                                                  //               color: Colors.black87,
+                                                                                  //               fontWeight:
+                                                                                  //               FontWeight.bold,
+                                                                                  //               fontSize: 20
+                                                                                  //           ),
+                                                                                  //           text: snapshot.data["data"][position]["emp_name"].toString()),
+                                                                                  //     ),
+                                                                                  //   ),
+                                                                                  // )
 
 
 

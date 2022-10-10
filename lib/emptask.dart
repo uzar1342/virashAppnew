@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:Virash/taskimg.dart';
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +17,6 @@ class EmpTask extends StatefulWidget {
    EmpTask({Key? key,required this.emoid,required this.status}) : super(key: key);
    String emoid;
    String status;
-
   @override
   State<EmpTask> createState() => _EmpTaskState();
 }
@@ -29,7 +31,7 @@ class _EmpTaskState extends State<EmpTask> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
   GlobalKey<RefreshIndicatorState>();
    PhotoViewScaleStateController? scaleStateController;
-
+  TextEditingController remark=new TextEditingController();
   late int check;
 
   bool isLoading=true;
@@ -79,15 +81,38 @@ class _EmpTaskState extends State<EmpTask> {
     super.initState();
     scaleStateController?.scaleState = PhotoViewScaleState.originalSize;
   }
+  updatetask(taskid) async {
+    print(remark.value.text);
+    final url = Uri.parse('http://training.virash.in/markTaskCompleted');
+    var map = Map<String, dynamic>();
+    map['emp_id'] = widget.emoid;
+    map['completed_task'] = taskid;
+    map['remark'] = remark.value.text;
+    print(map);
+    http.Response response = await http.post(
+      url,
+      body: map,
+    );
+    Map mapRes = json.decode(response.body);
+    print(mapRes["success"]);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(msg: mapRes["message"]);
+      remark.text= '';
+    } else {
+      Fluttertoast.showToast(msg: mapRes["message"]);
+      print(mapRes["message"]);
+      remark.text= '';
+    }
+  }
   @override
   Widget build(BuildContext context) {
-
-    TextEditingController remark=new TextEditingController();
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
+        resizeToAvoidBottomInset:false,
         body:Container(
-          height: employee_role=="Super Admin"||employee_role=="Admin"||employee_role=="Faculty & Admin"?h:h*0.8,
+          height: employee_role=="Super Admin"||employee_role=="Admin"||employee_role=="Faculty & Admin"?h:h*0.75,
           child: RefreshIndicator(
             key: _refreshIndicatorKey,
             color: Colors.white,
@@ -140,9 +165,9 @@ class _EmpTaskState extends State<EmpTask> {
                       var w=MediaQuery.of(context).size.width;
                       var h=MediaQuery.of(context).size.height;
                       Color primaryColor = const Color(0xff1f7396);
-
                       return
                         snapshot.data["data"]!=null&&check>0?ListView.builder(
+                          shrinkWrap: true,
                         itemCount: snapshot.data["data"].length,
                         itemBuilder: (context, position) {
                           return
@@ -180,16 +205,7 @@ class _EmpTaskState extends State<EmpTask> {
                                             SizedBox(
                                               width: w * 0.02,
                                             ),
-                                            Text(
-                                              snapshot.data["data"][position]["emp_name"].toString(),
-                                              style: const TextStyle(
-                                                  color: Colors
-                                                      .black54,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .bold,
-                                                  fontSize: 16.0),
-                                            )
+
                                           ],
                                         ),
                                         GestureDetector(
@@ -202,9 +218,9 @@ class _EmpTaskState extends State<EmpTask> {
                                             height: h * 0.04,
                                             decoration:
                                             BoxDecoration(
-                                                color: snapshot.data["data"][position]["priority"]=="high"?
+                                                color: snapshot.data["data"][position]["priority"]=="High"?
                                                   Colors
-                                                    .red:snapshot.data["data"][position]["priority"]=="medium"?Colors
+                                                    .red:snapshot.data["data"][position]["priority"]=="Medium"?Colors
                                                     .blue:Colors
                                                     .green,
                                                 borderRadius: const BorderRadius
@@ -402,8 +418,207 @@ class _EmpTaskState extends State<EmpTask> {
                                         employee_role=="Developer & Faculty"||employee_role=="Developer"?Container(
                                           padding:
                                           EdgeInsets.all(8.0),
-                                          child:
-                                         button(emoid: widget.emoid, img: snapshot.data["data"][position]["task_img"], teskid: snapshot.data["data"][position]["emp_id"].toString(),)
+                                          child:Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    // showDialog(
+                                                    //   context: context,
+                                                    //   builder: (context) => AlertDialog(
+                                                    //     title:  const Text('Are you sure?'),
+                                                    //     content:  const Text('Task Completed'),
+                                                    //     actions: <Widget>[
+                                                    //       TextButton(
+                                                    //         onPressed: () => Navigator.of(context).pop(false),
+                                                    //         child:  const Text('No'),
+                                                    //       ),
+                                                    //       TextButton(
+                                                    //         onPressed: () => {
+                                                    //           print("hgj$remarks"),
+                                                    //           Navigator.of(context).pop(false),
+                                                    //           if(snapshot.data["data"][position]["task_img"]!="N/A")
+                                                    //             {
+                                                    //               if(remarks.trim()!="")
+                                                    //                 {
+                                                    //                   updatetask(snapshot.data["data"][position]["task_id"].toString()),
+                                                    //                   setState(() {
+                                                    //                   })
+                                                    //                 }
+                                                    //               else
+                                                    //                 {
+                                                    //                   Fluttertoast.showToast(msg: "Enter Remark")
+                                                    //                 }
+                                                    //             }
+                                                    //           else
+                                                    //             {
+                                                    //               updatetask(snapshot.data["data"][position]["task_id"].toString()),
+                                                    //               setState(() {
+                                                    //               })
+                                                    //             }
+                                                    //
+                                                    //
+                                                    //
+                                                    //         },
+                                                    //         child:  const Text('Yes'),
+                                                    //       ),
+                                                    //     ],
+                                                    //   ),
+                                                    // );
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) => AlertDialog(
+                                                          title: Text(
+                                                            "Complete Task",
+                                                            style: TextStyle(
+                                                                color: primaryColor,
+                                                                fontWeight: FontWeight.bold),
+                                                          ),
+                                                          content: Container(
+                                                            height: h*0.4,
+                                                            child: Scaffold(
+                                                              resizeToAvoidBottomInset:false,
+                                                              body: Form(
+                                                                child: Column(
+                                                                  children: [
+                                                                    Text("Please fill Remark",
+                                                                        style: TextStyle(
+                                                                            color: Colors.black54,
+                                                                            fontWeight: FontWeight.bold)),
+                                                                    SizedBox(
+                                                                      height: h * 0.01,
+                                                                    ),
+                                                                    Container(
+                                                                      //  height: h * 0.07,
+                                                                      width: w * 0.95,
+                                                                      child: Card(
+                                                                        elevation: 3.0,
+                                                                        child: TextFormField(
+                                                                          controller: remark,
+                                                                          maxLines: 8,
+                                                                          cursorColor: primaryColor,
+                                                                          decoration: InputDecoration(
+                                                                              suffixIcon: Icon(
+                                                                                Icons.assignment,
+                                                                                color: Colors.red.shade200,
+                                                                              ),
+                                                                              hintText: "2,3 Done",
+                                                                              hintStyle: TextStyle(
+                                                                                color: Colors.black26,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontSize: 14.0,
+                                                                              ),
+                                                                              filled: true,
+                                                                              fillColor: Colors.white,
+                                                                              border: OutlineInputBorder(
+                                                                                gapPadding: 9,
+                                                                                borderSide: BorderSide.none,
+                                                                                borderRadius: BorderRadius.all(
+                                                                                    Radius.circular(12.0)),
+                                                                              ),
+                                                                              contentPadding:
+                                                                              EdgeInsets.symmetric(
+                                                                                  horizontal: 20.0,
+                                                                                  vertical: 16.0)),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height: h * 0.04,
+                                                                    ),
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                      MainAxisAlignment.spaceBetween,
+                                                                      children: [
+                                                                        TextButton(
+                                                                          onPressed: () {
+                                                                            Navigator.pop(context);
+                                                                          },
+                                                                          child: const Text(
+                                                                            "Cancel",
+                                                                            style: TextStyle(
+                                                                              color: Colors.black54,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              decoration:
+                                                                              TextDecoration.underline,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        InkWell(
+                                                                          onTap: ()  {
+
+                                                                            Navigator.pop(context);
+                                                                              updatetask(snapshot.data["data"][position]["task_id"].toString());
+                                                                                               setState(() {
+                                                                                               });
+
+
+                                                                          },
+                                                                          child: Container(
+                                                                            height: h * 0.04,
+                                                                            padding: EdgeInsets.symmetric(
+                                                                                horizontal: 10.0),
+                                                                            decoration: BoxDecoration(
+                                                                                borderRadius: BorderRadius.all(
+                                                                                  Radius.circular(6.0),
+                                                                                ),
+                                                                                color: primaryColor),
+                                                                            child: Center(
+                                                                              child: Text(
+                                                                                "Apply",
+                                                                                style: TextStyle(
+                                                                                    color: Colors.white,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                    fontSize: 15.0),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ));
+                                                  },
+                                                  child: Container(
+                                                    padding:
+                                                    EdgeInsets.all(8.0),
+                                                    decoration:
+                                                    BoxDecoration(
+                                                      color: primaryColor,
+                                                      borderRadius:
+                                                      const BorderRadius.all(
+                                                        Radius.circular(
+                                                            14.0),
+                                                      ),
+                                                    ),
+                                                    child: Row(children: const [
+                                                      Icon(
+                                                        Icons.check,
+                                                        color: Colors.white,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5.0,
+                                                      ),
+                                                      Text(
+                                                        "check",
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .white,
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .bold),
+                                                      )
+                                                    ]),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ):Container(),
                                       ],
                                     ):Container()
@@ -427,289 +642,3 @@ class _EmpTaskState extends State<EmpTask> {
   }
 }
 
-class button extends StatefulWidget {
-   button({Key? key,required this.emoid,required this.img,required this.teskid}) : super(key: key);
-String emoid,img,teskid;
-  @override
-  State<button> createState() => _buttonState();
-}
-
-class _buttonState extends State<button> {
-  updatetask(taskid) async {
-    remarks= '';
-    print(userId);
-    var id=[];
-    id.add(taskid);
-    Dio dio=Dio();
-    var formData =
-    {
-      "emp_id":widget.emoid,
-      "completed_task":id,
-    };
-    print(formData);
-    var response = await dio.post('http://training.virash.in/markCompletedTask', data: formData);
-    if (response.statusCode == 200) {
-      setState(() {
-      });
-       remarks= '';
-
-    } else {
-       remarks= '';
-    }
-  }
-
-  @override
-  void dispose() {
-    remarks= '';
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    TextEditingController remark=new TextEditingController();
-    double h = MediaQuery.of(context).size.height;
-    double w = MediaQuery.of(context).size.width;
-    return  Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text(
-                      "Remark",
-                      style: TextStyle(
-                          color: primaryColor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    content: SingleChildScrollView(
-                      physics: NeverScrollableScrollPhysics(),
-                      child: Container(
-                        height: h*0.5,
-                        child: Form(
-                          child: Column(
-                            children: [
-                              Text("Please fill Remark",
-                                  style: TextStyle(
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.bold)),
-                              SizedBox(
-                                height: h * 0.01,
-                              ),
-                              Container(
-                                //  height: h * 0.07,
-                                width: w * 0.95,
-                                child: Card(
-                                  elevation: 3.0,
-                                  child: TextFormField(
-                                    controller: remark,
-                                    maxLines: 8,
-                                    cursorColor: primaryColor,
-                                    decoration: InputDecoration(
-                                        suffixIcon: Icon(
-                                          Icons.assignment,
-                                          color: Colors.red.shade200,
-                                        ),
-                                        hintText: "2,3 Done",
-                                        hintStyle: TextStyle(
-                                          color: Colors.black26,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.0,
-                                        ),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        border: OutlineInputBorder(
-                                          gapPadding: 9,
-                                          borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(12.0)),
-                                        ),
-                                        contentPadding:
-                                        EdgeInsets.symmetric(
-                                            horizontal: 20.0,
-                                            vertical: 16.0)),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: h * 0.04,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      "Cancel",
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.bold,
-                                        decoration:
-                                        TextDecoration.underline,
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () async {
-
-                                      if(remark.value.text!="")
-                                      {
-                                        remarks=remark.value.text;
-                                        print(remarks);
-                                        Navigator.pop(context);
-                                      }
-                                      else {
-                                        Fluttertoast.showToast(msg: "fill Task");
-                                      }
-                                    },
-                                    child: Container(
-                                      height: h * 0.04,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10.0),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(6.0),
-                                          ),
-                                          color: primaryColor),
-                                      child: Center(
-                                        child: Text(
-                                          "Apply",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ));
-            },
-            child: Container(
-              padding:
-              EdgeInsets.all(8.0),
-              decoration:
-              BoxDecoration(
-                color: primaryColor,
-                borderRadius:
-                const BorderRadius.all(
-                  Radius.circular(
-                      14.0),
-                ),
-              ),
-              child: Row(children: const [
-                Icon(
-                  Icons.comment,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  width: 5.0,
-                ),
-                Text(
-                  "Remark",
-                  style: TextStyle(
-                      color: Colors
-                          .white,
-                      fontWeight:
-                      FontWeight
-                          .bold),
-                )
-              ]),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title:  const Text('Are you sure?'),
-                  content:  const Text('Task Completed'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child:  const Text('No'),
-                    ),
-                    TextButton(
-                      onPressed: () => {
-                        print("hgj$remarks"),
-                        Navigator.of(context).pop(false),
-                        if(widget.img!="N/A")
-                          {
-                            if(remarks.trim()!="")
-                              {
-                                updatetask(widget.teskid),
-                                setState(() {
-                                })
-                              }
-                            else
-                              {
-                                Fluttertoast.showToast(msg: "Enter Remark")
-                              }
-                          }
-                        else
-                          {
-                            updatetask(widget.teskid),
-                            setState(() {
-                            })
-                          }
-
-
-
-                      },
-                      child:  const Text('Yes'),
-                    ),
-                  ],
-                ),
-              );
-            },
-            child: Container(
-              padding:
-              EdgeInsets.all(8.0),
-              decoration:
-              BoxDecoration(
-                color: primaryColor,
-                borderRadius:
-                const BorderRadius.all(
-                  Radius.circular(
-                      14.0),
-                ),
-              ),
-              child: Row(children: const [
-                Icon(
-                  Icons.check,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  width: 5.0,
-                ),
-                Text(
-                  "check",
-                  style: TextStyle(
-                      color: Colors
-                          .white,
-                      fontWeight:
-                      FontWeight
-                          .bold),
-                )
-              ]),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}

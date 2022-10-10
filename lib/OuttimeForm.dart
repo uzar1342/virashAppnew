@@ -298,7 +298,7 @@ async {
                 if (response.statusCode == 200) {
                   print(response.data);
                   if(response.data["success"]=="1")
-                  Get.offAll(()=>(VirashAppHomeScreen()));
+                    Navigator.pop(context);
                   else {
                     setState(() {
                       isLoading = true;

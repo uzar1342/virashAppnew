@@ -70,7 +70,7 @@ class _TaskimgState extends State<Taskimg> {
                     Expanded(
                       flex: 8,
                       child: Text(
-                        "Monthly Status",
+                        "Task Image",
                         style: TextStyle(
                             fontSize: 25.0,
                             fontWeight: FontWeight.bold,

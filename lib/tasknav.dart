@@ -1,6 +1,7 @@
 import 'package:Virash/training/training_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'taskAdd.dart';
 import 'approved_task.dart';
@@ -100,16 +101,63 @@ class _TaskNavState extends State<TaskNav>
             if (!snapshot.hasData) {
               return const SizedBox();
             } else {
-              return SingleChildScrollView(
-                child:Column(
+              return SafeArea(
+                child: Column(
                   children: [
                     Container(
-                      height: h*0.9,
-                        child: tabBody),
-                    Container(
-                        height: h*0.1,
-                        child: bottomBar()),
-                  ],) ,
+                        padding: const EdgeInsets.only(top: 0.0),
+                        height: h * 0.09,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                margin: const EdgeInsets.only(
+                                  // top: 10.0,
+                                  left: 15.0,
+                                ),
+                                //padding: const EdgeInsets.only(left: 5.0),
+                                height: h * 0.05,
+                                width: h * 0.05,
+                                decoration: BoxDecoration(
+                                  // color: primaryColor,
+                                    border: Border.all(color: Colors.black26, width: 1.0),
+                                    borderRadius:
+                                    const BorderRadius.all(Radius.circular(12.0))),
+                                child: const Icon(
+                                  Icons.arrow_back_ios_new,
+                                  color: Colors.black87,
+                                  size: 18.0,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                widget.name,
+                                style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: primaryColor),
+                              ),
+                            ),
+                          ],
+                        )),
+                    Expanded(
+                      flex: 20,
+                      child: Container(
+                          child: tabBody),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                          child: bottomBar()),
+                    ),
+                  ],),
               );
             }
           },

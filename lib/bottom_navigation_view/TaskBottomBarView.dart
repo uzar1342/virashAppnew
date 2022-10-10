@@ -57,7 +57,7 @@ class _TaskBottomBarViewState extends State<TaskBottomBarView>
             color: primaryColor,
           ),
           SizedBox(
-            height: 10.0,
+            height: 9.0,
           ),
           Text("Loading...")
         ],
@@ -80,7 +80,7 @@ class _TaskBottomBarViewState extends State<TaskBottomBarView>
               child: Column(
                 children: <Widget>[
                   SizedBox(
-                    height: 62,
+                    height: 50,
                     child: Padding(
                       padding:
                       const EdgeInsets.only(left: 8, right: 8, top: 4),
@@ -227,8 +227,8 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                     children: [
                       Image.asset(widget.tabIconData!.isSelected
                           ? widget.tabIconData!.selectedImagePath
-                          : widget.tabIconData!.imagePath),
-                      Text(widget.tabIconData!.lable)
+                          : widget.tabIconData!.imagePath,height: 25,),
+                      Text(widget.tabIconData!.lable,style: TextStyle(fontSize: 15),)
                     ],
                   ),
                 ),
