@@ -66,11 +66,9 @@ class _TaskNavState extends State<TaskNav>
     tabBody = Taskadd(empid: widget.id,);
     super.initState();
   }
-
   @override
   void dispose() {
     animationController?.dispose();
-    subscription.cancle;
     super.dispose();
   }
 

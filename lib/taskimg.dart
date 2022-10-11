@@ -83,6 +83,9 @@ class _TaskimgState extends State<Taskimg> {
               width: MediaQuery.of(context).size.width,
               height: employee_role=="Admin"||employee_role=="Super Admin"||employee_role=="Faculty & Admin"?MediaQuery.of(context).size.height*0.8:MediaQuery.of(context).size.height*0.87,
               child: PhotoView(
+                enableRotation: true,
+                initialScale: PhotoViewComputedScale.contained ,
+              basePosition: Alignment.center,
               imageProvider: NetworkImage(widget.img),
               scaleStateController: scaleStateController,
               ),

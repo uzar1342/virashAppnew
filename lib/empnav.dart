@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   SingleChildScrollView(
                     child: Container(
-                      height: h*0.8,
+                      height: h*0.72,
                       child: TabBarView(
                         children:  [
                         EmpTask(emoid: userId, status: 'Pending',),
