@@ -303,12 +303,30 @@ async {
                     setState(() {
                       isLoading = true;
                     });
-                                    Fluttertoast.showToast(
-                                        msg: response.data["message"]);
-                                  }
+                    final snackBar = SnackBar(
+                      content:  Text(response.data["message"]),
+                      backgroundColor: (primaryColor),
+                      action: SnackBarAction(
+                        label: 'dismiss',
+                        onPressed: () {
+                        },
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                  }
                                 } else {
                   print(response.statusCode);
-                  Fluttertoast.showToast(msg: "Please try again later");
+                  final snackBar = SnackBar(
+                    content: const Text('Please try again later'),
+                    backgroundColor: (primaryColor),
+                    action: SnackBarAction(
+                      label: 'dismiss',
+                      onPressed: () {
+                      },
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   setState(() {
                     isLoading = true;
                   });

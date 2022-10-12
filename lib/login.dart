@@ -180,13 +180,32 @@ class _HomePageState extends State<HomePage> {
                               }
                               else
                               {
-                                Fluttertoast.showToast(msg: "Fill credincel");
+                                final snackBar = SnackBar(
+                                  content: const Text('Fill credincel'),
+                                  backgroundColor: (primaryColor),
+                                  action: SnackBarAction(
+                                    label: 'dismiss',
+                                    onPressed: () {
+                                    },
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
                               }
 
                             }
                           else
                             {
-                              Fluttertoast.showToast(msg: "No Internet");
+
+                              final snackBar = SnackBar(
+                                content: const Text('No Internet'),
+                                backgroundColor: (primaryColor),
+                                action: SnackBarAction(
+                                  label: 'dismiss',
+                                  onPressed: () {
+                                  },
+                                ),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             }
 
                         } ,
@@ -277,7 +296,16 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           isLoading=false;
         });
-        Fluttertoast.showToast(msg: "Acess Dineid");
+        final snackBar = SnackBar(
+          content: const Text('Acess Dineid'),
+          backgroundColor: (primaryColor),
+          action: SnackBarAction(
+            label: 'dismiss',
+            onPressed: () {
+            },
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
 
     }
@@ -317,7 +345,17 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             isLoading=false;
           });
-          Fluttertoast.showToast(msg: "Login Fail");
+          final snackBar = SnackBar(
+            content: const Text('Login Fail'),
+            backgroundColor: (primaryColor),
+            action: SnackBarAction(
+              label: 'dismiss',
+              onPressed: () {
+              },
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
         }
 
 

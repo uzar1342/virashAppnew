@@ -9,4 +9,6 @@ String employee_name="";
 String mobile_number="";
 String employee_address="";
 
-
+var admins = ['Admin','Super Admin','Faculty & Admin'];
+var faculties = ['Faculty','Faculty & Admin','Developer & Faculty'];
+var employees = ['Developer','Developer & Faculty','Intern'];

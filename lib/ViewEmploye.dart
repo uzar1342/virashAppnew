@@ -3,7 +3,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'monthattendence.dart';
@@ -59,7 +58,6 @@ print(formData.fields);
       });
     } else {
       return response.data;
-      Fluttertoast.showToast(msg: "Unable to fetch bank list");
       setState(() {
         isLoading = false;
       });

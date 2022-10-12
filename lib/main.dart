@@ -145,7 +145,16 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         else
           {
-            Fluttertoast.showToast(msg: "Acess Dineid");
+            final snackBar = SnackBar(
+              content: const Text('Acess Dineid'),
+              backgroundColor: (primaryColor),
+              action: SnackBarAction(
+                label: 'dismiss',
+                onPressed: () {
+                },
+              ),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
 
       }

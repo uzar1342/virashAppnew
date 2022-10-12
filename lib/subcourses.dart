@@ -39,7 +39,16 @@ class _SubCoursesPageState extends State<SubCoursesPage> {
       print(response.data);
     } else {
       print(response.statusCode);
-      Fluttertoast.showToast(msg: "Please try again later");
+      final snackBar = SnackBar(
+        content: const Text('Please try again later'),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       setState(() {
         isLoading = false;
       });

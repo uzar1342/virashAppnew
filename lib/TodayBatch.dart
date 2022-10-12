@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'globals.dart';
 class TodayBatch extends StatefulWidget {
@@ -32,7 +31,16 @@ class _TodayBatchState extends State<TodayBatch> {
       print(studentCourseList);
     } else {
       print(response.statusCode);
-      Fluttertoast.showToast(msg: "Please try again later");
+      final snackBar = SnackBar(
+        content: const Text('Please try again later'),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       setState(() {
         isLoading = false;
       });

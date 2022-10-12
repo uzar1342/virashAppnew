@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -65,7 +64,17 @@ class _EmpTaskState extends State<EmpTask> {
       print(response.data);
       return response.data;
     } else {
-      Fluttertoast.showToast(msg: "Unable to fetch bank list");
+      final snackBar = SnackBar(
+        content: const Text('Unable to fetch employetask'),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       setState(() {
         isLoading = false;
       });
@@ -100,10 +109,29 @@ class _EmpTaskState extends State<EmpTask> {
     print(mapRes["success"]);
     print(response.statusCode);
     if (response.statusCode == 200) {
-      Fluttertoast.showToast(msg: mapRes["message"]);
+      final snackBar = SnackBar(
+        content:  Text(mapRes["message"]),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       remark.text= '';
     } else {
-      Fluttertoast.showToast(msg: mapRes["message"]);
+      final snackBar = SnackBar(
+        content:  Text(mapRes["message"]),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(mapRes["message"]);
       remark.text= '';
     }
@@ -125,11 +153,31 @@ class _EmpTaskState extends State<EmpTask> {
     );
     Map mapRes = json.decode(response.body);
     print(mapRes["success"]);
-    print(response.statusCode);
+    print(response);
     if (response.statusCode == 200) {
-      Fluttertoast.showToast(msg: mapRes["message"]);
+      setState(() {
+      });
+      final snackBar = SnackBar(
+        content:  Text(mapRes["message"]),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
-      Fluttertoast.showToast(msg: mapRes["message"]);
+      final snackBar = SnackBar(
+        content:  Text(mapRes["message"]),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(mapRes["message"]);
     }
   }
@@ -140,7 +188,7 @@ class _EmpTaskState extends State<EmpTask> {
     return Scaffold(
         resizeToAvoidBottomInset:false,
         body:Container(
-          height: employee_role=="Super Admin"||employee_role=="Admin"||employee_role=="Faculty & Admin"?h:h*0.75,
+          height: admins.contains(employee_role)?h:h*0.75,
           child: RefreshIndicator(
             key: _refreshIndicatorKey,
             color: Colors.white,
@@ -426,7 +474,7 @@ class _EmpTaskState extends State<EmpTask> {
                                                 alignment: AlignmentDirectional(0, 0),
                                                 child: Row(
                                                   children: [
-                                                    if (employee_role!="Super Admin"&&employee_role!="Admin"&&employee_role!="Faculry & Admin")
+                                                    if (!admins.contains(employee_role))
                                                       Expanded(
                                                          flex: 1,
                                                          child: GestureDetector(

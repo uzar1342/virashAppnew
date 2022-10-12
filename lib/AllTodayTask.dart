@@ -71,7 +71,6 @@ class _AllEmpTaskState extends State<AllEmpTask> {
     map['assigned_to'] = emoid;
     map['task_img'] = img!="N/A"?img:"";
     map['priority'] = prio;
-
     print(map);
     http.Response response = await http.post(
       url,
@@ -81,9 +80,29 @@ class _AllEmpTaskState extends State<AllEmpTask> {
     print(mapRes["success"]);
     print(response.statusCode);
     if (response.statusCode == 200) {
-      Fluttertoast.showToast(msg: mapRes["message"]);
+      setState(() {
+      });
+      final snackBar = SnackBar(
+        content:  Text(mapRes["message"]),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
-      Fluttertoast.showToast(msg: mapRes["message"]);
+      final snackBar = SnackBar(
+        content:  Text(mapRes["message"]),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(mapRes["message"]);
     }
   }

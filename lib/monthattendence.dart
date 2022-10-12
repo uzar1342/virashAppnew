@@ -8,7 +8,6 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'OuttimeForm.dart';
@@ -224,7 +223,16 @@ static Widget _holidayIcon = new Container(
       print(response.data);
     } else {
       print(response.statusCode);
-      Fluttertoast.showToast(msg: "Please try again later");
+      final snackBar = SnackBar(
+        content: const Text('Please try again later'),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       setState(() {
         monthloader = true;
       });
@@ -243,7 +251,16 @@ static Widget _holidayIcon = new Container(
       return response.data;
     } else {
       print(response.statusCode);
-      Fluttertoast.showToast(msg: "Please try again later");
+      final snackBar = SnackBar(
+        content: const Text('Please try again later'),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return response.data;
     }
   }
@@ -333,7 +350,7 @@ static Widget _holidayIcon = new Container(
         body: net?SafeArea(
           child: Column(
             children: [
-              employee_role=="Admin"||employee_role=="Super Admin"||employee_role=="Faculty & Admin"?
+              admins.contains(employee_role)?
               Container(
                   padding: const EdgeInsets.only(top: 0.0),
                   height: h * 0.09,
@@ -785,7 +802,7 @@ static Widget _holidayIcon = new Container(
                                                             ),
                                                             snapshot.data["data"][0]["out_time"]==null?SizedBox(width: 10,):Container(),
                                                             snapshot.data["data"][0]["out_time"]=="N/A"?  Container(
-                                                              child: employee_role=="Admin"||employee_role=="Super Admin"||employee_role=="Faculty & Admin"?
+                                                              child: admins.contains(employee_role)?
                                                               widget.id!=userId?Container(
                                                                 child: Padding(
                                                                   padding: const EdgeInsets.all(8.0),
@@ -1034,16 +1051,6 @@ static Widget _holidayIcon = new Container(
                                                       SizedBox(
                                                         width: w * 0.02,
                                                       ),
-                                                      Text(
-                                                        widget.name,
-                                                        style: const TextStyle(
-                                                            color: Colors
-                                                                .black54,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .bold,
-                                                            fontSize: 16.0),
-                                                      )
                                                     ],
                                                   ),
                                                   GestureDetector(
@@ -1054,7 +1061,7 @@ static Widget _holidayIcon = new Container(
                                                       const EdgeInsets
                                                           .all(5.0),
                                                       height: h * 0.04,
-                                                      decoration:  BoxDecoration(
+                                                      decoration:  const BoxDecoration(
                                                           color:  Colors.red,
                                                           borderRadius: BorderRadius
                                                               .all(Radius
@@ -1108,30 +1115,6 @@ static Widget _holidayIcon = new Container(
                                                 MainAxisAlignment
                                                     .spaceBetween,
                                                 children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment
-                                                        .center,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .start,
-                                                    children: [
-
-                                                      SizedBox(
-                                                        width: w * 0.02,
-                                                      ),
-                                                      Text(
-                                                        widget.name,
-                                                        style: const TextStyle(
-                                                            color: Colors
-                                                                .black54,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .bold,
-                                                            fontSize: 16.0),
-                                                      )
-                                                    ],
-                                                  ),
                                                   GestureDetector(
                                                     onTap: (){
                                                     },
@@ -1178,7 +1161,8 @@ static Widget _holidayIcon = new Container(
 
                                             ],
                                           ),
-                                        ):Card(
+                                        ):
+                                        Card(
                                           elevation: 3.0,
                                           shape: const RoundedRectangleBorder(
                                               borderRadius: BorderRadius.all(
@@ -1204,16 +1188,6 @@ static Widget _holidayIcon = new Container(
                                                       SizedBox(
                                                         width: w * 0.02,
                                                       ),
-                                                      Text(
-                                                        widget.name,
-                                                        style: const TextStyle(
-                                                            color: Colors
-                                                                .black54,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .bold,
-                                                            fontSize: 16.0),
-                                                      )
                                                     ],
                                                   ),
                                                   GestureDetector(
@@ -1289,16 +1263,6 @@ static Widget _holidayIcon = new Container(
                                                     SizedBox(
                                                       width: w * 0.02,
                                                     ),
-                                                    Text(
-                                                      widget.name,
-                                                      style: const TextStyle(
-                                                          color: Colors
-                                                              .black54,
-                                                          fontWeight:
-                                                          FontWeight
-                                                              .bold,
-                                                          fontSize: 16.0),
-                                                    )
                                                   ],
                                                 ),
                                                 GestureDetector(

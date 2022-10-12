@@ -389,86 +389,6 @@ return response.data;
                                             ),
                                           ),
                                         ),
-                                        // Padding(
-                                        //   padding: const EdgeInsets.only(right: 16),
-                                        //   child: Center(
-                                        //     child: Stack(
-                                        //       clipBehavior: Clip.none,
-                                        //       children: <Widget>[
-                                        //         Padding(
-                                        //           padding: const EdgeInsets.all(8.0),
-                                        //           child: Container(
-                                        //             width: 100,
-                                        //             height: 100,
-                                        //             decoration: BoxDecoration(
-                                        //               color: FitnessAppTheme.white,
-                                        //               borderRadius: BorderRadius.all(
-                                        //                 Radius.circular(100.0),
-                                        //               ),
-                                        //               border: new Border.all(
-                                        //                   width: 4,
-                                        //                   color: FitnessAppTheme
-                                        //                       .nearlyDarkBlue
-                                        //                       .withOpacity(0.2)),
-                                        //             ),
-                                        //             child: Column(
-                                        //               mainAxisAlignment:
-                                        //                   MainAxisAlignment.center,
-                                        //               crossAxisAlignment:
-                                        //                   CrossAxisAlignment.center,
-                                        //               children: <Widget>[
-                                        //                 Text(
-                                        //                   '${(1503 * animation!.value).toInt()}',
-                                        //                   textAlign: TextAlign.center,
-                                        //                   style: TextStyle(
-                                        //                     fontFamily:
-                                        //                         FitnessAppTheme.fontName,
-                                        //                     fontWeight: FontWeight.normal,
-                                        //                     fontSize: 24,
-                                        //                     letterSpacing: 0.0,
-                                        //                     color: FitnessAppTheme
-                                        //                         .nearlyDarkBlue,
-                                        //                   ),
-                                        //                 ),
-                                        //                 Text(
-                                        //                   'Kcal left',
-                                        //                   textAlign: TextAlign.center,
-                                        //                   style: TextStyle(
-                                        //                     fontFamily:
-                                        //                         FitnessAppTheme.fontName,
-                                        //                     fontWeight: FontWeight.bold,
-                                        //                     fontSize: 12,
-                                        //                     letterSpacing: 0.0,
-                                        //                     color: FitnessAppTheme.grey
-                                        //                         .withOpacity(0.5),
-                                        //                   ),
-                                        //                 ),
-                                        //               ],
-                                        //             ),
-                                        //           ),
-                                        //         ),
-                                        //         Padding(
-                                        //           padding: const EdgeInsets.all(4.0),
-                                        //           child: CustomPaint(
-                                        //             painter: CurvePainter(
-                                        //                 colors: [
-                                        //                   FitnessAppTheme.nearlyDarkBlue,
-                                        //                   HexColor("#8A98E8"),
-                                        //                   HexColor("#8A98E8")
-                                        //                 ],
-                                        //                 angle: 140 +
-                                        //                     (360 - 140) *
-                                        //                         (1.0 - animation!.value)),
-                                        //             child: SizedBox(
-                                        //               width: 108,
-                                        //               height: 108,
-                                        //             ),
-                                        //           ),
-                                        //         )
-                                        //       ],
-                                        //     ),
-                                        //   ),
-                                        // )
                                         AnalogClock(
                                           decoration: BoxDecoration(
                                               border: Border.all(width: 2.0, color: Colors.black),
@@ -499,7 +419,7 @@ return response.data;
                         ));
                       } else {
                         Color primaryColor = const Color(0xff1f7396);
-                        print("3"+snapshot.data.toString());
+                        print("3${snapshot.data}");
                         return   snapshot.data["success"].toString().trim()=="1"?
                         Container(
                             child: Container(
@@ -651,7 +571,7 @@ return response.data;
                                                             crossAxisAlignment:
                                                             CrossAxisAlignment.end,
                                                             children: <Widget>[
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                 width: 28,
                                                                 height: 28,
                                                                 child: Icon(Icons.access_time_filled_outlined
@@ -664,7 +584,7 @@ return response.data;
                                                                 child: Text(
                                                                   outtime,
                                                                   textAlign: TextAlign.center,
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                     fontFamily:
                                                                     VirashAppTheme
                                                                         .fontName,
@@ -801,13 +721,11 @@ return response.data;
                 },
           ),
         ),
-
-
-           employee_role=="Super Admin"||employee_role=="Admin"? Container(
+           admins.contains(employee_role)? Container(
               child: Padding(
                 padding: const EdgeInsets.only(left: 24, right: 24),
                 child: Row(
-                  children: <Widget>[
+                  children: const <Widget>[
                     Expanded(
                       child: Text(
                         "Task List",
@@ -825,7 +743,7 @@ return response.data;
                 ),
               ),
             ):Container(),
-            employee_role=="Super Admin"||employee_role=="Admin"||employee_role=="Faculty & Admin"?Container(
+            admins.contains(employee_role)?Container(
               height: 216,
               width: double.infinity,
               child: ListView.builder(
@@ -851,13 +769,13 @@ return response.data;
                         animation: animation,
                         animationController:  widget.animationController!,
                       ),
-                      employee_role!="Faculty"?MealsView(
+                    !faculties.contains(employee_role)?MealsView(
                         position: 1,
                         mealsListData: mealsListData[1],
                         animation: animation,
                         animationController:  widget.animationController!,
                       ):Container(),
-                      employee_role!="Developer"?MealsView(
+                      !employees.contains(employee_role)?MealsView(
                         position: 2,
                         mealsListData: mealsListData[2],
                         animation: animation,

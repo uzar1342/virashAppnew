@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io' as Io;
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'flutter_flow/flutter_flow_theme.dart';
 import 'globals.dart';
 
 final List<DropdownMenuItem<String>> item=[];
@@ -229,7 +231,6 @@ class _pickerImageState extends State<pickerImage> {
   async {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera,imageQuality: 15);
     final bytes = await Io.File(image!.path.toString()).readAsBytes();
-// or
     String img64 = base64Encode(bytes);
     print(img64);
     widget.cartItem.img=img64;
@@ -237,7 +238,6 @@ class _pickerImageState extends State<pickerImage> {
       selectimg=!selectimg;
     });
   }
-
  @override
   void initState() {
     widget.cartItem.img!=""?selectimg=false:selectimg=true;
@@ -264,7 +264,89 @@ class _pickerImageState extends State<pickerImage> {
           ),
         ),
       ],
-    ):Text("Image Selected");
+    ):
+    Container(
+      decoration: BoxDecoration(
+        color: Color(0xb1eee7e7),
+        borderRadius: BorderRadius.circular(50),
+        shape: BoxShape.rectangle,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 3,
+            child: Text(
+              'Setected',
+              textAlign: TextAlign.center,
+              style: FlutterFlowTheme.of(context).title1,
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                      var _byteImage = Base64Decoder().convert(widget.cartItem.img);
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(
+                              "View Image",
+                              style: TextStyle(
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            content: Container(
+                              child: SingleChildScrollView(
+                                child: Form(
+                                  child: Column(
+                                    children: [
+                                      Image.memory(_byteImage,height: 200,)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ));
+                    },
+                    child: Expanded(
+                      child: Icon(
+                        Icons.image,
+                        color: Colors.black,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                ), 
+                Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        widget.cartItem.img="";
+                        selectimg=true;
+                      });
+                    },
+                    child: const Expanded(
+                      child: Icon(
+                        Icons.cancel,
+                        color: Colors.black,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -323,26 +405,52 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
   Sendtask(task) async {
-        print(task);
-        setState(() {
-          loder=true;
-        });
-        Dio dio=Dio();
-        var response = await dio.post('http://training.virash.in/provide_task', data: task);
-        if (response.statusCode == 200) {
-          setState(() {
-            cart.clear();
-            loder=false;
-          });
-          print(response.data.length);
-          Fluttertoast.showToast(msg: "Sucessfull Send");
-        }
-        else {
-          setState(() {
-            loder=false;
-          });
-          Fluttertoast.showToast(msg: "Unable to send task");
-        }
+    log(task.toString());
+        // setState(() {
+        //   loder=true;
+        // });
+        // Dio dio=Dio();
+        // var response = await dio.post('http://training.virash.in/provide_task', data: task);
+        // if (response.statusCode == 200) {
+        //   setState(() {
+        //     cart.clear();
+        //     cart.add(CartItem(
+        //         productType: "",
+        //         itemName: "",
+        //         flavor: "",
+        //         img:""
+        //     ));
+        //     loder=false;
+        //   });
+        //   print(response.data.length);
+        //   final snackBar = SnackBar(
+        //     content: const Text('Sucessfull Send'),
+        //     backgroundColor: (primaryColor),
+        //     action: SnackBarAction(
+        //       label: 'dismiss',
+        //       onPressed: () {
+        //       },
+        //     ),
+        //   );
+        //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        //
+        // }
+        // else {
+        //   setState(() {
+        //     loder=false;
+        //   });
+        //   final snackBar = SnackBar(
+        //     content: const Text('Unable to send task'),
+        //     backgroundColor: (primaryColor),
+        //     action: SnackBarAction(
+        //       label: 'dismiss',
+        //       onPressed: () {
+        //       },
+        //     ),
+        //   );
+        //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        //
+        // }
   }
   ADDtaskpriorety() async {
     setState(() {
@@ -372,7 +480,16 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         loder=false;
       });
-      Fluttertoast.showToast(msg: "Unable to send task");
+      final snackBar = SnackBar(
+        content: const Text('Please try again later'),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
   @override
@@ -462,7 +579,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               }
 
                             });
-                            print(data);
+                            log(data.toString());
                             if(count==0)
                             {
                               if(data.length>0) {
@@ -490,12 +607,33 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ],
                                   ),
                                 );
-                              } else
-                                Fluttertoast.showToast(msg: "Add Task");
+                              } else {
+                                final snackBar = SnackBar(
+                                  content: const Text('Add Task'),
+                                  backgroundColor: (primaryColor),
+                                  action: SnackBarAction(
+                                    label: 'dismiss',
+                                    onPressed: () {
+                                    },
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              }
+
                             }
                             else
                             {
-                              Fluttertoast.showToast(msg: "Fill Task");
+                              final snackBar = SnackBar(
+                                content: const Text('Fill Task'),
+                                backgroundColor: (primaryColor),
+                                action: SnackBarAction(
+                                  label: 'dismiss',
+                                  onPressed: () {
+                                  },
+                                ),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
                             }
                           },icon: const Icon(Icons.send),
                         ),

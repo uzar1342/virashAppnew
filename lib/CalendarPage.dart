@@ -568,7 +568,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                       ),
                                                       snapshot.data["data"][position]["out_time"]==null?SizedBox(width: 10,):Container(),
                                                       snapshot.data["data"][position]["out_time"]==null?  Container(
-                                                        child: employee_role=="Admin"||employee_role=="Super Admin"||employee_role=="Faculty & Admin"?
+                                                        child: admins.contains(employee_role)?
                                                         widget.id!=snapshot.data["data"][position]["emp_id"].toString().trim()?Container(
                                                           child: InkWell(
                                                             onTap: () {

@@ -29,7 +29,16 @@ class _ModuleState extends State<Module> {
         print(response.data);
       return response.data;
     } else {
-      Fluttertoast.showToast(msg: "Please try again later");
+      final snackBar = SnackBar(
+        content: const Text('Please try again later'),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return response.data;
     }
   }

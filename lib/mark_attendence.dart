@@ -249,6 +249,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                                else
                                                  {
                                                  Navigator.of(context).pop(false),
+
                                                  Fluttertoast.showToast(msg: "No Internet")
                                                  }
                                              },
@@ -364,7 +365,17 @@ class TakePictureScreenState extends State<TakePictureScreen> {
         setState(() {
           loader=true;
         });
-        Fluttertoast.showToast(msg:value.toString(),toastLength: Toast.LENGTH_LONG);
+        final snackBar = SnackBar(
+          content:  Text(value.toString()),
+          backgroundColor: (primaryColor),
+          action: SnackBarAction(
+            label: 'dismiss',
+            onPressed: () {
+            },
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       }
     }
     );
@@ -486,13 +497,35 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                   setState(() {
                                     loader=true;
                                   });
-                                  Fluttertoast.showToast(msg:value.toString(),toastLength: Toast.LENGTH_LONG);
+                                  final snackBar = SnackBar(
+                                    content:  Text(value.toString()),
+                                    backgroundColor: (primaryColor),
+                                    action: SnackBarAction(
+                                      label: 'dismiss',
+                                      onPressed: () {
+                                      },
+                                    ),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
                                 }
                               }
                               );
                             }
-                          else
-                            Fluttertoast.showToast(msg: "fill Task");
+                          else {
+                            final snackBar = SnackBar(
+                              content:  Text("fill Task"),
+                              backgroundColor: (primaryColor),
+                              action: SnackBarAction(
+                                label: 'dismiss',
+                                onPressed: () {
+                                },
+                              ),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          }
+
+
 
                           },
                           child: Container(

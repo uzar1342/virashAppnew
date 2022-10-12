@@ -170,7 +170,7 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
           child: SizedBox(),
         ),
         BottomBarView(
-          tabIconsList: employee_role=="Admin"||employee_role=="Super Admin"||employee_role=="Faculty & Admin"?tabIconsList1:tabIconsList,
+          tabIconsList: admins.contains(employee_role)?tabIconsList1:tabIconsList,
           addClick: () {
             setState(() {
             widget.isLoading=!widget.isLoading;
@@ -207,7 +207,7 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
                 setState(() {
 
 
-                  employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"||employee_role=="Intern"?
+                  !admins.contains(employee_role)?
                   tabBody =  EmpTaskNav():
                   tabBody=viewemp(type: 'T',);
 
@@ -217,17 +217,17 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
                 });
               });
             }else if (index == 3 ) {
-              if( employee_role!="Super Admin"&& employee_role!="Admin"&&employee_role!="Faculty & Admin")
-              animationController?.reverse().then<dynamic>((data) {
+              if(!admins.contains(employee_role)) {
+                animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
                 }
-
                 setState(() {
-                  employee_role=="Developer & Faculty"||employee_role=="Developer"||employee_role=="Faculty"?tabBody = MonthCalendarPage(id: userId, name: employee_name,):
+                  !admins.contains(employee_role)?tabBody = MonthCalendarPage(id: userId, name: employee_name,):
                   tabBody=viewemp(type: 'A',);
                 });
               });
+              }
             }
           },
         ),
