@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'globals.dart';
-
 final List<DropdownMenuItem<String>> item=[];
 class Taskadd extends StatefulWidget {
    Taskadd({Key? key,required this.empid}) : super(key: key);
@@ -399,62 +399,61 @@ class _CartWidgetState extends State<CartWidget> {
 class _MyHomePageState extends State<MyHomePage> {
   List<CartItem> cart = [];
 
-  bool loder= false;
 
   void refresh() {
     setState(() {});
   }
   Sendtask(task) async {
     log(task.toString());
-        // setState(() {
-        //   loder=true;
-        // });
-        // Dio dio=Dio();
-        // var response = await dio.post('http://training.virash.in/provide_task', data: task);
-        // if (response.statusCode == 200) {
-        //   setState(() {
-        //     cart.clear();
-        //     cart.add(CartItem(
-        //         productType: "",
-        //         itemName: "",
-        //         flavor: "",
-        //         img:""
-        //     ));
-        //     loder=false;
-        //   });
-        //   print(response.data.length);
-        //   final snackBar = SnackBar(
-        //     content: const Text('Sucessfull Send'),
-        //     backgroundColor: (primaryColor),
-        //     action: SnackBarAction(
-        //       label: 'dismiss',
-        //       onPressed: () {
-        //       },
-        //     ),
-        //   );
-        //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        //
-        // }
-        // else {
-        //   setState(() {
-        //     loder=false;
-        //   });
-        //   final snackBar = SnackBar(
-        //     content: const Text('Unable to send task'),
-        //     backgroundColor: (primaryColor),
-        //     action: SnackBarAction(
-        //       label: 'dismiss',
-        //       onPressed: () {
-        //       },
-        //     ),
-        //   );
-        //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        //
-        // }
+        setState(() {
+          context.loaderOverlay.show();
+        });
+        Dio dio=Dio();
+        var response = await dio.post('http://training.virash.in/provide_task', data: task);
+        if (response.statusCode == 200) {
+          setState(() {
+            cart.clear();
+            cart.add(CartItem(
+                productType: "",
+                itemName: "",
+                flavor: "",
+                img:""
+            ));
+            context.loaderOverlay.hide();
+          });
+          print(response.data.length);
+          final snackBar = SnackBar(
+            content: const Text('Sucessfull Send'),
+            backgroundColor: (primaryColor),
+            action: SnackBarAction(
+              label: 'dismiss',
+              onPressed: () {
+              },
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        }
+        else {
+          setState(() {
+            context.loaderOverlay.hide();
+          });
+          final snackBar = SnackBar(
+            content: const Text('Unable to send task'),
+            backgroundColor: (primaryColor),
+            action: SnackBarAction(
+              label: 'dismiss',
+              onPressed: () {
+              },
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        }
   }
   ADDtaskpriorety() async {
     setState(() {
-      loder=true;
+      context.loaderOverlay.show();
     });
     Dio dio=Dio();
     var response = await dio.post('http://training.virash.in/showPriority');
@@ -472,13 +471,13 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       }
       setState(() {
-        loder=false;
+        context.loaderOverlay.hide();
       });
 
     }
     else {
       setState(() {
-        loder=false;
+        context.loaderOverlay.hide();
       });
       final snackBar = SnackBar(
         content: const Text('Please try again later'),
@@ -518,98 +517,113 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
     });
     return Scaffold(
-      body: !loder?SafeArea(
-        child: Column(
-          children: <Widget>[
-            Container(
-                padding: const EdgeInsets.only(top: 0.0),
-                height: h * 0.09,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 6,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          child: Text(
-                            widget.title,
-                            style: TextStyle(
-                                fontSize: 25.0,
-                                fontWeight: FontWeight.bold,
-                                color: primaryColor),
+      body: LoaderOverlay(
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Container(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  height: h * 0.09,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 6,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            child: Text(
+                              widget.title,
+                              style: TextStyle(
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: primaryColor),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        child: IconButton(
-                          onPressed: () {
-                            cart.add(CartItem(
-                                productType: "",
-                                itemName: "",
-                                flavor: "",
-                              img:""
-                            ));
-                            setState(() {
-                            });
-                          },
-                          icon: const Icon(Icons.add),
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: IconButton(
+                            onPressed: () {
+                              cart.add(CartItem(
+                                  productType: "",
+                                  itemName: "",
+                                  flavor: "",
+                                img:""
+                              ));
+                              setState(() {
+                              });
+                            },
+                            icon: const Icon(Icons.add),
+                          ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        child: IconButton(
-                          onPressed: () {
-                            var count=0;
-                            var data=[];
-                            cart.forEach((element) {
-                              if(element.flavor.trim()!="")
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: IconButton(
+                            onPressed: () {
+                              var count=0;
+                              var data=[];
+                              cart.forEach((element) {
+                                if(element.flavor.trim()!="")
+                                {
+                                  var item={"task":element.flavor,"priority":element.itemName,"task_img": element.img};
+                                  data.add(item);
+                                }
+                                else
+                                {
+                                  count++;
+                                }
+
+                              });
+                              log(data.toString());
+                              if(count==0)
                               {
-                                var item={"task":element.flavor,"priority":element.itemName,"task_img": element.img};
-                                data.add(item);
+                                if(data.length>0) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: new Text('Are you sure?'),
+                                      content: new Text('Do you want ADD Task'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () => Navigator.of(context).pop(false),
+                                          child: new Text('No'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () => {
+                                            Navigator.of(context).pop(false),
+                                            Sendtask({
+                                              "emp_id": userId,
+                                              "assigned_to": widget.empid,
+                                              "tasks": data
+                                            })
+                                          },
+                                          child: new Text('Yes'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                } else {
+                                  final snackBar = SnackBar(
+                                    content: const Text('Add Task'),
+                                    backgroundColor: (primaryColor),
+                                    action: SnackBarAction(
+                                      label: 'dismiss',
+                                      onPressed: () {
+                                      },
+                                    ),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                }
                               }
                               else
                               {
-                                count++;
-                              }
-
-                            });
-                            log(data.toString());
-                            if(count==0)
-                            {
-                              if(data.length>0) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: new Text('Are you sure?'),
-                                    content: new Text('Do you want ADD Task'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () => Navigator.of(context).pop(false),
-                                        child: new Text('No'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () => {
-                                          Navigator.of(context).pop(false),
-                                          Sendtask({
-                                            "emp_id": userId,
-                                            "assigned_to": widget.empid,
-                                            "tasks": data
-                                          })
-                                        },
-                                        child: new Text('Yes'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              } else {
                                 final snackBar = SnackBar(
-                                  content: const Text('Add Task'),
+                                  content: const Text('Fill Task'),
                                   backgroundColor: (primaryColor),
                                   action: SnackBarAction(
                                     label: 'dismiss',
@@ -618,44 +632,30 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 );
                                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
                               }
-
-                            }
-                            else
-                            {
-                              final snackBar = SnackBar(
-                                content: const Text('Fill Task'),
-                                backgroundColor: (primaryColor),
-                                action: SnackBarAction(
-                                  label: 'dismiss',
-                                  onPressed: () {
-                                  },
-                                ),
-                              );
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                            }
-                          },icon: const Icon(Icons.send),
+                            },icon: const Icon(Icons.send),
+                          ),
                         ),
-                      ),
-                    )
-                  ],
-                )),
-            Expanded(
-              child: ListView.builder(
-                  key: UniqueKey(),
-                  itemCount: cart.length,
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    return ListTile(
-                      title: CartWidget(
-                          cart: cart, index: index, callback: refresh),
-                    );
-                  }),
-            ),
+                      )
+                    ],
+                  )),
+              Expanded(
+                child: ListView.builder(
+                    key: UniqueKey(),
+                    itemCount: cart.length,
+                    itemBuilder: (BuildContext ctxt, int index) {
+                      return ListTile(
+                        title: CartWidget(
+                            cart: cart, index: index, callback: refresh),
+                      );
+                    }),
+              ),
 
-          ],
+            ],
+          ),
         ),
-      ):Center(child: CircularProgressIndicator(),),
+      )
     );
   }
 }

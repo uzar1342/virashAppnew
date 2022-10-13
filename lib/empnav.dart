@@ -34,7 +34,6 @@ bool isLoading=true;
   fetchemployetask() async {
 
     Dio dio=Dio();
-
     var formData = FormData.fromMap({
       "emp_id":userId
     });
@@ -65,6 +64,7 @@ bool isLoading=true;
 
     } else {
       final snackBar = SnackBar(
+        margin: EdgeInsets.only(bottom: 100.0),
         content: const Text('Unable to fetch bank list'),
         backgroundColor: (primaryColor),
         action: SnackBarAction(
@@ -131,8 +131,7 @@ int index=0;
                           tabs: [
                             Row(
                               children:  <Widget>[
-
-                                 Padding(
+                                 const Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text( 'Pending',),
                                 ),
@@ -197,7 +196,6 @@ int index=0;
                         child: Container(
                           height: h*0.72,
                           child: TabBarView(
-                            physics: NeverScrollableScrollPhysics(),
                             children:  [
                             EmpTask(emoid: userId, status: 'Pending',),
                               EmpTask(emoid: userId, status: 'Completed',),
