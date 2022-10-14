@@ -260,7 +260,7 @@ async {
                 height: _height * 0.1,
                 alignment: Alignment.center,
                 child: TextFormField(
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.text,
                   controller: _remark,
@@ -275,7 +275,6 @@ async {
                   isLoading = false;
                 });
                 Position position = await _getGeoLocationPosition();
-
                 var df =  DateFormat("h:mma");
                 String h=_timeController.value.text;
                 var da=h.split(" ");

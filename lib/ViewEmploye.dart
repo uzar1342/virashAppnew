@@ -1,3 +1,4 @@
+import 'package:Virash/taskimg.dart';
 import 'package:Virash/tasknav.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'flutter_flow/flutter_flow_theme.dart';
 import 'monthattendence.dart';
 import 'virash_app_home_screen.dart';
 import 'globals.dart';
@@ -154,7 +156,52 @@ print(formData.fields);
                                   ),
                                   elevation: 5,
                                   child: ListTile(
-                                    leading: Icon(Icons.person),
+                                    leading:
+                                    Padding(
+                                      padding:
+                                      const EdgeInsets
+                                          .all(8.0),
+                                      child: Container(
+                                          width: 50,
+                                          height: 50,
+                                          clipBehavior: Clip
+                                              .antiAlias,
+                                          decoration:
+                                          BoxDecoration(
+                                            shape: BoxShape
+                                                .circle,
+                                          ),
+                                          child: Image
+                                              .network(
+                                            snapshot.data[
+                                            "data"]
+                                            [
+                                            position]
+                                            [
+                                            "profile_img"],
+                                            loadingBuilder: (BuildContext
+                                            context,
+                                                Widget
+                                                child,
+                                                ImageChunkEvent?
+                                                loadingProgress) {
+                                              if (loadingProgress ==
+                                                  null) {
+                                                return child;
+                                              }
+                                              return Center(
+                                                child:
+                                                CircularProgressIndicator(
+                                                  value: loadingProgress.expectedTotalBytes !=
+                                                      null
+                                                      ? loadingProgress.cumulativeBytesLoaded /
+                                                      loadingProgress.expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              );
+                                            },
+                                          )),
+                                    ),
                                     title: Text(snapshot.data["data"][position]["emp_name"]),
                                     trailing: PopupMenuButton<int>(
                                       icon: Container(child:Icon(Icons.more_vert)),

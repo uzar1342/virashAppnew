@@ -54,7 +54,8 @@ class _TaskState extends State<Task> {
     return Container(
       child:TextFormField(
         initialValue: _value,
-        maxLines:2,
+        maxLines:8,
+        minLines: 5,
         onChanged: (value) {
           setState(() {
             _value = value.toString();
@@ -77,7 +78,7 @@ class _TaskState extends State<Task> {
             fillColor: Colors.white,
             border: const OutlineInputBorder(
               gapPadding: 9,
-              borderSide: BorderSide.none,
+              borderSide: BorderSide(),
               borderRadius: BorderRadius.all(
                   Radius.circular(12.0)),
             ),
@@ -210,9 +211,7 @@ class pickerImage extends StatefulWidget {
    pickerImage({Key? key,required this.cartItem}) : super(key: key);
   @override
   State<pickerImage> createState() => _pickerImageState();
-
 }
-
 class _pickerImageState extends State<pickerImage> {
   late bool selectimg;
   final ImagePicker _picker = ImagePicker();
@@ -272,7 +271,6 @@ class _pickerImageState extends State<pickerImage> {
         shape: BoxShape.rectangle,
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
@@ -315,30 +313,24 @@ class _pickerImageState extends State<pickerImage> {
                             ),
                           ));
                     },
-                    child: Expanded(
-                      child: Icon(
-                        Icons.image,
-                        color: Colors.black,
-                        size: 24,
-                      ),
+                    child: Icon(
+                      Icons.image,
+                      color: Colors.black,
+                      size: 24,
                     ),
                   ),
                 ), 
-                Expanded(
-                  child: GestureDetector(
-                    onTap: (){
-                      setState(() {
-                        widget.cartItem.img="";
-                        selectimg=true;
-                      });
-                    },
-                    child: const Expanded(
-                      child: Icon(
-                        Icons.cancel,
-                        color: Colors.black,
-                        size: 24,
-                      ),
-                    ),
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      widget.cartItem.img="";
+                      selectimg=true;
+                    });
+                  },
+                  child: const Icon(
+                    Icons.cancel,
+                    color: Colors.black,
+                    size: 24,
                   ),
                 ),
               ],

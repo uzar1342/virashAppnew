@@ -31,7 +31,6 @@ class _ApprovedTaskState extends State<ApprovedTask> {
   approvtask(taskid) async {
     print(userId);
     setState(() {
-      context.loaderOverlay.show();
     });
     var id=[];
     id.add(taskid);
@@ -47,20 +46,20 @@ class _ApprovedTaskState extends State<ApprovedTask> {
     var response = await dio.post('http://training.virash.in/acknowledgeTask', data: formData);
     if (response.statusCode == 200) {
       setState(() {
-        context.loaderOverlay.show();
+
       });
       return response.data;
     } else {
       setState(() {
-        context.loaderOverlay.show();
       });
       return response.data;
     }
   }
+
   rejtask(taskid, remark) async {
     print(userId);
     setState(() {
-      context.loaderOverlay.hide();
+
     });
     var id=[];
     id.add({"id":taskid,"remark":remark!=""?remark:""});
@@ -76,12 +75,12 @@ class _ApprovedTaskState extends State<ApprovedTask> {
     var response = await dio.post('http://training.virash.in/acknowledgeTask', data: formData);
     if (response.statusCode == 200) {
       setState(() {
-        context.loaderOverlay.show();
+
       });
       return response.data;
     } else {
       setState(() {
-        context.loaderOverlay.show();
+
       });
       return response.data;
     }
@@ -90,7 +89,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
 
   multichecktask(rejid, appid) async {
     setState(() {
-      context.loaderOverlay.show();
+
     });
     var id=rejid;
     print(id);
@@ -134,7 +133,6 @@ class _ApprovedTaskState extends State<ApprovedTask> {
 
 
       setState(() {
-        context.loaderOverlay.hide();
       });
 
     } else {
@@ -149,7 +147,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       setState(() {
-        context.loaderOverlay.show();
+
       });
     }
   }
@@ -180,7 +178,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
     else {
       Fluttertoast.showToast(msg: "Unable to fetch bank list");
       setState(() {
-        context.loaderOverlay.hide();
+
       });
       return response.data;
     }
