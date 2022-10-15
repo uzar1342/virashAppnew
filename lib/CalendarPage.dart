@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:Virash/viewimage.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:date_format/date_format.dart';
@@ -35,6 +37,7 @@ class _CalendarPageState extends State<CalendarPage> {
   late int year;
   late int day;
   late int month;
+  String address="";
   final DateFormat formatter = DateFormat('dd-MM-yyy');
   bool isLoading = true;
   var subscription;
@@ -79,14 +82,10 @@ class _CalendarPageState extends State<CalendarPage> {
     final formatted = formatter.format(day);
     return events[formatted] ?? [];
   }
-var address;
-  getLat()
+
+  getLat(Position position)
   async {
-    Position position = await _getGeoLocationPosition();
-    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemarks);
-    Placemark place = placemarks[0];
-    address= '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    log(address);
   }
   Future<Position> _getGeoLocationPosition() async {
     bool serviceEnabled;
@@ -840,22 +839,26 @@ var address;
                                                                                 setState(() {
                                                                                   context.loaderOverlay.show();
                                                                                 });
-                                                                                Position position = await _getGeoLocationPosition();
+                                                                                Position locationposition = await _getGeoLocationPosition();
+
+                                                                                List<Placemark> placemarks = await placemarkFromCoordinates(locationposition.latitude, locationposition.longitude);
+                                                                                Placemark place = placemarks[0];
+                                                                                address= '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+                                                                                print(address);
                                                                                 var df =  DateFormat("h:mma");
                                                                                 String? h=textController1?.value.text;
                                                                                 var da=h?.split(" ");
                                                                                 var dt = df.parse(da!.first+""+da!.last);
                                                                                 print(DateFormat('HH:mm').format(dt));
-
                                                                                 Dio dio=Dio();
                                                                                 var formData = FormData.fromMap({
-                                                                                  'emp_id':widget.id,
+                                                                                  'emp_id':snapshot.data["data"][position]["emp_id"].toString(),
                                                                                   "atte_date": "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",
                                                                                   "out_time":DateFormat('HH:mm').format(dt)+":00",
                                                                                   "admin_id":userId,
                                                                                   "remark":textController2?.value.text,
-                                                                                  "out_longitude":position.longitude,
-                                                                                  "out_latitude":position.latitude,
+                                                                                  "out_longitude":locationposition.longitude,
+                                                                                  "out_latitude":locationposition.latitude,
                                                                                   "out_location":address.toString()
                                                                                 });
                                                                                 print(formData.fields);
@@ -863,14 +866,11 @@ var address;
                                                                                 if (response.statusCode == 200) {
                                                                                   print(response.data);
                                                                                   if(response.data["success"]=="1") {
-                                                                                    setState(() {
+
                                                                                       context.loaderOverlay.hide();
-                                                                                    });
 
                                                                                   } else {
-                                                                                    setState(() {
                                                                                       context.loaderOverlay.hide();
-                                                                                    });
                                                                                     final snackBar = SnackBar(
                                                                                       content:  Text(response.data["message"]),
                                                                                       backgroundColor: (primaryColor),

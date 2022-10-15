@@ -1252,7 +1252,6 @@ var address;
                                                                                         var da=h?.split(" ");
                                                                                         var dt = df.parse(da!.first+""+da!.last);
                                                                                         print(DateFormat('HH:mm').format(dt));
-
                                                                                         Dio dio=Dio();
                                                                                         var formData = FormData.fromMap({
                                                                                           'emp_id':widget.id,
