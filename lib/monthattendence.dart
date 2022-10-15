@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:Virash/globals.dart';
+import 'package:Virash/taskimg.dart';
 import 'package:Virash/viewimage.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:date_format/date_format.dart';
@@ -1361,149 +1362,371 @@ var address;
                                                     shrinkWrap: true,
                                                     itemCount: snapshot.data["data"][0]["task"].length,
                                                     itemBuilder: (BuildContext context, int index){
-                                                      return Card(elevation: 4,child: Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding: const EdgeInsets.all(8.0),
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                              children: [
-                                                                Row(
-                                                                  children: [
-
-                                                                    SizedBox(
-                                                                      width: w * 0.02,
-                                                                    ),
-                                                                    Text(
-                                                                      "Priority : "+snapshot.data["data"][0]["task"][index]["priority"].toString(),
-                                                                      style: const TextStyle(
-                                                                          color: Colors
-                                                                              .black54,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                          fontSize: 17.0),
-                                                                    )
-                                                                  ],
+                                                      return
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(bottom: 4),
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                  color: Colors.blueGrey.withOpacity(0.1),
+                                                                  spreadRadius: 3,
+                                                                  blurRadius:2,
+                                                                  offset: Offset(0, 7), // changes position of shadow
                                                                 ),
-
                                                               ],
                                                             ),
-                                                          ),
-                                                          const Divider(),
-                                                          Padding(
-                                                            padding: const EdgeInsets.all(8.0),
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                              children: [
-                                                                Row(
-                                                                  crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                                  mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                                  children: [
-
-                                                                    SizedBox(
-                                                                      width: w * 0.02,
-                                                                    ),
-                                                                    Container(
-                                                                      width: w*0.8,
-                                                                      child: Text(
-                                                                        "TASK : "+snapshot.data["data"][0]["task"][index]["title"].toString(),
-                                                                        softWrap: true,maxLines:8,style: const TextStyle(
-                                                                        color: Colors
-                                                                            .black54,
-                                                                        fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                      ),
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-
-                                                              ],
-                                                            ),
-                                                          ),
-
-                                                          Padding(
-                                                            padding: const EdgeInsets.all(8.0),
-                                                            child: Container(
-                                                              width: w,
-                                                              color: snapshot.data["data"][0]["task"][index]["task_status"]=="Completed"?
-                                                              Color(0xFF91b7ed):snapshot.data["data"][0]["task"][index]["task_status"]=="Pending"?Color(0xFFedc791):
-                                                              snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected"?Color(0xFFed9c91):Color(0xff91edbf),
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.all(8.0),
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                                  children: [
-                                                                    Row(
-                                                                      crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                      mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .start,
+                                                            child: Card(
+                                                              elevation: 3,
+                                                              surfaceTintColor: Colors.red,
+                                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(
+                                                                bottomLeft: Radius.circular(10),
+                                                                bottomRight: Radius.circular(10),
+                                                                topLeft: Radius.circular(10),
+                                                                topRight: Radius.circular(10),
+                                                              )),
+                                                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                              child: Column(
+                                                                mainAxisSize: MainAxisSize.max,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: Row(
+                                                                      mainAxisSize: MainAxisSize.max,
                                                                       children: [
-
-                                                                        if(snapshot.data["data"][0]["task"][index]["task_status"]=="Completed")
-                                                                          Text(
-                                                                            "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
-                                                                            style: const TextStyle(
-                                                                                color: Color(0xff0e1163),
-                                                                                fontWeight:
-                                                                                FontWeight
-                                                                                    .bold,
-                                                                                fontSize: 17.0),
-                                                                          )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Pending")
-                                                                          Text(
-                                                                            "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
-                                                                            style: const TextStyle(
-                                                                                color: Color(
-                                                                                    0xff63400e),
-                                                                                fontWeight:
-                                                                                FontWeight
-                                                                                    .bold,
-                                                                                fontSize: 17.0),
-                                                                          )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected")
-                                                                            Text(
-                                                                              "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
-                                                                              style: const TextStyle(
-                                                                                  color: Color(0xff63190e),
-                                                                                  fontWeight:
-                                                                                  FontWeight
-                                                                                      .bold,
-                                                                                  fontSize: 17.0),
-                                                                            )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Approved")
-                                                                              Text(
-                                                                                "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
-                                                                                style: const TextStyle(
-                                                                                    color: Color(0xff0e6339),
-                                                                                    fontWeight:
-                                                                                    FontWeight
-                                                                                        .bold,
-                                                                                    fontSize: 17.0),
+                                                                        Expanded(
+                                                                          child: Column(
+                                                                            mainAxisSize: MainAxisSize.max,
+                                                                            children: [
+                                                                              Row(
+                                                                                mainAxisSize: MainAxisSize.max,
+                                                                                children: [
+                                                                                  Expanded(
+                                                                                    flex: 3,
+                                                                                    child: Padding(
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                                                                                      child:
+                                                                                      GestureDetector(
+                                                                                        onTap: (){
+                                                                                          showDialog(
+                                                                                              context: context,
+                                                                                              builder: (context) => AlertDialog(
+                                                                                                content:
+                                                                                                Row(
+                                                                                                  children: [
+                                                                                                    Icon(
+                                                                                                      Icons
+                                                                                                          .assignment,
+                                                                                                      color: Colors
+                                                                                                          .red.shade200,
+                                                                                                    ),
+                                                                                                    SizedBox(
+                                                                                                      width: w * 0.01,
+                                                                                                    ),
+                                                                                                    Container(
+                                                                                                      width: w*0.5,
+                                                                                                      child: Text(
+                                                                                                          snapshot.data["data"][0]["task"]!=null?snapshot.data["data"][0]["task"].toString():"",
+                                                                                                          maxLines: 8,
+                                                                                                          style: const TextStyle(
+                                                                                                              color: Colors
+                                                                                                                  .black54)),
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ));
+                                                                                        },
+                                                                                        child: RichText(
+                                                                                          maxLines: 1,
+                                                                                          overflow: TextOverflow.ellipsis,
+                                                                                          strutStyle: StrutStyle(fontSize: 17.0),
+                                                                                          text: TextSpan(
+                                                                                              style:  FlutterFlowTheme.of(context).bodyText1,
+                                                                                              text: snapshot.data["data"][0]["task"][index]["title"].toString()),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  snapshot.data["data"][0]["task_img"]!="N/A"?Expanded(
+                                                                                    flex: 1,
+                                                                                    child: GestureDetector(
+                                                                                      onTap: (){
+                                                                                        Navigator.push(context, MaterialPageRoute(builder: (c)=>Taskimg(img:  snapshot.data["data"][0]["task_img"],)));
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        width: 30,
+                                                                                        height: 30,
+                                                                                        decoration: const BoxDecoration(
+                                                                                          color: Color(0x00FFFFFF),
+                                                                                          shape: BoxShape.rectangle,
+                                                                                        ),
+                                                                                        child: const Icon(
+                                                                                          Icons.image_sharp,
+                                                                                          color: Colors.black,
+                                                                                          size: 24,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ):
+                                                                                  Expanded(
+                                                                                    flex: 1,
+                                                                                    child: Container(
+                                                                                      width: 30,
+                                                                                      height: 30,
+                                                                                      decoration: const BoxDecoration(
+                                                                                        color: Color(0x00FFFFFF),
+                                                                                        shape: BoxShape.rectangle,
+                                                                                      ),
+                                                                                      child: const Icon(
+                                                                                        Icons.image_not_supported_outlined,
+                                                                                        color: Color(0xFF898585),
+                                                                                        size: 24,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
                                                                               ),
-                                                                        SizedBox(width: 2,)
+                                                                              Row(
+                                                                                mainAxisSize: MainAxisSize.max,
+                                                                                children: [
+                                                                                  Expanded(
+                                                                                    flex: 3,
+                                                                                    child: Padding(
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                                                                                      child: Text(
+                                                                                        snapshot.data["data"][0]["task"][index]["assigned_date"].toString()+"@"+snapshot.data["data"][0]["assigned_time"].toString(),
+                                                                                        style: FlutterFlowTheme.of(context).bodyText2.override(
+                                                                                          fontFamily: 'Poppins',
+                                                                                          color: Color(0xFF888C91),
+                                                                                          fontWeight: FontWeight.normal,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    flex: 1,
+                                                                                    child: Padding(
+                                                                                      padding:
+                                                                                      EdgeInsetsDirectional.fromSTEB(10, 0, 10, 10),
+                                                                                      child: Container(
+                                                                                        width: 30,
+                                                                                        height: 30,
+                                                                                        decoration:  BoxDecoration(
+                                                                                          color: snapshot.data["data"][0]["task"][index]["priority"]=="High"?
+                                                                                          Colors
+                                                                                              .red:snapshot.data["data"][0]["task"][index]["priority"]=="Medium"?snapshot.data["data"][0]["task"][index]["priority"]=="N/A"?Colors
+                                                                                              .grey:Colors
+                                                                                              .blue:Colors
+                                                                                              .green,
+                                                                                          borderRadius: const BorderRadius.only(
+                                                                                            bottomLeft: Radius.circular(0),
+                                                                                            bottomRight: Radius.circular(10),
+                                                                                            topLeft: Radius.circular(10),
+                                                                                            topRight: Radius.circular(0),
+                                                                                          ),
+                                                                                        ),
+                                                                                        child: Align(
+                                                                                          alignment: AlignmentDirectional(0, 0),
+                                                                                          child: Text(
+                                                                                            snapshot.data["data"][0]["task"][index]["priority"],
+                                                                                            textAlign: TextAlign.center,
+                                                                                            style: FlutterFlowTheme.of(context)
+                                                                                                .subtitle1
+                                                                                                .override(
+                                                                                              fontFamily: 'Poppins',
+                                                                                              color: FlutterFlowTheme.of(context)
+                                                                                                  .primaryBtnText,
+                                                                                              fontSize: 12,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
                                                                       ],
                                                                     ),
-
-                                                                  ],
-                                                                ),
+                                                                  ),
+                                                                   Padding(
+                                                                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                                                                    child: Row(
+                                                                      mainAxisSize: MainAxisSize.max,
+                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                      children: [
+                                                                        Expanded(
+                                                                          child: Container(
+                                                                            decoration: BoxDecoration(
+                                                                              color: snapshot.data["data"][0]["task"][index]["task_status"]=="Completed"?
+                                                                              Color(0xFF91b7ed):snapshot.data["data"][0]["task"][index]["task_status"]=="Pending"?Color(0xFFedc791):
+                                                                              snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected"?Color(0xFFed9c91):Color(0xff91edbf),
+                                                                            ),
+                                                                            alignment: AlignmentDirectional(0, 0),
+                                                                            child: Padding(
+                                                                              padding: const EdgeInsets.all(5.0),
+                                                                              child: Text(
+                                                                                snapshot.data["data"][0]["task"][index]["task_status"].toString(),
+                                                                                textAlign: TextAlign.center,
+                                                                                style: FlutterFlowTheme.of(context).bodyText1,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  )
+                                                                ],
                                                               ),
                                                             ),
                                                           ),
-                                                        ],
-                                                      ));
+                                                        );
+                                                      //   Card(
+                                                      //     elevation: 4,child: Column(
+                                                      //   children: [
+                                                      //     Padding(
+                                                      //       padding: const EdgeInsets.all(8.0),
+                                                      //       child: Row(
+                                                      //         mainAxisAlignment:
+                                                      //         MainAxisAlignment
+                                                      //             .spaceBetween,
+                                                      //         children: [
+                                                      //           Row(
+                                                      //             children: [
+                                                      //
+                                                      //               SizedBox(
+                                                      //                 width: w * 0.02,
+                                                      //               ),
+                                                      //               Text(
+                                                      //                 "Priority : "+snapshot.data["data"][0]["task"][0]["priority"].toString(),
+                                                      //                 style: const TextStyle(
+                                                      //                     color: Colors
+                                                      //                         .black54,
+                                                      //                     fontWeight:
+                                                      //                     FontWeight
+                                                      //                         .bold,
+                                                      //                     fontSize: 17.0),
+                                                      //               )
+                                                      //             ],
+                                                      //           ),
+                                                      //
+                                                      //         ],
+                                                      //       ),
+                                                      //     ),
+                                                      //     const Divider(),
+                                                      //     Padding(
+                                                      //       padding: const EdgeInsets.all(8.0),
+                                                      //       child: Row(
+                                                      //         mainAxisAlignment:
+                                                      //         MainAxisAlignment
+                                                      //             .spaceBetween,
+                                                      //         children: [
+                                                      //           Row(
+                                                      //             crossAxisAlignment:
+                                                      //             CrossAxisAlignment
+                                                      //                 .center,
+                                                      //             mainAxisAlignment:
+                                                      //             MainAxisAlignment
+                                                      //                 .start,
+                                                      //             children: [
+                                                      //
+                                                      //               SizedBox(
+                                                      //                 width: w * 0.02,
+                                                      //               ),
+                                                      //               Container(
+                                                      //                 width: w*0.8,
+                                                      //                 child: Text(
+                                                      //                   "TASK : "+snapshot.data["data"][0]["task"][0]["title"].toString(),
+                                                      //                   softWrap: true,maxLines:8,style: const TextStyle(
+                                                      //                   color: Colors
+                                                      //                       .black54,
+                                                      //                   fontWeight:
+                                                      //                   FontWeight
+                                                      //                       .bold,
+                                                      //                 ),
+                                                      //                 ),
+                                                      //               )
+                                                      //             ],
+                                                      //           ),
+                                                      //
+                                                      //         ],
+                                                      //       ),
+                                                      //     ),
+                                                      //
+                                                      //     Padding(
+                                                      //       padding: const EdgeInsets.all(8.0),
+                                                      //       child: Container(
+                                                      //         width: w,
+                                                      //         color: snapshot.data["data"][0]["task"][0]["task_status"]=="Completed"?
+                                                      //         Color(0xFF91b7ed):snapshot.data["data"][0]["task"][0]["task_status"]=="Pending"?Color(0xFFedc791):
+                                                      //         snapshot.data["data"][0]["task"][0]["task_status"]=="Rejected"?Color(0xFFed9c91):Color(0xff91edbf),
+                                                      //         child: Padding(
+                                                      //           padding: const EdgeInsets.all(8.0),
+                                                      //           child: Row(
+                                                      //             mainAxisAlignment:
+                                                      //             MainAxisAlignment
+                                                      //                 .spaceBetween,
+                                                      //             children: [
+                                                      //               Row(
+                                                      //                 crossAxisAlignment:
+                                                      //                 CrossAxisAlignment
+                                                      //                     .center,
+                                                      //                 mainAxisAlignment:
+                                                      //                 MainAxisAlignment
+                                                      //                     .start,
+                                                      //                 children: [
+                                                      //
+                                                      //                   if(snapshot.data["data"][0]["task"][0]["task_status"]=="Completed")
+                                                      //                     Text(
+                                                      //                       "Status : "+snapshot.data["data"][0]["task"][0]["task_status"].toString(),
+                                                      //                       style: const TextStyle(
+                                                      //                           color: Color(0xff0e1163),
+                                                      //                           fontWeight:
+                                                      //                           FontWeight
+                                                      //                               .bold,
+                                                      //                           fontSize: 17.0),
+                                                      //                     )else if(snapshot.data["data"][0]["task"][0]["task_status"]=="Pending")
+                                                      //                     Text(
+                                                      //                       "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
+                                                      //                       style: const TextStyle(
+                                                      //                           color: Color(
+                                                      //                               0xff63400e),
+                                                      //                           fontWeight:
+                                                      //                           FontWeight
+                                                      //                               .bold,
+                                                      //                           fontSize: 17.0),
+                                                      //                     )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected")
+                                                      //                       Text(
+                                                      //                         "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
+                                                      //                         style: const TextStyle(
+                                                      //                             color: Color(0xff63190e),
+                                                      //                             fontWeight:
+                                                      //                             FontWeight
+                                                      //                                 .bold,
+                                                      //                             fontSize: 17.0),
+                                                      //                       )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Approved")
+                                                      //                         Text(
+                                                      //                           "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
+                                                      //                           style: const TextStyle(
+                                                      //                               color: Color(0xff0e6339),
+                                                      //                               fontWeight:
+                                                      //                               FontWeight
+                                                      //                                   .bold,
+                                                      //                               fontSize: 17.0),
+                                                      //                         ),
+                                                      //                   SizedBox(width: 2,)
+                                                      //                 ],
+                                                      //               ),
+                                                      //
+                                                      //             ],
+                                                      //           ),
+                                                      //         ),
+                                                      //       ),
+                                                      //     ),
+                                                      //   ],
+                                                      // ));
 
                                                     }):Image.asset("assets/no_data.png"),
                                               ): Image.asset("assets/no_data.png"),

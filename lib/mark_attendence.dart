@@ -226,7 +226,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                    context: context,
                                    builder: (context) => AlertDialog(
                                      title:  const Text('Are you sure?'),
-                                     content:  const Text('Do you want Logout'),
+                                     content:  const Text('You want to mark your out-time'),
                                      actions: <Widget>[
                                        TextButton(
                                          onPressed: () =>
@@ -268,7 +268,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                    context: context,
                                    builder: (context) => AlertDialog(
                                      title: const Text('Are you sure?'),
-                                     content: const Text('Do you want Login'),
+                                     content: const Text("You want to mark your in-time"),
                                      actions: <Widget>[
                                        TextButton(
                                          onPressed: () =>

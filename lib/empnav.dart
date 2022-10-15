@@ -31,8 +31,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 int rej=0,comp=0,pend=0;
 bool isLoading=true;
-  fetchemployetask() async {
 
+refress()
+{
+  rej=0;comp=0;pend=0;
+  fetchemployetask();
+}
+
+  fetchemployetask() async {
     Dio dio=Dio();
     var formData = FormData.fromMap({
       "emp_id":userId
@@ -51,7 +57,6 @@ bool isLoading=true;
           if (response.data["data"][i]["status"] == "Rejected") {rej++;}
           if (response.data["data"][i]["status"] == "Completed") {comp++;}
           if (response.data["data"][i]["status"] == "Pending") {pend++;}
-
         }
       }
       setState(() {
@@ -197,9 +202,9 @@ int index=0;
                           height: h*0.72,
                           child: TabBarView(
                             children:  [
-                            EmpTask(emoid: userId, status: 'Pending',),
-                              EmpTask(emoid: userId, status: 'Completed',),
-                              EmpTask(emoid: userId, status: 'Rejected',),
+                            EmpTask(emoid: userId, status: 'Pending', fun: ()=>{refress()},),
+                              EmpTask(emoid: userId, status: 'Completed', fun: ()=>refress(),),
+                              EmpTask(emoid: userId, status: 'Rejected', fun: ()=> refress(),),
                             ],
                           ),
                         ),

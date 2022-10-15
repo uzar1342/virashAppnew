@@ -91,7 +91,7 @@ print(formData.fields);
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "View Employee",
+                      "Employee List",
                       style: TextStyle(
                           fontSize: 25.0,
                           fontWeight: FontWeight.bold,

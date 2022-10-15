@@ -164,6 +164,7 @@ class _CalendarPageState extends State<CalendarPage> {
     subscription.cancel();
     super.dispose();
   }
+  bool showSearch = true;
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   Future<Null> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -179,6 +180,9 @@ class _CalendarPageState extends State<CalendarPage> {
       });
     }
   }
+  final TextEditingController _searchController = TextEditingController();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  GlobalKey<RefreshIndicatorState>();
   @override
   Widget build(BuildContext context) {
     Color primaryColor = const Color(0xff1f7396);
@@ -188,783 +192,807 @@ class _CalendarPageState extends State<CalendarPage> {
       body: net?SafeArea(
           child: Column(
             children: [
-              Container(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  height: h * 0.09,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                            // top: 10.0,
-                            left: 15.0,
-                          ),
-                          //padding: const EdgeInsets.only(left: 5.0),
-                          height: h * 0.05,
-                          width: h * 0.05,
-                          decoration: BoxDecoration(
-                            // color: primaryColor,
-                              border: Border.all(color: Colors.black26, width: 1.0),
-                              borderRadius:
-                              const BorderRadius.all(Radius.circular(12.0))),
-                          child: const Icon(
-                            Icons.arrow_back_ios_new,
-                            color: Colors.black87,
-                            size: 18.0,
-                          ),
+            Expanded(
+            flex: 1,
+            child: showSearch?Container(
+                padding: const EdgeInsets.only(top: 0.0),
+                height: h * 0.09,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          // top: 10.0,
+                          left: 15.0,
+                        ),
+                        //padding: const EdgeInsets.only(left: 5.0),
+                        height: h * 0.05,
+                        width: h * 0.05,
+                        decoration: BoxDecoration(
+                          // color: primaryColor,
+                            border: Border.all(color: Colors.black26, width: 1.0),
+                            borderRadius:
+                            const BorderRadius.all(Radius.circular(12.0))),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.black87,
+                          size: 18.0,
                         ),
                       ),
-                      Text(
-                        "Time table",
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Today's Attendence",
                         style: TextStyle(
                             fontSize: 25.0,
                             fontWeight: FontWeight.bold,
                             color: primaryColor),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const AttendancePage()));
-                        },
-                        icon: const FaIcon(
-                          FontAwesomeIcons.chartArea,
-                          color: Colors.white,
-                          size: 25,
-                        ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  showSearch = !showSearch;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.search,
+                                color: primaryColor,
+                              )),
+                        ],
                       ),
-                    ],
-                  )),
+                    )
+                  ],
+                )):Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: w * 0.7,
+                  child: Card(
+                    //margin: EdgeInsets.only(left: 30, right: 30, top: 30),
+                    elevation: 4,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(12))),
+                    child: TextFormField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {});
+                      },
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.orange.shade200,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: const Icon(
+                              Icons.close,
+                              color: Colors.black38,
+                              size: 20.0,
+                            ),
+                            onPressed: () {
+                              setState(() {
+
+                                _searchController.clear();
+                              });
+                            },
+                          ),
+                          hintText: "Search",
+                          hintStyle: const TextStyle(
+                              color: Colors.black26),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(18.0)),
+                          ),
+                          contentPadding:
+                          const EdgeInsets.symmetric(
+                              horizontal: 20.0,
+                              vertical: 16.0)),
+                    ),
+                  ),
+                ),
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        showSearch = !showSearch;
+                      });
+                    },
+                    child: Text("Close",
+                        style: TextStyle(
+                          color: Colors.black54,
+                          decoration: TextDecoration.underline,
+                        ))),
+              ],
+            ),
+          ),
               //SizedBox(height: h * 0.02),
               Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      // TableCalendar(
-                      //   focusedDay: focusedDay,
-                      //   firstDay: DateTime.utc(2018),
-                      //   lastDay: DateTime.now(),
-                      //   rowHeight: 60,
-                      //   eventLoader: _getEventsForDay,
-                      //   startingDayOfWeek: StartingDayOfWeek.monday,
-                      //   calendarStyle: CalendarStyle(
-                      //     isTodayHighlighted: true,
-                      //     todayDecoration: BoxDecoration(
-                      //         color: Colors.orange.shade200,
-                      //         shape: BoxShape.rectangle,
-                      //         borderRadius: BorderRadius.circular(10)),
-                      //     selectedDecoration: BoxDecoration(
-                      //         color: primaryColor,
-                      //         shape: BoxShape.rectangle,
-                      //         borderRadius: BorderRadius.circular(10)),
-                      //     defaultDecoration: BoxDecoration(
-                      //         color: Colors.white,
-                      //         shape: BoxShape.rectangle,
-                      //         borderRadius: BorderRadius.circular(10)),
-                      //     weekendDecoration: BoxDecoration(
-                      //         shape: BoxShape.rectangle,
-                      //         color: Color(0xffd9d9d9),
-                      //         borderRadius: BorderRadius.circular(10)),
-                      //     disabledDecoration: BoxDecoration(
-                      //         shape: BoxShape.rectangle,
-                      //         color: Color(0xffd8d8db),
-                      //         borderRadius: BorderRadius.circular(10)),
-                      //     holidayDecoration: BoxDecoration(
-                      //         shape: BoxShape.rectangle,
-                      //         color: Colors.green,
-                      //         borderRadius: BorderRadius.circular(10)),
-                      //     outsideDecoration: BoxDecoration(
-                      //         shape: BoxShape.rectangle,
-                      //         color: Colors.grey.shade200,
-                      //         borderRadius: BorderRadius.circular(10)),
-                      //     markersAnchor: 1.2,
-                      //     markersMaxCount: 5,
-                      //   ),
-                      //   calendarBuilders: CalendarBuilders(
-                      //       singleMarkerBuilder: (context, date, event) {
-                      //         return Container(
-                      //           width: 4,
-                      //           height: 4,
-                      //           margin: const EdgeInsets.symmetric(horizontal: 0.5),
-                      //           decoration: const BoxDecoration(
-                      //             color: Colors.amber,
-                      //             shape: BoxShape.circle,
-                      //           ),
-                      //         );
-                      //       }),
-                      //   //Day Change and focus change
-                      //   selectedDayPredicate: (day) {
-                      //     return isSameDay(selectedDay, day);
-                      //   },
-                      //   onDaySelected: (DateTime selectday, DateTime focusDay) {
-                      //     print(selectday.day);
-                      //     setState(() {
-                      //       day=selectday.day;
-                      //       month=selectday.month;
-                      //       year=selectday.year;
-                      //       selectedDay = selectday;
-                      //       focusedDay = focusDay;
-                      //     });
-                      //     _selectedEvents.value = _getEventsForDay(selectday);
-                      //   },
-                      //   daysOfWeekVisible: true,
-                      //   headerStyle: HeaderStyle(
-                      //       formatButtonDecoration: BoxDecoration(
-                      //           border: Border.all(color: primaryColor, width: 1),
-                      //           borderRadius: BorderRadius.circular(15)),
-                      //       formatButtonTextStyle: TextStyle(
-                      //           color: primaryColor,
-                      //           fontSize: 12,
-                      //           fontWeight: FontWeight.w400),
-                      //       titleCentered: true,
-                      //       titleTextStyle: TextStyle(
-                      //           color: primaryColor,
-                      //           fontWeight: FontWeight.w700,
-                      //           fontSize: 18),
-                      //       leftChevronIcon: Container(
-                      //           padding: const EdgeInsets.all(4),
-                      //           decoration: BoxDecoration(
-                      //             color: Colors.grey.shade300,
-                      //             borderRadius:
-                      //             const BorderRadius.all(Radius.circular(8)),
-                      //           ),
-                      //           child: const Icon(
-                      //             Icons.chevron_left_outlined,
-                      //             color: Colors.grey,
-                      //             size: 26,
-                      //           )),
-                      //       rightChevronIcon: Container(
-                      //           padding: const EdgeInsets.all(4),
-                      //           decoration: BoxDecoration(
-                      //             color: Colors.grey.shade300,
-                      //             borderRadius:
-                      //             const BorderRadius.all(Radius.circular(8)),
-                      //           ),
-                      //           child: const Icon(Icons.chevron_right_outlined,
-                      //               color: Colors.grey, size: 26)),
-                      //       formatButtonVisible: true),
-                      //   onPageChanged: (focusedDay) {
-                      //     focusedDay = focusedDay;
-                      //   },
-                      //   //Format of Calendar week month 2weeks
-                      //   calendarFormat: CalendarFormat.week,
-                      // ),
-
-                    Expanded(
-                        child: LoaderOverlay(
-                          child: FutureBuilder<dynamic>(
-                            future: viewattendence(), // async work
-                             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                             switch (snapshot.connectionState) {
-                              case ConnectionState.waiting: return Center(child: Text('Loading....'));
-                              default:
-                              if (snapshot.hasError) {
-                                return SafeArea(
-                                  child: Container(
-                                    width: double.infinity,
-                                    color: Colors
-                                        .white,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          "asset/somthing_went_wrong.png",
-                                          height: 300,
-                                          width: 300,
+                flex: 8,
+                child: RefreshIndicator(
+                  key: _refreshIndicatorKey,
+                  color: Colors.white,
+                  backgroundColor: Colors.blue,
+                  strokeWidth: 4.0,
+                  onRefresh: () async {
+                    _refreshIndicatorKey.currentState?.show(); setState(() {
+                    });
+                    return Future<void>.delayed(const Duration(seconds: 3));
+                  },
+                  child: FutureBuilder<dynamic>(
+                    future: viewattendence(), // async work
+                    builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
+                        default:
+                          if (snapshot.hasError) {
+                            return SafeArea(
+                                child: Container(
+                                  width: double.infinity,
+                                  color: Colors
+                                      .white,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        "asset/somthing_went_wrong.png",
+                                        height: 300,
+                                        width: 300,
+                                      ),
+                                      const SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                        child: const Text(
+                                          "somthing went wrong",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold),
                                         ),
-                                        const SizedBox(
-                                          height: 10.0,
+                                      )
+                                    ],
+                                  ),
+                                ));
+                          } else {
+                            print("object");
+                            var w=MediaQuery.of(context).size.width;
+                            var h=MediaQuery.of(context).size.height;
+                            Color primaryColor = const Color(0xff1f7396);
+                            return
+                              snapshot.data["data"]!=null?Container(
+                                child: snapshot.data["data"].length>0?ListView.builder(
+                                  itemCount: snapshot.data["data"].length,
+                                  itemBuilder: (context, position) {
+                                    if (snapshot.data["data"][position]['emp_name']
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(
+                                        _searchController.text.toLowerCase())||snapshot.data["data"][position]['Presentee']
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(
+                                        _searchController.text.toLowerCase())) {
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.blueGrey
+                                                  .withOpacity(0.1),
+                                              spreadRadius: 3,
+                                              blurRadius: 2,
+                                              offset: Offset(0,
+                                                  7), // changes position of shadow
+                                            ),
+                                          ],
                                         ),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 14.0),
-                                          child: const Text(
-                                            "somthing went wrong",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ));
-                              } else {
-                                Color primaryColor = const Color(0xff1f7396);
-                                return   snapshot.data["success"].toString().trim()=="1"?ListView.builder(
-                                itemCount: snapshot.data["data"].length,
-                                itemBuilder: (context, position) {
-                                  return InkWell(
-                                    onTap:()=>{
-                                      },
-                                    child: Container(
-                                      child: ValueListenableBuilder<List<dynamic>>(
-                                        valueListenable: _selectedEvents,
-                                        builder: (context, value, _) {
-                                          return
-                                            Container(
-                                              width: w,
-                                              margin: const EdgeInsets.all(5.0),
-                                              child: Card(
-                                                elevation: 3.0,
-                                                shape: const RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.all(
-                                                        Radius.circular(14.0))),
-                                                child:            Column(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
+                                        child: Padding(
+                                          padding:
+                                          const EdgeInsets.all(4.0),
+                                          child: Card(
+                                            elevation: 3,
+                                            surfaceTintColor: Colors.red,
+                                            shape:
+                                            const RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.only(
+                                                  bottomLeft:
+                                                  Radius.circular(10),
+                                                  bottomRight:
+                                                  Radius.circular(10),
+                                                  topLeft:
+                                                  Radius.circular(10),
+                                                  topRight:
+                                                  Radius.circular(10),
+                                                )),
+                                            clipBehavior: Clip
+                                                .antiAliasWithSaveLayer,
+                                            child: Column(
+                                              mainAxisSize:
+                                              MainAxisSize.max,
+                                              children: [
+                                                Row(
+                                                  mainAxisSize:
+                                                  MainAxisSize.max,
                                                   children: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        Row(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                          children: [
-
-                                                            SizedBox(
-                                                              width: w * 0.02,
-                                                            ),
-                                                            Text(
-                                                              snapshot.data["data"][position]["emp_name"].toString(),
-                                                              style: const TextStyle(
-                                                                  color: Colors
-                                                                      .black54,
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                                  fontSize: 16.0),
-                                                            )
-                                                          ],
-                                                        ),
-                                                        GestureDetector(
-                                                          onTap: (){
-                                                            if(snapshot.data["data"][position]["in_latitude"]!="N/A"||snapshot.data["data"][position]["in_longitude"]!="N/A") {
-                                                              Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                                                Googlem(
-
-                                                                     lan: double.parse(snapshot.data["data"][position]["in_latitude"]), lug: double.parse(snapshot.data["data"][position]["in_longitude"]))));
-                                                            } else {
-                                                              Fluttertoast.showToast(msg: "No Location found");
-                                                            }
-
+                                                    Padding(
+                                                      padding:
+                                                      const EdgeInsets
+                                                          .all(8.0),
+                                                      child: Container(
+                                                          width: 50,
+                                                          height: 50,
+                                                          clipBehavior: Clip
+                                                              .antiAlias,
+                                                          decoration:
+                                                          BoxDecoration(
+                                                            shape: BoxShape
+                                                                .circle,
+                                                          ),
+                                                          child: Image
+                                                              .network(
+                                                            snapshot.data[
+                                                            "data"]
+                                                            [
+                                                            position]
+                                                            [
+                                                            "profile_img"].toString(),
+                                                            loadingBuilder: (BuildContext
+                                                            context,
+                                                                Widget
+                                                                child,
+                                                                ImageChunkEvent?
+                                                                loadingProgress) {
+                                                              if (loadingProgress ==
+                                                                  null) {
+                                                                return child;
+                                                              }
+                                                              return Center(
+                                                                child:
+                                                                CircularProgressIndicator(
+                                                                  value: loadingProgress.expectedTotalBytes !=
+                                                                      null
+                                                                      ? loadingProgress.cumulativeBytesLoaded /
+                                                                      loadingProgress.expectedTotalBytes!
+                                                                      : null,
+                                                                ),
+                                                              );
                                                             },
-                                                          child: Container(
-                                                            padding:
-                                                            const EdgeInsets
-                                                                .all(5.0),
-                                                            height: h * 0.04,
-                                                            decoration:  BoxDecoration(
-                                                                color:  snapshot.data["data"][position]["Presentee"]=="Absent"?Colors
-                                                                    .red:Colors
-                                                                    .green,
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                    .circular(
-                                                                    20.0))),
-                                                            child: Row(
-                                                              children: [
-                                                                const FaIcon(
-                                                                  FontAwesomeIcons
-                                                                      .globe,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  size: 20.0,
+                                                          )),
+                                                    ),
+                                                    Expanded(
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                        MainAxisSize
+                                                            .max,
+                                                        children: [
+                                                          Row(
+                                                            mainAxisSize:
+                                                            MainAxisSize
+                                                                .max,
+                                                            children: [
+                                                              Expanded(
+                                                                flex: 3,
+                                                                child:
+                                                                GestureDetector(
+                                                                  onTap:
+                                                                      () {
+
+                                                                  },
+                                                                  child:
+                                                                  RichText(
+                                                                    maxLines:
+                                                                    1,
+                                                                    overflow:
+                                                                    TextOverflow.ellipsis,
+                                                                    strutStyle:
+                                                                    StrutStyle(fontSize: 17.0),
+                                                                    text: TextSpan(
+                                                                        style: FlutterFlowTheme.of(context).bodyText1,
+                                                                        text: snapshot.data["data"][position]["emp_name"]),
+                                                                  ),
                                                                 ),
-                                                                SizedBox(
-                                                                  width:
-                                                                  w * 0.01,
+                                                              ),
+                                                              snapshot.data["data"][position]["in_time"] !=
+                                                                  "N/A"
+                                                                  ? Expanded(
+                                                                flex:
+                                                                1,
+                                                                child:
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                            builder:
+                                                                                (context) =>
+                                                                                viewimage(inimage: snapshot.data["data"][position]["in_image"].toString(), outimage: snapshot.data["data"][position]["out_image"].toString(),)));
+                                                                  },
+                                                                  child: Container(
+                                                                    width: 30,
+                                                                    height: 30,
+                                                                    decoration: BoxDecoration(
+                                                                      color: Color(0x00FFFFFF),
+                                                                      shape: BoxShape.rectangle,
+                                                                    ),
+                                                                    child: Icon(
+                                                                      Icons.image_sharp,
+                                                                      color: Colors.black,
+                                                                      size: 24,
+                                                                    ),
+                                                                  ),
                                                                 ),
-                                                                Text(
-                                                                  snapshot.data["data"][position]["Presentee"].toString(),
-                                                                  style: const TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                                )
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        )
-
-                                                      ],
-                                                    ),
-                                                    const Divider(),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        Row(
-                                                          children: [
-                                                            Icon(
-                                                              Icons
-                                                                  .access_time_filled,
-                                                              color: Colors
-                                                                  .green.shade200,
-                                                            ),
-                                                            SizedBox(
-                                                              width: w * 0.01,
-                                                            ),
-                                                            Text(
-
-                                                                snapshot.data["data"][position]["in_time"],
-                                                                style: const TextStyle(
-                                                                    color: Colors
-                                                                        .black54)),
-                                                          ],
-                                                        ),
-                                                        const Text(
-                                                          "To",
-                                                          style: TextStyle(
-                                                              color: Colors.black38,
-                                                              fontSize: 15.0,
-                                                              fontWeight:
-                                                              FontWeight.bold),
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            Icon(
-                                                              Icons
-                                                                  .access_time_filled,
-                                                              color: Colors
-                                                                  .red.shade200,
-                                                            ),
-                                                            SizedBox(
-                                                              width: w * 0.01,
-                                                            ),
-                                                            Text(
-
-                                                                snapshot.data["data"][position]["out_time"].toString(),
-                                                                style: const TextStyle(
-                                                                    color: Colors
-                                                                        .black54)),
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
-                                                    Divider(),
-                                                    Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons
-                                                              .assignment,
-                                                          color: Colors
-                                                              .red.shade200,
-                                                        ),
-                                                        SizedBox(
-                                                          width: w * 0.01,
-                                                        ),
-                                                        Container(
-                                                          width: w*0.8,
-                                                          child: Text(
-                                                              snapshot.data["data"][position]["task"]!=null?snapshot.data["data"][position]["task"].toString():"",
-                                                              maxLines: 8,style: const TextStyle(
-                                                                  color: Colors
-                                                                      .black54)),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Divider(),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                      children: [
-                                                        InkWell(
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                        viewimage(inimage: snapshot.data["data"][position]["in_image"].toString(), outimage: snapshot.data["data"][position]["out_image"].toString(),)));
-                                                          },
-                                                          child: Container(
-                                                            padding:
-                                                            EdgeInsets.all(8.0),
-                                                            decoration:
-                                                            BoxDecoration(
-                                                              color: primaryColor,
-                                                              borderRadius:
-                                                              const BorderRadius.all(
-                                                                Radius.circular(
-                                                                    14.0),
-                                                              ),
-                                                            ),
-                                                            child: Row(children: const [
-                                                              Icon(
-                                                                Icons.assignment,
-                                                                color: Colors.white,
-                                                              ),
-                                                              SizedBox(
-                                                                width: 5.0,
-                                                              ),
-                                                              Text(
-                                                                "View Image",
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
                                                               )
-                                                            ]),
-                                                          ),
-                                                        ),
-                                                        snapshot.data["data"][position]["out_time"]==null?SizedBox(width: 10,):Container(),
-                                                        snapshot.data["data"][position]["out_time"]=="N/A"?
-                                                        Container(
-                                                          child: admins.contains(employee_role)?
-                                                          widget.id!=snapshot.data["data"][position]["emp_id"].toString().trim()?Container(
-                                                            child: InkWell(
-                                                              onTap: () async {
-
-
-                                                                showDialog(
-                                                                    context: context,
-                                                                    builder: (context) => AlertDialog(
-                                                                        content:
-                                                                        // Generated code for this HomePage Widget...
-                                                                        Container(
-                                                                          child: Column(
-                                                                            mainAxisSize: MainAxisSize.min,
-                                                                            children: [
-                                                                              Row(
-                                                                                mainAxisSize: MainAxisSize.max,
-                                                                                children: [
-                                                                                  Padding(
-                                                                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                                                                    child: Icon(
-                                                                                      Icons.calendar_today,
-                                                                                      color: Colors.black,
-                                                                                      size: 24,
-                                                                                    ),
-                                                                                  ),
-                                                                                  Text(
-                                                                                    DateFormat("dd ,MMMM yyyy").format(DateTime.now()),
-                                                                                    style: FlutterFlowTheme.of(context).bodyText1,
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              Padding(
-                                                                                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                                                                                child: Row(
-                                                                                  mainAxisSize: MainAxisSize.max,
-                                                                                  children: [
-                                                                                    const Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                                                                      child: FaIcon(
-                                                                                        FontAwesomeIcons.clock,
-                                                                                        color: Colors.black,
-                                                                                        size: 24,
-                                                                                      ),
-                                                                                    ),
-                                                                                    Expanded(
-                                                                                      child: GestureDetector(
-                                                                                        onTap: (){
-                                                                                          _selectTime(context);
-                                                                                        },
-                                                                                        child: Padding(
-                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0, 10, 20, 0),
-                                                                                          child: Container(
-                                                                                            decoration: BoxDecoration(
-                                                                                                color: FlutterFlowTheme.of(context).secondaryBackground,
-                                                                                                border: Border.all(
-                                                                                                  width: 1,
-                                                                                                )),
-                                                                                            width: 100,
-                                                                                            child: TextFormField(
-                                                                                              controller: textController1,
-                                                                                              enabled: false,
-                                                                                              obscureText: false,
-                                                                                              decoration: InputDecoration(
-                                                                                                hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                                                                                                enabledBorder: const OutlineInputBorder(
-                                                                                                  borderSide: BorderSide(
-                                                                                                    color: Color(0xFF504B4B),
-                                                                                                    width: 1,
-                                                                                                  ),
-                                                                                                  borderRadius: BorderRadius.only(
-                                                                                                    topLeft: Radius.circular(4.0),
-                                                                                                    topRight: Radius.circular(4.0),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                focusedBorder: const OutlineInputBorder(
-                                                                                                  borderSide: BorderSide(
-                                                                                                    color: Color(0xFF504B4B),
-                                                                                                    width: 1,
-                                                                                                  ),
-                                                                                                  borderRadius: BorderRadius.only(
-                                                                                                    topLeft: Radius.circular(4.0),
-                                                                                                    topRight: Radius.circular(4.0),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                errorBorder: OutlineInputBorder(
-                                                                                                  borderSide: BorderSide(
-                                                                                                    color: Color(0x00000000),
-                                                                                                    width: 1,
-                                                                                                  ),
-                                                                                                  borderRadius: const BorderRadius.only(
-                                                                                                    topLeft: Radius.circular(4.0),
-                                                                                                    topRight: Radius.circular(4.0),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                focusedErrorBorder: OutlineInputBorder(
-                                                                                                  borderSide: BorderSide(
-                                                                                                    color: Color(0x00000000),
-                                                                                                    width: 1,
-                                                                                                  ),
-                                                                                                  borderRadius: const BorderRadius.only(
-                                                                                                    topLeft: Radius.circular(4.0),
-                                                                                                    topRight: Radius.circular(4.0),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                filled: true,
-                                                                                                fillColor: Color(0x00FFFFFF),
-                                                                                                contentPadding:
-                                                                                                EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
-                                                                                              ),
-                                                                                              style:
-                                                                                              FlutterFlowTheme.of(context).bodyText1.override(
-                                                                                                fontFamily: 'Poppins',
-                                                                                                lineHeight: 1,
-                                                                                              ),
-                                                                                              maxLines: 1,
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ),
-                                                                              Padding(
-                                                                                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                                                                                child: Row(
-                                                                                  mainAxisSize: MainAxisSize.max,
-                                                                                  children: [
-                                                                                    Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                                                                      child: Icon(
-                                                                                        Icons.text_snippet_outlined,
-                                                                                        color: Colors.black,
-                                                                                        size: 24,
-                                                                                      ),
-                                                                                    ),
-                                                                                    Expanded(
-                                                                                      child: Padding(
-                                                                                        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 20, 0),
-                                                                                        child: Container(
-                                                                                          width: 100,
-                                                                                          child: TextFormField(
-                                                                                            controller: textController2,
-                                                                                            autofocus: true,
-                                                                                            obscureText: false,
-                                                                                            decoration: InputDecoration(
-                                                                                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                                                                                              enabledBorder: OutlineInputBorder(
-                                                                                                borderSide: BorderSide(
-                                                                                                  color: Color(0xFF504B4B),
-                                                                                                  width: 1,
-                                                                                                ),
-                                                                                                borderRadius: const BorderRadius.only(
-                                                                                                  topLeft: Radius.circular(4.0),
-                                                                                                  topRight: Radius.circular(4.0),
-                                                                                                ),
-                                                                                              ),
-                                                                                              focusedBorder: OutlineInputBorder(
-                                                                                                borderSide: BorderSide(
-                                                                                                  color: Color(0xFF504B4B),
-                                                                                                  width: 1,
-                                                                                                ),
-                                                                                                borderRadius: const BorderRadius.only(
-                                                                                                  topLeft: Radius.circular(4.0),
-                                                                                                  topRight: Radius.circular(4.0),
-                                                                                                ),
-                                                                                              ),
-                                                                                              errorBorder: OutlineInputBorder(
-                                                                                                borderSide: BorderSide(
-                                                                                                  color: Color(0x00000000),
-                                                                                                  width: 1,
-                                                                                                ),
-                                                                                                borderRadius: const BorderRadius.only(
-                                                                                                  topLeft: Radius.circular(4.0),
-                                                                                                  topRight: Radius.circular(4.0),
-                                                                                                ),
-                                                                                              ),
-                                                                                              focusedErrorBorder: OutlineInputBorder(
-                                                                                                borderSide: BorderSide(
-                                                                                                  color: Color(0x00000000),
-                                                                                                  width: 1,
-                                                                                                ),
-                                                                                                borderRadius: const BorderRadius.only(
-                                                                                                  topLeft: Radius.circular(4.0),
-                                                                                                  topRight: Radius.circular(4.0),
-                                                                                                ),
-                                                                                              ),
-                                                                                              filled: true,
-                                                                                              fillColor: Color(0x00FFFFFF),
-                                                                                              contentPadding:
-                                                                                              EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
-                                                                                            ),
-                                                                                            style:
-                                                                                            FlutterFlowTheme.of(context).bodyText1.override(
-                                                                                              fontFamily: 'Poppins',
-                                                                                              lineHeight: 1,
-                                                                                            ),
-                                                                                            maxLines: 1,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ),
-
-                                                                              ElevatedButton(onPressed: () async {
-                                                                                Navigator.pop(context);
-                                                                                setState(() {
-                                                                                  context.loaderOverlay.show();
-                                                                                });
-                                                                                Position locationposition = await _getGeoLocationPosition();
-
-                                                                                List<Placemark> placemarks = await placemarkFromCoordinates(locationposition.latitude, locationposition.longitude);
-                                                                                Placemark place = placemarks[0];
-                                                                                address= '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
-                                                                                print(address);
-                                                                                var df =  DateFormat("h:mma");
-                                                                                String? h=textController1?.value.text;
-                                                                                var da=h?.split(" ");
-                                                                                var dt = df.parse(da!.first+""+da!.last);
-                                                                                print(DateFormat('HH:mm').format(dt));
-                                                                                Dio dio=Dio();
-                                                                                var formData = FormData.fromMap({
-                                                                                  'emp_id':snapshot.data["data"][position]["emp_id"].toString(),
-                                                                                  "atte_date": "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",
-                                                                                  "out_time":DateFormat('HH:mm').format(dt)+":00",
-                                                                                  "admin_id":userId,
-                                                                                  "remark":textController2?.value.text,
-                                                                                  "out_longitude":locationposition.longitude,
-                                                                                  "out_latitude":locationposition.latitude,
-                                                                                  "out_location":address.toString()
-                                                                                });
-                                                                                print(formData.fields);
-                                                                                var response = await dio.post('http://training.virash.in/outTimeByAdmin', data:formData);
-                                                                                if (response.statusCode == 200) {
-                                                                                  print(response.data);
-                                                                                  if(response.data["success"]=="1") {
-
-                                                                                      context.loaderOverlay.hide();
-
-                                                                                  } else {
-                                                                                      context.loaderOverlay.hide();
-                                                                                    final snackBar = SnackBar(
-                                                                                      content:  Text(response.data["message"]),
-                                                                                      backgroundColor: (primaryColor),
-                                                                                    );
-                                                                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                                                                                  }
-                                                                                } else {
-                                                                                  print(response.statusCode);
-                                                                                  final snackBar = SnackBar(
-                                                                                    content: const Text('Please try again later'),
-                                                                                    backgroundColor: (primaryColor),
-                                                                                  );
-                                                                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                                                                  setState(() {
-                                                                                    context.loaderOverlay.hide();
-                                                                                  });
-
-                                                                                }
-
-                                                                              }, child: Text("MARK OUTTIME"))
-
-
-                                                                            ],
-                                                                          ),
-
-                                                                        )
-
-                                                                    ));
-
-
-                                                              },
-                                                              child: Container(
-                                                                padding:
-                                                                EdgeInsets.all(8.0),
-                                                                decoration:
-                                                                BoxDecoration(
-                                                                  color: primaryColor,
-                                                                  borderRadius:
-                                                                  const BorderRadius.all(
-                                                                    Radius.circular(
-                                                                        14.0),
+                                                                  : Expanded(
+                                                                flex:
+                                                                1,
+                                                                child:
+                                                                Container(
+                                                                  width: 30,
+                                                                  height: 30,
+                                                                  decoration: const BoxDecoration(
+                                                                    color: Color(0x00FFFFFF),
+                                                                    shape: BoxShape.rectangle,
+                                                                  ),
+                                                                  child: const Icon(
+                                                                    Icons.image_not_supported_outlined,
+                                                                    color: Color(0xFF898585),
+                                                                    size: 24,
                                                                   ),
                                                                 ),
-                                                                child: Row(children: const [
-                                                                  Icon(
-                                                                    Icons.punch_clock_rounded,
-                                                                    color: Colors.white,
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: 5.0,
-                                                                  ),
-                                                                  Text(
-                                                                    "Mark Outtime",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                                  )
-                                                                ]),
                                                               ),
-                                                            ),
-                                                          ):Container():Container(),
-                                                        ):Container(),
-                                                      ],
-                                                    )
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            mainAxisSize:
+                                                            MainAxisSize
+                                                                .max,
+                                                            children: [
+                                                              Expanded(
+                                                                flex: 3,
+                                                                child:
+                                                                Padding(
+                                                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                                                      10,
+                                                                      0,
+                                                                      0,
+                                                                      0),
+                                                                  child:
+                                                                  Text(
+                                                                    snapshot.data["data"][position]["in_time"] +
+                                                                        " TO " +
+                                                                        snapshot.data["data"][position]["out_time"],
+                                                                    style: FlutterFlowTheme.of(context)
+                                                                        .bodyText2
+                                                                        .override(
+                                                                      fontFamily: 'Poppins',
+                                                                      color: Color(0xFF888C91),
+                                                                      fontWeight: FontWeight.normal,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child:
+                                                                Padding(
+                                                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                                                      10,
+                                                                      0,
+                                                                      10,
+                                                                      10),
+                                                                  child:
+                                                                  Container(
+                                                                    width:
+                                                                    30,
+                                                                    height:
+                                                                    30,
+                                                                    decoration:
+                                                                    BoxDecoration(
+                                                                      color: snapshot.data["data"][position]["Presentee"] == "Absent"
+                                                                          ? Colors.red
+                                                                          : snapshot.data["data"][position]["Presentee"] == "Present"
+                                                                          ? Colors.green
+                                                                          : Colors.grey,
+                                                                      borderRadius:
+                                                                      const BorderRadius.only(
+                                                                        bottomLeft: Radius.circular(0),
+                                                                        bottomRight: Radius.circular(10),
+                                                                        topLeft: Radius.circular(10),
+                                                                        topRight: Radius.circular(0),
+                                                                      ),
+                                                                    ),
+                                                                    child:
+                                                                    Align(
+                                                                      alignment:
+                                                                      AlignmentDirectional(0, 0),
+                                                                      child:
+                                                                      Text(
+                                                                        snapshot.data["data"][position]["Presentee"],
+                                                                        textAlign: TextAlign.center,
+                                                                        style: FlutterFlowTheme.of(context).subtitle1.override(
+                                                                          fontFamily: 'Poppins',
+                                                                          color: FlutterFlowTheme.of(context).primaryBtnText,
+                                                                          fontSize: 12,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ],
                                                 ),
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets
+                                                      .fromLTRB(
+                                                      0, 8, 0, 0),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                    MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .center,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Container(
+                                                          decoration:
+                                                          BoxDecoration(
+                                                            color: snapshot.data["data"][position]
+                                                            [
+                                                            "out_time"] ==
+                                                                "N/A"
+                                                                && snapshot.data["data"][position]
+                                                  [
+                                                  "in_time"] !=
+                                                  "N/A"? primaryColor
+                                                                : Color(0xff79b0c7),
+                                                          ),
+                                                          alignment:
+                                                          AlignmentDirectional(
+                                                              0, 0),
+                                                          child: Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child:
+                                                                GestureDetector(
+                                                                  onTap: (){
+                                                                    if(snapshot.data["data"][position]
+                                                                    [
+                                                                    "out_time"] ==
+                                                                    "N/A"
+                                                                    && snapshot.data["data"][position]
+                                                                    [
+                                                                    "in_time"] !=
+                                                                    "N/A")
+                                                                    showDialog(
+                                                                        context: context,
+                                                                        builder: (context) => AlertDialog(
+                                                                            content:
+                                                                            // Generated code for this HomePage Widget...
+                                                                            Container(
+                                                                              child: Column(
+                                                                                mainAxisSize: MainAxisSize.min,
+                                                                                children: [
+                                                                                  Row(
+                                                                                    mainAxisSize: MainAxisSize.max,
+                                                                                    children: [
+                                                                                      Padding(
+                                                                                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                                                                        child: Icon(
+                                                                                          Icons.calendar_today,
+                                                                                          color: Colors.black,
+                                                                                          size: 24,
+                                                                                        ),
+                                                                                      ),
+                                                                                      Text(
+                                                                                        DateFormat("dd ,MMMM yyyy").format(DateTime.now()),
+                                                                                        style: FlutterFlowTheme.of(context).bodyText1,
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                  Padding(
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                                                                    child: Row(
+                                                                                      mainAxisSize: MainAxisSize.max,
+                                                                                      children: [
+                                                                                        const Padding(
+                                                                                          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                                                                          child: FaIcon(
+                                                                                            FontAwesomeIcons.clock,
+                                                                                            color: Colors.black,
+                                                                                            size: 24,
+                                                                                          ),
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          child: GestureDetector(
+                                                                                            onTap: (){
+                                                                                              _selectTime(context);
+                                                                                            },
+                                                                                            child: Padding(
+                                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 10, 20, 0),
+                                                                                              child: Container(
+                                                                                                decoration: BoxDecoration(
+                                                                                                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                                                                                                    border: Border.all(
+                                                                                                      width: 1,
+                                                                                                    )),
+                                                                                                width: 100,
+                                                                                                child: TextFormField(
+                                                                                                  controller: textController1,
+                                                                                                  enabled: false,
+                                                                                                  obscureText: false,
+                                                                                                  decoration: InputDecoration(
+                                                                                                    hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                                                                                    enabledBorder: const OutlineInputBorder(
+                                                                                                      borderSide: BorderSide(
+                                                                                                        color: Color(0xFF504B4B),
+                                                                                                        width: 1,
+                                                                                                      ),
+                                                                                                      borderRadius: BorderRadius.only(
+                                                                                                        topLeft: Radius.circular(4.0),
+                                                                                                        topRight: Radius.circular(4.0),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    focusedBorder: const OutlineInputBorder(
+                                                                                                      borderSide: BorderSide(
+                                                                                                        color: Color(0xFF504B4B),
+                                                                                                        width: 1,
+                                                                                                      ),
+                                                                                                      borderRadius: BorderRadius.only(
+                                                                                                        topLeft: Radius.circular(4.0),
+                                                                                                        topRight: Radius.circular(4.0),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    errorBorder: OutlineInputBorder(
+                                                                                                      borderSide: BorderSide(
+                                                                                                        color: Color(0x00000000),
+                                                                                                        width: 1,
+                                                                                                      ),
+                                                                                                      borderRadius: const BorderRadius.only(
+                                                                                                        topLeft: Radius.circular(4.0),
+                                                                                                        topRight: Radius.circular(4.0),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    focusedErrorBorder: OutlineInputBorder(
+                                                                                                      borderSide: BorderSide(
+                                                                                                        color: Color(0x00000000),
+                                                                                                        width: 1,
+                                                                                                      ),
+                                                                                                      borderRadius: const BorderRadius.only(
+                                                                                                        topLeft: Radius.circular(4.0),
+                                                                                                        topRight: Radius.circular(4.0),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    filled: true,
+                                                                                                    fillColor: Color(0x00FFFFFF),
+                                                                                                    contentPadding:
+                                                                                                    EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
+                                                                                                  ),
+                                                                                                  style:
+                                                                                                  FlutterFlowTheme.of(context).bodyText1.override(
+                                                                                                    fontFamily: 'Poppins',
+                                                                                                    lineHeight: 1,
+                                                                                                  ),
+                                                                                                  maxLines: 1,
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                  Padding(
+                                                                                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                                                                    child: Row(
+                                                                                      mainAxisSize: MainAxisSize.max,
+                                                                                      children: [
+                                                                                        Padding(
+                                                                                          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                                                                          child: Icon(
+                                                                                            Icons.text_snippet_outlined,
+                                                                                            color: Colors.black,
+                                                                                            size: 24,
+                                                                                          ),
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          child: Padding(
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(0, 10, 20, 0),
+                                                                                            child: Container(
+                                                                                              width: 100,
+                                                                                              child: TextFormField(
+                                                                                                controller: textController2,
+                                                                                                autofocus: true,
+                                                                                                obscureText: false,
+                                                                                                decoration: InputDecoration(
+                                                                                                  hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                                                                                  enabledBorder: OutlineInputBorder(
+                                                                                                    borderSide: BorderSide(
+                                                                                                      color: Color(0xFF504B4B),
+                                                                                                      width: 1,
+                                                                                                    ),
+                                                                                                    borderRadius: const BorderRadius.only(
+                                                                                                      topLeft: Radius.circular(4.0),
+                                                                                                      topRight: Radius.circular(4.0),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  focusedBorder: OutlineInputBorder(
+                                                                                                    borderSide: BorderSide(
+                                                                                                      color: Color(0xFF504B4B),
+                                                                                                      width: 1,
+                                                                                                    ),
+                                                                                                    borderRadius: const BorderRadius.only(
+                                                                                                      topLeft: Radius.circular(4.0),
+                                                                                                      topRight: Radius.circular(4.0),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  errorBorder: OutlineInputBorder(
+                                                                                                    borderSide: BorderSide(
+                                                                                                      color: Color(0x00000000),
+                                                                                                      width: 1,
+                                                                                                    ),
+                                                                                                    borderRadius: const BorderRadius.only(
+                                                                                                      topLeft: Radius.circular(4.0),
+                                                                                                      topRight: Radius.circular(4.0),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  focusedErrorBorder: OutlineInputBorder(
+                                                                                                    borderSide: BorderSide(
+                                                                                                      color: Color(0x00000000),
+                                                                                                      width: 1,
+                                                                                                    ),
+                                                                                                    borderRadius: const BorderRadius.only(
+                                                                                                      topLeft: Radius.circular(4.0),
+                                                                                                      topRight: Radius.circular(4.0),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  filled: true,
+                                                                                                  fillColor: Color(0x00FFFFFF),
+                                                                                                  contentPadding:
+                                                                                                  EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
+                                                                                                ),
+                                                                                                style:
+                                                                                                FlutterFlowTheme.of(context).bodyText1.override(
+                                                                                                  fontFamily: 'Poppins',
+                                                                                                  lineHeight: 1,
+                                                                                                ),
+                                                                                                maxLines: 1,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+
+                                                                                  ElevatedButton(onPressed: () async {
+                                                                                    Navigator.pop(context);
+                                                                                    setState(() {
+                                                                                      context.loaderOverlay.show();
+                                                                                    });
+                                                                                    Position locationposition = await _getGeoLocationPosition();
+
+                                                                                    List<Placemark> placemarks = await placemarkFromCoordinates(locationposition.latitude, locationposition.longitude);
+                                                                                    Placemark place = placemarks[0];
+                                                                                    address= '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+                                                                                    print(address);
+                                                                                    var df =  DateFormat("h:mma");
+                                                                                    String? h=textController1?.value.text;
+                                                                                    var da=h?.split(" ");
+                                                                                    var dt = df.parse(da!.first+""+da!.last);
+                                                                                    print(DateFormat('HH:mm').format(dt));
+                                                                                    Dio dio=Dio();
+                                                                                    var formData = FormData.fromMap({
+                                                                                      'emp_id':snapshot.data["data"][position]["emp_id"].toString(),
+                                                                                      "atte_date": "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",
+                                                                                      "out_time":DateFormat('HH:mm').format(dt)+":00",
+                                                                                      "admin_id":userId,
+                                                                                      "remark":textController2?.value.text,
+                                                                                      "out_longitude":locationposition.longitude,
+                                                                                      "out_latitude":locationposition.latitude,
+                                                                                      "out_location":address.toString()
+                                                                                    });
+                                                                                    print(formData.fields);
+                                                                                    var response = await dio.post('http://training.virash.in/outTimeByAdmin', data:formData);
+                                                                                    if (response.statusCode == 200) {
+                                                                                      print(response.data);
+                                                                                      if(response.data["success"]=="1") {
+
+                                                                                        context.loaderOverlay.hide();
+
+                                                                                      } else {
+                                                                                        context.loaderOverlay.hide();
+                                                                                        final snackBar = SnackBar(
+                                                                                          content:  Text(response.data["message"]),
+                                                                                          backgroundColor: (primaryColor),
+                                                                                        );
+                                                                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                                                                                      }
+                                                                                    } else {
+                                                                                      print(response.statusCode);
+                                                                                      final snackBar = SnackBar(
+                                                                                        content: const Text('Please try again later'),
+                                                                                        backgroundColor: (primaryColor),
+                                                                                      );
+                                                                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                                                                      setState(() {
+                                                                                        context.loaderOverlay.hide();
+                                                                                      });
+
+                                                                                    }
+
+                                                                                  }, child: Text("MARK OUTTIME"))
 
 
-                                              ),
-                                            );
+                                                                                ],
+                                                                              ),
+
+                                                                            )
+
+                                                                        ));
 
 
-                                        },
-                                      )
-                                      ,
-                                    ),
 
 
-                                  );
-
-
-                                },
-                              ):Image.asset("assets/no_data.png");
-            }
-        }
-      },
-                      ),
-                        )  ),
-                    ],
-                  )),
+                                                                  },
+                                                                  child: Padding(
+                                                                    padding:
+                                                                    const EdgeInsets.all(5.0),
+                                                                    child:
+                                                                    Text(
+                                                                     "Mark outtime",
+                                                                      textAlign:
+                                                                      TextAlign.center,
+                                                                      style:
+                                                                      FlutterFlowTheme.of(context).bodyText1,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    else
+                                      return  Container();
+                                  },
+                                ):Container(child: Center(child: Image.asset("assets/no_data.png")),),
+                              ):Center(child: Image.asset("assets/no_data.png"));}
+                      }
+                    },
+                  ),
+                ),
+              ),
             ],
           )):SafeArea(
           child: Column(

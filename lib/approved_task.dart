@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'flutter_flow/flutter_flow_theme.dart';
 import 'globals.dart';
 import 'package:http/http.dart' as http;
 
@@ -120,18 +121,8 @@ class _ApprovedTaskState extends State<ApprovedTask> {
       final snackBar = SnackBar(
         content:  Text(mapRes.values.last),
         backgroundColor: (primaryColor),
-        action: SnackBarAction(
-          label: 'dismiss',
-          onPressed: () {
-          },
-        ),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-
-
-
-
       setState(() {
       });
 
@@ -139,11 +130,6 @@ class _ApprovedTaskState extends State<ApprovedTask> {
       final snackBar = SnackBar(
         content:  Text(mapRes.values.last.toString()),
         backgroundColor: (primaryColor),
-        action: SnackBarAction(
-          label: 'dismiss',
-          onPressed: () {
-          },
-        ),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       setState(() {
@@ -191,6 +177,68 @@ class _ApprovedTaskState extends State<ApprovedTask> {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+
+
+          var appid=[];
+          approveid.forEach((element) {
+            if(element.trim()!="")
+            {
+              appid.add(element);
+            }
+          });
+          var rejid=[];
+          rejectid.forEach((element) {
+            if(element!="")
+            {
+              rejid.add(element);
+            }
+          });
+          log(appid.toString());
+          if(appid.isNotEmpty||rejid.isNotEmpty) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: new Text('Are you sure?'),
+                content: new Text('Do you want Approve/Reject Task'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: new Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () => {
+                      Navigator.of(context).pop(false),
+                      print(appid),
+                      print(rejid),
+                      multichecktask(rejid,appid)
+                    },
+                    child: new Text('Yes'),
+                  ),
+                ],
+              ),
+            );
+
+
+          }
+          else
+          {
+            final snackBar = SnackBar(
+              content: const Text('Fill Task'),
+              backgroundColor: (primaryColor),
+
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+
+
+
+
+        },
+        backgroundColor: Colors.blueAccent,
+        child: Icon(Icons.send),
+      ),
         body:LoaderOverlay(
           child: SafeArea(
             child: RefreshIndicator(
@@ -216,7 +264,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
                                 child: Text(
-                                  widget.name,
+                                  "Approve Task",
                                   style: TextStyle(
                                       fontSize: 25.0,
                                       fontWeight: FontWeight.bold,
@@ -225,71 +273,40 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                               ),
                             ),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              child: IconButton(
-                                onPressed: () {
-                                  var appid=[];
-                                  approveid.forEach((element) {
-                                    if(element.trim()!="")
-                                    {
-                                      appid.add(element);
-                                    }
-                                  });
-                                  var rejid=[];
-                                  rejectid.forEach((element) {
-                                    if(element!="")
-                                    {
-                                      rejid.add(element);
-                                    }
-                                  });
-                                  log(appid.toString());
-                                    if(appid.isNotEmpty||rejid.isNotEmpty) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          title: new Text('Are you sure?'),
-                                          content: new Text('Do you want Approve/Reject Task'),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () => Navigator.of(context).pop(false),
-                                              child: new Text('No'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () => {
-                                                Navigator.of(context).pop(false),
-                                                print(appid),
-                                                print(rejid),
-                                                multichecktask(rejid,appid)
-                                              },
-                                              child: new Text('Yes'),
-                                            ),
-                                          ],
-                                        ),
-                                      );
 
-
-                                  }
-                                  else
-                                  {
-                                    final snackBar = SnackBar(
-                                      content: const Text('Fill Task'),
-                                      backgroundColor: (primaryColor),
-                                      action: SnackBarAction(
-                                        label: 'dismiss',
-                                        onPressed: () {
-                                        },
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                  }
-                                },icon: const Icon(Icons.send),
-                              ),
-                            ),
-                          )
                         ],
                       )),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          'Task',
+                          textAlign: TextAlign.center,
+                          style: FlutterFlowTheme.of(context).subtitle1.override(
+                            fontFamily: 'Poppins',
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Check Task',
+                          style: FlutterFlowTheme.of(context).bodyText1,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'Rejected Task',
+                          style: FlutterFlowTheme.of(context).bodyText1,
+                        ),
+                      ),
+                    ],
+                  ),
+
                   Expanded(
                     flex: 9,
                     child: Container(
