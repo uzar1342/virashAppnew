@@ -67,11 +67,7 @@ class _EmpTaskState extends State<EmpTask> {
       final snackBar = SnackBar(
         content: const Text('Unable to fetch employetask'),
         backgroundColor: (primaryColor),
-        action: SnackBarAction(
-          label: 'dismiss',
-          onPressed: () {
-          },
-        ),
+
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
@@ -117,11 +113,7 @@ class _EmpTaskState extends State<EmpTask> {
         margin: EdgeInsets.only(bottom: 100.0),
         content:  Text(mapRes["message"]),
         backgroundColor: (primaryColor),
-        action: SnackBarAction(
-          label: 'dismiss',
-          onPressed: () {
-          },
-        ),
+
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
@@ -130,11 +122,6 @@ class _EmpTaskState extends State<EmpTask> {
       final snackBar = SnackBar(
         content:  Text(mapRes["message"]),
         backgroundColor: (primaryColor),
-        action: SnackBarAction(
-          label: 'dismiss',
-          onPressed: () {
-          },
-        ),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(mapRes["message"]);
@@ -165,22 +152,12 @@ class _EmpTaskState extends State<EmpTask> {
       final snackBar = SnackBar(
         content:  Text(mapRes["message"]),
         backgroundColor: (primaryColor),
-        action: SnackBarAction(
-          label: 'dismiss',
-          onPressed: () {
-          },
-        ),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       final snackBar = SnackBar(
         content:  Text(mapRes["message"]),
         backgroundColor: (primaryColor),
-        action: SnackBarAction(
-          label: 'dismiss',
-          onPressed: () {
-          },
-        ),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(mapRes["message"]);

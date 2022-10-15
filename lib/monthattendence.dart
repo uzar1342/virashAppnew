@@ -293,11 +293,6 @@ static Widget _holidayIcon = new Container(
       final snackBar = SnackBar(
         content: const Text('Please try again later'),
         backgroundColor: (primaryColor),
-        action: SnackBarAction(
-          label: 'dismiss',
-          onPressed: () {
-          },
-        ),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       setState(() {
@@ -321,11 +316,6 @@ static Widget _holidayIcon = new Container(
       final snackBar = SnackBar(
         content: const Text('Please try again later'),
         backgroundColor: (primaryColor),
-        action: SnackBarAction(
-          label: 'dismiss',
-          onPressed: () {
-          },
-        ),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return response.data;
@@ -1279,11 +1269,6 @@ var address;
                                                                                             final snackBar = SnackBar(
                                                                                               content:  Text(response.data["message"]),
                                                                                               backgroundColor: (primaryColor),
-                                                                                              action: SnackBarAction(
-                                                                                                label: 'dismiss',
-                                                                                                onPressed: () {
-                                                                                                },
-                                                                                              ),
                                                                                             );
                                                                                             ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
@@ -1293,11 +1278,6 @@ var address;
                                                                                           final snackBar = SnackBar(
                                                                                             content: const Text('Please try again later'),
                                                                                             backgroundColor: (primaryColor),
-                                                                                            action: SnackBarAction(
-                                                                                              label: 'dismiss',
-                                                                                              onPressed: () {
-                                                                                              },
-                                                                                            ),
                                                                                           );
                                                                                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                                                                           setState(() {

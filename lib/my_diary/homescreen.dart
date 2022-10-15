@@ -273,7 +273,7 @@ return response.data;
                                                             MainAxisAlignment.center,
                                                             crossAxisAlignment:
                                                             CrossAxisAlignment.end,
-                                                            children: <Widget>[
+                                                            children: const <Widget>[
                                                               SizedBox(
                                                                 width: 28,
                                                                 height: 28,
@@ -281,7 +281,7 @@ return response.data;
                                                               ),
                                                               Padding(
                                                                 padding:
-                                                                const EdgeInsets.only(
+                                                                EdgeInsets.only(
                                                                     left: 4, bottom: 3),
                                                                 child: Text(
                                                                   "N/A",

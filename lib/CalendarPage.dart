@@ -874,11 +874,6 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                                     final snackBar = SnackBar(
                                                                                       content:  Text(response.data["message"]),
                                                                                       backgroundColor: (primaryColor),
-                                                                                      action: SnackBarAction(
-                                                                                        label: 'dismiss',
-                                                                                        onPressed: () {
-                                                                                        },
-                                                                                      ),
                                                                                     );
                                                                                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
@@ -888,11 +883,6 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                                   final snackBar = SnackBar(
                                                                                     content: const Text('Please try again later'),
                                                                                     backgroundColor: (primaryColor),
-                                                                                    action: SnackBarAction(
-                                                                                      label: 'dismiss',
-                                                                                      onPressed: () {
-                                                                                      },
-                                                                                    ),
                                                                                   );
                                                                                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                                                                   setState(() {

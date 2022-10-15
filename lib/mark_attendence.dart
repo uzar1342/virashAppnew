@@ -368,11 +368,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
         final snackBar = SnackBar(
           content:  Text(value.toString()),
           backgroundColor: (primaryColor),
-          action: SnackBarAction(
-            label: 'dismiss',
-            onPressed: () {
-            },
-          ),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
@@ -500,11 +495,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                   final snackBar = SnackBar(
                                     content:  Text(value.toString()),
                                     backgroundColor: (primaryColor),
-                                    action: SnackBarAction(
-                                      label: 'dismiss',
-                                      onPressed: () {
-                                      },
-                                    ),
+
                                   );
                                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
@@ -516,11 +507,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                             final snackBar = SnackBar(
                               content:  Text("fill Task"),
                               backgroundColor: (primaryColor),
-                              action: SnackBarAction(
-                                label: 'dismiss',
-                                onPressed: () {
-                                },
-                              ),
+
                             );
                             ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           }
