@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'globals.dart';
-final List<DropdownMenuItem<String>> item=[];
+
 class Taskadd extends StatefulWidget {
    Taskadd({Key? key,required this.empid}) : super(key: key);
     String empid;
@@ -443,46 +443,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         }
   }
-  ADDtaskpriorety() async {
-    setState(() {
-      context.loaderOverlay.show();
-    });
-    Dio dio=Dio();
-    var response = await dio.post('http://training.virash.in/showPriority');
-    print(response.data.length);
-    if (response.statusCode == 200) {
-      if(response.data["data"]!=null)
-      {
-        int len=int.parse(response.data["data"].length.toString());
-        for(int i=0;i<len;i++)
-        {
-          item.add(DropdownMenuItem(
-            value: response.data["data"][i].toString(),
-            child: Text(response.data["data"][i].toString()),
-          )) ;
-        }
-      }
-      setState(() {
-        context.loaderOverlay.hide();
-      });
 
-    }
-    else {
-      setState(() {
-        context.loaderOverlay.hide();
-      });
-      final snackBar = SnackBar(
-        content: const Text('Please try again later'),
-        backgroundColor: (primaryColor),
-        action: SnackBarAction(
-          label: 'dismiss',
-          onPressed: () {
-          },
-        ),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-  }
   @override
   void initState() {
     cart.add(CartItem(
@@ -493,12 +454,10 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
     setState(() {
     });
-    ADDtaskpriorety();
     super.initState();
   }
   @override
   void dispose() {
-    item.clear();
     super.dispose();
   }
 

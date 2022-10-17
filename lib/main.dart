@@ -83,6 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   @override
   void initState() {
+    item.clear();
+    ADDtaskpriorety();
     checkinternet();
     super.initState();
   }
@@ -90,6 +92,40 @@ class _MyHomePageState extends State<MyHomePage> {
   void dispose() {
     subscription.cancel;
     super.dispose();
+  }
+  ADDtaskpriorety() async {
+
+    Dio dio=Dio();
+    var response = await dio.post('http://training.virash.in/showPriority');
+    print(response.data.length);
+    if (response.statusCode == 200) {
+      if(response.data["data"]!=null)
+      {
+        int len=int.parse(response.data["data"].length.toString());
+        for(int i=0;i<len;i++)
+        {
+          item.add(DropdownMenuItem(
+            value: response.data["data"][i].toString(),
+            child: Text(response.data["data"][i].toString()),
+          )) ;
+        }
+      }
+
+
+    }
+    else {
+
+      final snackBar = SnackBar(
+        content: const Text('Fail to load Priority'),
+        backgroundColor: (primaryColor),
+        action: SnackBarAction(
+          label: 'dismiss',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
   @override
   Widget build(BuildContext context) {

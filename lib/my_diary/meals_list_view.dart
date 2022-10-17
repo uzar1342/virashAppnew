@@ -70,6 +70,11 @@ class MealsView extends StatelessWidget {
   final MealsListData? mealsListData;
   final AnimationController? animationController;
   final Animation<double>? animation;
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(

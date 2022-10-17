@@ -222,7 +222,7 @@ class _TaskNavState extends State<TaskNav>
             }
             setState(() {
               tabBody =
-                  EmpTask(emoid: widget.id, status: 'Pending',);
+                  EmpTask(emoid: widget.id, status: 'Pending', fun: (){},);
             });
           });
         }else if (index == 2 ){
@@ -244,7 +244,7 @@ class _TaskNavState extends State<TaskNav>
             }
             setState(() {
               tabBody =
-                  EmpTask(emoid: widget.id, status: 'Rejected',);
+                  EmpTask(emoid: widget.id, status: 'Rejected', fun: (){},);
                   //CompTask(emoid: widget.id);
             });
           });

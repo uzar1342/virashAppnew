@@ -183,11 +183,7 @@ class _HomePageState extends State<HomePage> {
                                 final snackBar = SnackBar(
                                   content: const Text('Fill credincel'),
                                   backgroundColor: (primaryColor),
-                                  action: SnackBarAction(
-                                    label: 'dismiss',
-                                    onPressed: () {
-                                    },
-                                  ),
+
                                 );
                                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                               }
@@ -199,11 +195,7 @@ class _HomePageState extends State<HomePage> {
                               final snackBar = SnackBar(
                                 content: const Text('No Internet'),
                                 backgroundColor: (primaryColor),
-                                action: SnackBarAction(
-                                  label: 'dismiss',
-                                  onPressed: () {
-                                  },
-                                ),
+
                               );
                               ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             }
@@ -299,11 +291,6 @@ class _HomePageState extends State<HomePage> {
         final snackBar = SnackBar(
           content: const Text('Acess Dineid'),
           backgroundColor: (primaryColor),
-          action: SnackBarAction(
-            label: 'dismiss',
-            onPressed: () {
-            },
-          ),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
@@ -348,11 +335,6 @@ class _HomePageState extends State<HomePage> {
           final snackBar = SnackBar(
             content: const Text('Login Fail'),
             backgroundColor: (primaryColor),
-            action: SnackBarAction(
-              label: 'dismiss',
-              onPressed: () {
-              },
-            ),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
