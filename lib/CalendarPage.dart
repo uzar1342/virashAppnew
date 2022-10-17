@@ -21,7 +21,7 @@ import 'globals.dart';
 import 'googlemap.dart';
 import 'no_internet_page.dart';
 
-
+final TextEditingController _searchController = TextEditingController();
 class CalendarPage extends StatefulWidget {
    CalendarPage( {required this.id, Key? key,}) : super(key: key);
 String id;
@@ -164,7 +164,7 @@ class _CalendarPageState extends State<CalendarPage> {
     subscription.cancel();
     super.dispose();
   }
-  bool showSearch = true;
+
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   Future<Null> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -180,7 +180,16 @@ class _CalendarPageState extends State<CalendarPage> {
       });
     }
   }
-  final TextEditingController _searchController = TextEditingController();
+
+
+  refress()
+  {
+    setState(() {
+
+    });
+  }
+
+
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
   GlobalKey<RefreshIndicatorState>();
   @override
@@ -194,129 +203,7 @@ class _CalendarPageState extends State<CalendarPage> {
             children: [
             Expanded(
             flex: 1,
-            child: showSearch?Container(
-                padding: const EdgeInsets.only(top: 0.0),
-                height: h * 0.09,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                          // top: 10.0,
-                          left: 15.0,
-                        ),
-                        //padding: const EdgeInsets.only(left: 5.0),
-                        height: h * 0.05,
-                        width: h * 0.05,
-                        decoration: BoxDecoration(
-                          // color: primaryColor,
-                            border: Border.all(color: Colors.black26, width: 1.0),
-                            borderRadius:
-                            const BorderRadius.all(Radius.circular(12.0))),
-                        child: const Icon(
-                          Icons.arrow_back_ios_new,
-                          color: Colors.black87,
-                          size: 18.0,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Today's Attendence",
-                        style: TextStyle(
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.bold,
-                            color: primaryColor),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  showSearch = !showSearch;
-                                });
-                              },
-                              icon: Icon(
-                                Icons.search,
-                                color: primaryColor,
-                              )),
-                        ],
-                      ),
-                    )
-                  ],
-                )):Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  width: w * 0.7,
-                  child: Card(
-                    //margin: EdgeInsets.only(left: 30, right: 30, top: 30),
-                    elevation: 4,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(12))),
-                    child: TextFormField(
-                      controller: _searchController,
-                      onChanged: (value) {
-                        setState(() {});
-                      },
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Colors.orange.shade200,
-                          ),
-                          suffixIcon: IconButton(
-                            icon: const Icon(
-                              Icons.close,
-                              color: Colors.black38,
-                              size: 20.0,
-                            ),
-                            onPressed: () {
-                              setState(() {
-
-                                _searchController.clear();
-                              });
-                            },
-                          ),
-                          hintText: "Search",
-                          hintStyle: const TextStyle(
-                              color: Colors.black26),
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(18.0)),
-                          ),
-                          contentPadding:
-                          const EdgeInsets.symmetric(
-                              horizontal: 20.0,
-                              vertical: 16.0)),
-                    ),
-                  ),
-                ),
-                TextButton(
-                    onPressed: () {
-                      setState(() {
-                        showSearch = !showSearch;
-                      });
-                    },
-                    child: Text("Close",
-                        style: TextStyle(
-                          color: Colors.black54,
-                          decoration: TextDecoration.underline,
-                        ))),
-              ],
-            ),
+            child: taskbar(refress),
           ),
               //SizedBox(height: h * 0.02),
               Expanded(
@@ -683,8 +570,8 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                     && snapshot.data["data"][position]
                                                                     [
                                                                     "in_time"] !=
-                                                                    "N/A")
-                                                                    showDialog(
+                                                                    "N/A") {
+                                                                      showDialog(
                                                                         context: context,
                                                                         builder: (context) => AlertDialog(
                                                                             content:
@@ -763,22 +650,22 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                                                         topRight: Radius.circular(4.0),
                                                                                                       ),
                                                                                                     ),
-                                                                                                    errorBorder: OutlineInputBorder(
+                                                                                                    errorBorder: const OutlineInputBorder(
                                                                                                       borderSide: BorderSide(
                                                                                                         color: Color(0x00000000),
                                                                                                         width: 1,
                                                                                                       ),
-                                                                                                      borderRadius: const BorderRadius.only(
+                                                                                                      borderRadius: BorderRadius.only(
                                                                                                         topLeft: Radius.circular(4.0),
                                                                                                         topRight: Radius.circular(4.0),
                                                                                                       ),
                                                                                                     ),
-                                                                                                    focusedErrorBorder: OutlineInputBorder(
+                                                                                                    focusedErrorBorder: const OutlineInputBorder(
                                                                                                       borderSide: BorderSide(
                                                                                                         color: Color(0x00000000),
                                                                                                         width: 1,
                                                                                                       ),
-                                                                                                      borderRadius: const BorderRadius.only(
+                                                                                                      borderRadius: BorderRadius.only(
                                                                                                         topLeft: Radius.circular(4.0),
                                                                                                         topRight: Radius.circular(4.0),
                                                                                                       ),
@@ -807,7 +694,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                                     child: Row(
                                                                                       mainAxisSize: MainAxisSize.max,
                                                                                       children: [
-                                                                                        Padding(
+                                                                                        const Padding(
                                                                                           padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                                                                           child: Icon(
                                                                                             Icons.text_snippet_outlined,
@@ -826,42 +713,42 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                                                 obscureText: false,
                                                                                                 decoration: InputDecoration(
                                                                                                   hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                                                                                                  enabledBorder: OutlineInputBorder(
+                                                                                                  enabledBorder: const OutlineInputBorder(
                                                                                                     borderSide: BorderSide(
                                                                                                       color: Color(0xFF504B4B),
                                                                                                       width: 1,
                                                                                                     ),
-                                                                                                    borderRadius: const BorderRadius.only(
+                                                                                                    borderRadius: BorderRadius.only(
                                                                                                       topLeft: Radius.circular(4.0),
                                                                                                       topRight: Radius.circular(4.0),
                                                                                                     ),
                                                                                                   ),
-                                                                                                  focusedBorder: OutlineInputBorder(
+                                                                                                  focusedBorder: const OutlineInputBorder(
                                                                                                     borderSide: BorderSide(
                                                                                                       color: Color(0xFF504B4B),
                                                                                                       width: 1,
                                                                                                     ),
-                                                                                                    borderRadius: const BorderRadius.only(
+                                                                                                    borderRadius: BorderRadius.only(
                                                                                                       topLeft: Radius.circular(4.0),
                                                                                                       topRight: Radius.circular(4.0),
                                                                                                     ),
                                                                                                   ),
-                                                                                                  errorBorder: OutlineInputBorder(
+                                                                                                  errorBorder: const OutlineInputBorder(
                                                                                                     borderSide: BorderSide(
                                                                                                       color: Color(0x00000000),
                                                                                                       width: 1,
                                                                                                     ),
-                                                                                                    borderRadius: const BorderRadius.only(
+                                                                                                    borderRadius: BorderRadius.only(
                                                                                                       topLeft: Radius.circular(4.0),
                                                                                                       topRight: Radius.circular(4.0),
                                                                                                     ),
                                                                                                   ),
-                                                                                                  focusedErrorBorder: OutlineInputBorder(
+                                                                                                  focusedErrorBorder: const OutlineInputBorder(
                                                                                                     borderSide: BorderSide(
                                                                                                       color: Color(0x00000000),
                                                                                                       width: 1,
                                                                                                     ),
-                                                                                                    borderRadius: const BorderRadius.only(
+                                                                                                    borderRadius: BorderRadius.only(
                                                                                                       topLeft: Radius.circular(4.0),
                                                                                                       topRight: Radius.circular(4.0),
                                                                                                     ),
@@ -951,6 +838,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                             )
 
                                                                         ));
+                                                                    }
 
 
 
@@ -1021,7 +909,147 @@ class _CalendarPageState extends State<CalendarPage> {
           )),
     );
   }
+  
 }
+class taskbar extends StatefulWidget {
+   taskbar(Function() this.refress, {Key? key}) : super(key: key);
+   var refress;
+  @override
+  State<taskbar> createState() => _taskbarState();
+}
+
+class _taskbarState extends State<taskbar> {
+  bool showSearch = true;
+  @override
+  Widget build(BuildContext context) {
+    Color primaryColor = const Color(0xff1f7396);
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
+    return  showSearch ?Container(
+        padding: const EdgeInsets.only(top: 0.0),
+        height: h * 0.09,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: const EdgeInsets.only(
+                  // top: 10.0,
+                  left: 15.0,
+                ),
+                //padding: const EdgeInsets.only(left: 5.0),
+                height: h * 0.05,
+                width: h * 0.05,
+                decoration: BoxDecoration(
+                  // color: primaryColor,
+                    border: Border.all(color: Colors.black26, width: 1.0),
+                    borderRadius:
+                    const BorderRadius.all(Radius.circular(12.0))),
+                child: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.black87,
+                  size: 18.0,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Today's Attendence",
+                style: TextStyle(
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                    color: primaryColor),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          showSearch = !showSearch;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.search,
+                        color: primaryColor,
+                      )),
+                ],
+              ),
+            )
+          ],
+        )):
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Container(
+          width: w * 0.7,
+          child: Card(
+            //margin: EdgeInsets.only(left: 30, right: 30, top: 30),
+            elevation: 4,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                    Radius.circular(12))),
+            child: TextFormField(
+              controller: _searchController,
+              onChanged: (value) {
+                widget.refress();
+              },
+              decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.orange.shade200,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.black38,
+                      size: 20.0,
+                    ),
+                    onPressed: () {
+                      widget.refress();
+                      _searchController.clear();
+                    },
+                  ),
+                  hintText: "Search",
+                  hintStyle: const TextStyle(
+                      color: Colors.black26),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(18.0)),
+                  ),
+                  contentPadding:
+                  const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 16.0)),
+            ),
+          ),
+        ),
+        TextButton(
+            onPressed: () {
+              setState(() {
+                showSearch = !showSearch;
+              });
+            },
+            child: Text("Close",
+                style: TextStyle(
+                  color: Colors.black54,
+                  decoration: TextDecoration.underline,
+                ))),
+      ],
+    );
+  }
+}
+
 
 
 

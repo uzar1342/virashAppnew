@@ -565,7 +565,6 @@ class _EmpTaskState extends State<EmpTask> {
                                         {
                                           return InkWell(
                                             onTap: (){
-
                                               if(snapshot.data["data"][position]['status']!="Pending") {
                                                 showModalBottomSheet<void>(
                                                 context: context,
@@ -574,10 +573,7 @@ class _EmpTaskState extends State<EmpTask> {
                                                 },
                                               );
                                               }
-
-
-
-                                            },
+                                              },
                                             child: Padding(
                                               padding: const EdgeInsets.only(bottom: 4),
                                               child: Container(
@@ -828,102 +824,104 @@ class _EmpTaskState extends State<EmpTask> {
                                                                                       height: h*0.4,
                                                                                       child: Scaffold(
                                                                                         resizeToAvoidBottomInset:false,
-                                                                                        body: Form(
-                                                                                          child: Column(
-                                                                                            children: [
-                                                                                              Text("Please fill Remark",
-                                                                                                  style: TextStyle(
-                                                                                                      color: Colors.black54,
-                                                                                                      fontWeight: FontWeight.bold)),
-                                                                                              SizedBox(
-                                                                                                height: h * 0.01,
-                                                                                              ),
-                                                                                              Container(
-                                                                                                //  height: h * 0.07,
-                                                                                                width: w * 0.95,
-                                                                                                child: Card(
-                                                                                                  elevation: 3.0,
-                                                                                                  child: TextFormField(
-                                                                                                    controller: remark,
-                                                                                                    maxLines: 8,
-                                                                                                    cursorColor: primaryColor,
-                                                                                                    decoration: InputDecoration(
-                                                                                                        suffixIcon: Icon(
-                                                                                                          Icons.assignment,
-                                                                                                          color: Colors.red.shade200,
-                                                                                                        ),
-                                                                                                        hintText: "2,3 Done",
-                                                                                                        hintStyle: TextStyle(
-                                                                                                          color: Colors.black26,
-                                                                                                          fontWeight: FontWeight.bold,
-                                                                                                          fontSize: 14.0,
-                                                                                                        ),
-                                                                                                        filled: true,
-                                                                                                        fillColor: Colors.white,
-                                                                                                        border: OutlineInputBorder(
-                                                                                                          gapPadding: 9,
-                                                                                                          borderSide: BorderSide.none,
-                                                                                                          borderRadius: BorderRadius.all(
-                                                                                                              Radius.circular(12.0)),
-                                                                                                        ),
-                                                                                                        contentPadding:
-                                                                                                        EdgeInsets.symmetric(
-                                                                                                            horizontal: 20.0,
-                                                                                                            vertical: 16.0)),
+                                                                                        body: SingleChildScrollView(
+                                                                                          child: Form(
+                                                                                            child: Column(
+                                                                                              children: [
+                                                                                                Text("Please fill Remark",
+                                                                                                    style: TextStyle(
+                                                                                                        color: Colors.black54,
+                                                                                                        fontWeight: FontWeight.bold)),
+                                                                                                SizedBox(
+                                                                                                  height: h * 0.01,
+                                                                                                ),
+                                                                                                Container(
+                                                                                                  //  height: h * 0.07,
+                                                                                                  width: w * 0.95,
+                                                                                                  child: Card(
+                                                                                                    elevation: 3.0,
+                                                                                                    child: TextFormField(
+                                                                                                      controller: remark,
+                                                                                                      maxLines: 8,
+                                                                                                      cursorColor: primaryColor,
+                                                                                                      decoration: InputDecoration(
+                                                                                                          suffixIcon: Icon(
+                                                                                                            Icons.assignment,
+                                                                                                            color: Colors.red.shade200,
+                                                                                                          ),
+                                                                                                          hintText: "2,3 Done",
+                                                                                                          hintStyle: TextStyle(
+                                                                                                            color: Colors.black26,
+                                                                                                            fontWeight: FontWeight.bold,
+                                                                                                            fontSize: 14.0,
+                                                                                                          ),
+                                                                                                          filled: true,
+                                                                                                          fillColor: Colors.white,
+                                                                                                          border: OutlineInputBorder(
+                                                                                                            gapPadding: 9,
+                                                                                                            borderSide: BorderSide.none,
+                                                                                                            borderRadius: BorderRadius.all(
+                                                                                                                Radius.circular(12.0)),
+                                                                                                          ),
+                                                                                                          contentPadding:
+                                                                                                          EdgeInsets.symmetric(
+                                                                                                              horizontal: 20.0,
+                                                                                                              vertical: 16.0)),
+                                                                                                    ),
                                                                                                   ),
                                                                                                 ),
-                                                                                              ),
-                                                                                              SizedBox(
-                                                                                                height: h * 0.04,
-                                                                                              ),
-                                                                                              Row(
-                                                                                                mainAxisAlignment:
-                                                                                                MainAxisAlignment.spaceBetween,
-                                                                                                children: [
-                                                                                                  TextButton(
-                                                                                                    onPressed: () {
-                                                                                                      Navigator.pop(context);
-                                                                                                    },
-                                                                                                    child: const Text(
-                                                                                                      "Cancel",
-                                                                                                      style: TextStyle(
-                                                                                                        color: Colors.black54,
-                                                                                                        fontWeight: FontWeight.bold,
-                                                                                                        decoration:
-                                                                                                        TextDecoration.underline,
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  InkWell(
-                                                                                                    onTap: ()  {
-                                                                                                      Navigator.pop(context);
-                                                                                                      updatetask(snapshot.data["data"][position]["task_id"].toString());
-                                                                                                      setState(() {
-                                                                                                      });
-                                                                                                    },
-                                                                                                    child: Container(
-                                                                                                      height: h * 0.04,
-                                                                                                      padding: const EdgeInsets.symmetric(
-                                                                                                          horizontal: 10.0),
-                                                                                                      decoration: BoxDecoration(
-                                                                                                          borderRadius: const BorderRadius.all(
-                                                                                                            Radius.circular(6.0),
-                                                                                                          ),
-                                                                                                          color: primaryColor),
-                                                                                                      child: Center(
-                                                                                                        child: Text(
-                                                                                                          "Apply",
-                                                                                                          style: TextStyle(
-                                                                                                              color: Colors.white,
-                                                                                                              fontWeight: FontWeight.bold,
-                                                                                                              fontSize: 15.0),
+                                                                                                SizedBox(
+                                                                                                  height: h * 0.04,
+                                                                                                ),
+                                                                                                Row(
+                                                                                                  mainAxisAlignment:
+                                                                                                  MainAxisAlignment.spaceBetween,
+                                                                                                  children: [
+                                                                                                    TextButton(
+                                                                                                      onPressed: () {
+                                                                                                        Navigator.pop(context);
+                                                                                                      },
+                                                                                                      child: const Text(
+                                                                                                        "Cancel",
+                                                                                                        style: TextStyle(
+                                                                                                          color: Colors.black54,
+                                                                                                          fontWeight: FontWeight.bold,
+                                                                                                          decoration:
+                                                                                                          TextDecoration.underline,
                                                                                                         ),
                                                                                                       ),
                                                                                                     ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              )
-                                                                                            ],
+                                                                                                    InkWell(
+                                                                                                      onTap: ()  {
+                                                                                                        Navigator.pop(context);
+                                                                                                        updatetask(snapshot.data["data"][position]["task_id"].toString());
+                                                                                                        setState(() {
+                                                                                                        });
+                                                                                                      },
+                                                                                                      child: Container(
+                                                                                                        height: h * 0.04,
+                                                                                                        padding: const EdgeInsets.symmetric(
+                                                                                                            horizontal: 10.0),
+                                                                                                        decoration: BoxDecoration(
+                                                                                                            borderRadius: const BorderRadius.all(
+                                                                                                              Radius.circular(6.0),
+                                                                                                            ),
+                                                                                                            color: primaryColor),
+                                                                                                        child: Center(
+                                                                                                          child: Text(
+                                                                                                            "Apply",
+                                                                                                            style: TextStyle(
+                                                                                                                color: Colors.white,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontSize: 15.0),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                )
+                                                                                              ],
+                                                                                            ),
                                                                                           ),
                                                                                         ),
                                                                                       ),

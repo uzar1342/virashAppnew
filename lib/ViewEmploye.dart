@@ -10,7 +10,7 @@ import 'flutter_flow/flutter_flow_theme.dart';
 import 'monthattendence.dart';
 import 'virash_app_home_screen.dart';
 import 'globals.dart';
-
+final TextEditingController _searchController = TextEditingController();
 class viewemp extends StatefulWidget {
    viewemp({Key? key,required this.type}) : super(key: key);
   String type;
@@ -50,7 +50,7 @@ class _viewempState extends State<viewemp> {
     var formData = FormData.fromMap({
       "emp_id":userId
     });
-print(formData.fields);
+    print(formData.fields);
     var response = await dio.post('http://training.virash.in/employee_list', data: formData);
     if (response.statusCode == 200) {
       print(response.data);
@@ -76,6 +76,12 @@ print(formData.fields);
    subscription.cancel;
    super.dispose();
  }
+ refress()
+ {
+   setState(() {
+
+   });
+}
   @override
   Widget build(BuildContext context) {
    var h=MediaQuery.of(context).size.height;
@@ -84,21 +90,7 @@ print(formData.fields);
       body:net?SafeArea(
         child: Column(
           children: [
-            Container(
-                padding: const EdgeInsets.only(top: 0.0),
-                height: h * 0.09,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Employee List",
-                      style: TextStyle(
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
-                          color: primaryColor),
-                    ),
-                  ],
-                )),
+            taskbar(refress),
             FutureBuilder<dynamic>(
               future: fetchemployelist(), // async work
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -145,8 +137,13 @@ print(formData.fields);
                           itemCount: snapshot.data["data"].length,
                           physics: ScrollPhysics(),
                           itemBuilder: (context, position) {
-                            return
-                              Padding(
+                            if (snapshot.data["data"][position]['emp_name']
+                                .toString()
+                                .toLowerCase()
+                                .contains(
+                                _searchController.text.toLowerCase())) {
+                              return
+                              snapshot.data["data"][position]["emp_id"]!=userId? Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
                                 onTap:()=>{},
@@ -255,9 +252,10 @@ print(formData.fields);
                                   ),
                                 ),
                             ),
-                              );
-
-
+                              ):Container();
+                            }
+                            else
+                              return Container();
                           },
                         ),
                       ):Image.asset("assets/no_data.png");
@@ -296,3 +294,123 @@ print(formData.fields);
     );
   }
 }
+
+
+class taskbar extends StatefulWidget {
+  taskbar(Function() this.refress, {Key? key}) : super(key: key);
+  var refress;
+  @override
+  State<taskbar> createState() => _taskbarState();
+}
+
+class _taskbarState extends State<taskbar> {
+  bool showSearch = true;
+  @override
+  Widget build(BuildContext context) {
+    Color primaryColor = const Color(0xff1f7396);
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
+    return  showSearch ?Container(
+        padding: const EdgeInsets.only(top: 0.0),
+        height: h * 0.09,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  "Employe List",
+                  style: TextStyle(
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                      color: primaryColor),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          showSearch = !showSearch;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.search,
+                        color: primaryColor,
+                      )),
+                ],
+              ),
+            )
+          ],
+        )):
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Container(
+          width: w * 0.7,
+          child: Card(
+            //margin: EdgeInsets.only(left: 30, right: 30, top: 30),
+            elevation: 4,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                    Radius.circular(12))),
+            child: TextFormField(
+              controller: _searchController,
+              onChanged: (value) {
+                widget.refress();
+              },
+              decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.orange.shade200,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.black38,
+                      size: 20.0,
+                    ),
+                    onPressed: () {
+                      widget.refress();
+                      _searchController.clear();
+                    },
+                  ),
+                  hintText: "Search",
+                  hintStyle: const TextStyle(
+                      color: Colors.black26),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(18.0)),
+                  ),
+                  contentPadding:
+                  const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 16.0)),
+            ),
+          ),
+        ),
+        TextButton(
+            onPressed: () {
+              setState(() {
+                showSearch = !showSearch;
+              });
+            },
+            child: Text("Close",
+                style: TextStyle(
+                  color: Colors.black54,
+                  decoration: TextDecoration.underline,
+                ))),
+      ],
+    );
+  }
+}
+
