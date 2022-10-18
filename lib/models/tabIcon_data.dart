@@ -63,8 +63,8 @@ class TabIconData {
       animationController: null,
     ),
     TabIconData(
-      imagePath: 'asset/mortarboa.png',
-      selectedImagePath: 'asset/mortarboard.png',
+      imagePath: "asset/hchecklist.png",
+      selectedImagePath: "asset/checklist.png",
       index: 1,
       lable: "",
       isSelected: false,

@@ -366,7 +366,7 @@ class _CartWidgetState extends State<CartWidget> {
         Row(
           children: [
             Expanded(flex: 9,child: Priorety(cartItem: widget.cart[widget.index])),
-            Expanded(
+            widget.index!=0? Expanded(
               flex: 1,
               child: IconButton(
                 icon: Icon(Icons.delete),
@@ -378,7 +378,7 @@ class _CartWidgetState extends State<CartWidget> {
                   });
                 },
               ),
-            )
+            ):Container()
           ],
         ),
         Task(cartItem: widget.cart[widget.index]),

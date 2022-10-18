@@ -137,60 +137,36 @@ int index=0;
                             Row(
                               children:  <Widget>[
                                  const Padding(
-                                  padding: EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.zero,
                                   child: Text( 'Pending',),
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(2.0),
-                                    child: Text(pend.toString(),style: TextStyle(fontSize: 15),),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            comp>9?Row(
-                              children:  <Widget>[
                                 Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text( 'Completed',style: TextStyle(fontSize: 11),),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(2.0),
-                                    child: Text(comp.toString(),style: TextStyle(fontSize: 13),),
-                                  ),
-                                ),
-                              ],
-                            ):
-                            Row(
-                              children:  <Widget>[
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text( 'Completed',),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(2.0),
-                                    child: Text(comp.toString(),style: TextStyle(fontSize: 15),),
-                                  ),
+                                  padding: EdgeInsets.only(left: 2.0),
+                                  child: Text(pend.toString(),style: TextStyle(fontSize: 15),),
                                 ),
                               ],
                             ),
                             Row(
                               children:  <Widget>[
                                 const Padding(
-                                  padding: EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.zero,
+                                  child: Text( 'Completed',style: TextStyle(fontSize: 14)),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 2),
+                                  child: Text(comp.toString(),style: TextStyle(fontSize: 15),),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children:  <Widget>[
+                                const Padding(
+                                  padding: EdgeInsets.zero,
                                   child: Text( 'Rejected',),
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(2.0),
-                                    child: Text(rej.toString(),),
-                                  ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 2),
+                                  child: Text(rej.toString(),style: TextStyle(fontSize: 15)),
                                 ),
                               ],
                             ),

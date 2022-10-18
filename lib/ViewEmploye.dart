@@ -143,7 +143,8 @@ class _viewempState extends State<viewemp> {
                                 .contains(
                                 _searchController.text.toLowerCase())) {
                               return
-                              snapshot.data["data"][position]["emp_id"]!=userId? Padding(
+                              snapshot.data["data"][position]["emp_id"].toString().trim()!=userId?
+                              Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
                                 onTap:()=>{},

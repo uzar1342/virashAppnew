@@ -356,7 +356,6 @@ class _EmpTaskState extends State<EmpTask> {
   }
 
   updatetask(taskid) async {
-
     print(remark.value.text);
     final url = Uri.parse('http://training.virash.in/markTaskCompleted');
     var map = Map<String, dynamic>();
@@ -404,7 +403,7 @@ class _EmpTaskState extends State<EmpTask> {
     map['task_id'] = taskid;
     map['task'] = task;
     map['assigned_to'] = emoid;
-    map['task_img'] = img!=""?img:"";
+    map['task_img'] = img.toString().trim()!="N/A"?img:"".trim();
     map['priority'] = prio;
     print(map);
     http.Response response = await http.post(
@@ -532,7 +531,7 @@ class _EmpTaskState extends State<EmpTask> {
                                         Container(
                                           padding: EdgeInsets.symmetric(horizontal: 14.0),
                                           child: const Text(
-                                            "somthing went wrong",
+                                            "something went wrong",
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 color: Colors.red,
@@ -563,13 +562,15 @@ class _EmpTaskState extends State<EmpTask> {
                                             .contains(
                                             _searchController.text.toLowerCase()))
                                         {
-                                          return InkWell(
+                                          return
+
+                                            InkWell(
                                             onTap: (){
                                               if(snapshot.data["data"][position]['status']!="Pending") {
                                                 showModalBottomSheet<void>(
                                                 context: context,
                                                 builder: (BuildContext context) {
-                                                  return Tasktrail(id: snapshot.data["data"][position]["emp_id"],);
+                                                  return Tasktrail(id: snapshot.data["data"][position]["task_id"],);
                                                 },
                                               );
                                               }
@@ -1250,7 +1251,7 @@ class _TasktrailState extends State<Tasktrail> {
  Future<dynamic> taskTrail(id) async {
     Dio dio=Dio();
     var formData = FormData.fromMap({
-      "task_id":"379"
+      "task_id":id
     });
     print(formData.fields);
     var response = await dio.post('http://training.virash.in/taskTrail', data: formData);
@@ -1295,9 +1296,8 @@ class _TasktrailState extends State<Tasktrail> {
                 // if we got our data
               } else if (snapshot.hasData) {
 
-
+                int len=int.parse(snapshot.data["data"].length.toString());
                 return
-
                 ListView.builder(
                     shrinkWrap: true,
                     itemCount: snapshot.data["data"].length,
@@ -1346,8 +1346,8 @@ class _TasktrailState extends State<Tasktrail> {
                             ),
                             Expanded(
                               child: Container(
-                                width: 150,
-                                height: 150,
+                                width: 100,
+                                height: 100,
                                 decoration: BoxDecoration(
                                   color: Color(0x00FFFFFF),
                                   shape: BoxShape.circle,
@@ -1360,17 +1360,18 @@ class _TasktrailState extends State<Tasktrail> {
                                       flex: 1,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context).secondaryBackground,
+                                          color: primaryColor,
                                           shape: BoxShape.circle,
                                         ),
                                       ),
                                     ),
                                     Expanded(
                                       flex: 2,
-                                      child: snapshot.data["data"].length==(position-1) ?Container(
+                                      child: len!=(position+1) ?Container(
                                         width: 10,
                                         decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context).secondaryBackground,
+                                          color: primaryColor,
+                                          //78len==(position+1)?FlutterFlowTheme.of(context).secondaryBackground:primaryColor,
                                         ),
                                       ):Container(),
                                     ),

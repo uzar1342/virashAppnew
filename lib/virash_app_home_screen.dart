@@ -193,10 +193,20 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
                 if (!mounted) {
                   return;
                 }
-                setState(() {
+                if(admins.contains(employee_role)) {
+                  setState(() {
+                  tabBody =
+                      EmpTaskNav();
+
+                });
+                }
+                else{
+                  setState(() {
                   tabBody =
                       TrainingScreen(animationController: animationController);
+
                 });
+                }
               });
             }
                else if (index == 2 ) {
@@ -205,29 +215,23 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
                   return;
                 }
                 setState(() {
-
-
                   !admins.contains(employee_role)?
                   tabBody =  EmpTaskNav():
                   tabBody=viewemp(type: 'T',);
-
-
-
-
                 });
               });
             }else if (index == 3 ) {
-              if(!admins.contains(employee_role)) {
+
                 animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) {
                   return;
                 }
                 setState(() {
                   !admins.contains(employee_role)?tabBody = MonthCalendarPage(id: userId, name: employee_name,):
-                  tabBody=viewemp(type: 'A',);
+                  tabBody=TrainingScreen(animationController: animationController);
                 });
               });
-              }
+
             }
           },
         ),
