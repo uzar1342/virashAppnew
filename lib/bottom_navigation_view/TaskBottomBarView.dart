@@ -130,6 +130,15 @@ class _TaskBottomBarViewState extends State<TaskBottomBarView>
                                   widget.changeIndex!(3);
                                 }),
                           ),
+                          Expanded(
+                            child: TabIcons(
+                                tabIconData: widget.tabIconsList?[4],
+                                removeAllSelect: () {
+                                  setRemoveAllSelection(
+                                      widget.tabIconsList?[4]);
+                                  widget.changeIndex!(4);
+                                }),
+                          ),
                         ],
                       ),
                     ),

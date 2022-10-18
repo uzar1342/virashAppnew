@@ -8,6 +8,7 @@ import 'package:dio/src/form_data.dart' as f;
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'virash_app_home_screen.dart';
 import 'globals.dart';
@@ -51,206 +52,208 @@ class _HomePageState extends State<HomePage> {
     TextEditingController Emailcon=TextEditingController();
     TextEditingController passcon=TextEditingController();
 
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: net?SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: 400,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/images/background.png'),
-                          fit: BoxFit.fill
-                      )
-                  ),
-                  child: Stack(
-                    children: <Widget>[
-                      Positioned(
-                        left: 30,
-                        width: 80,
-                        height: 200,
-                        child:  Container(
+    return LoaderOverlay(
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          body: net?SingleChildScrollView(
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: 400,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/background.png'),
+                            fit: BoxFit.fill
+                        )
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                          left: 30,
+                          width: 80,
+                          height: 200,
+                          child:  Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage('assets/images/light-1.png')
+                                  )
+                              ),
+                            ),
+                        ),
+                        Positioned(
+                          left: 140,
+                          width: 80,
+                          height: 150,
+                          child:  Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: AssetImage('assets/images/light-1.png')
+                                    image: AssetImage('assets/images/light-2.png')
                                 )
                             ),
                           ),
-                      ),
-                      Positioned(
-                        left: 140,
-                        width: 80,
-                        height: 150,
-                        child:  Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage('assets/images/light-2.png')
-                              )
+                        ),
+                        Positioned(
+                          right: 40,
+                          top: 40,
+                          width: 80,
+                          height: 150,
+                          child:  Container(
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage('assets/images/clock.png')
+                                )
+                            ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        right: 40,
-                        top: 40,
-                        width: 80,
-                        height: 150,
-                        child:  Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage('assets/images/clock.png')
-                              )
+                        Positioned(
+                          child:  Container(
+                            margin: EdgeInsets.only(top: 50),
+                            child: Center(
+                              child: Text("Login", style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),),
+                            ),
                           ),
-                        ),
-                      ),
-                      Positioned(
-                        child:  Container(
-                          margin: EdgeInsets.only(top: 50),
-                          child: Center(
-                            child: Text("Login", style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),),
-                          ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(30.0),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Color.fromRGBO(143, 148, 251, .2),
-                                  blurRadius: 20.0,
-                                  offset: Offset(0, 10)
-                              )
-                            ]
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color: Colors.grey))
-                              ),
-                              child: TextField(
-                                controller: Emailcon,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Username",
-                                    hintStyle: TextStyle(color: Colors.grey[400])
+                  Padding(
+                    padding: EdgeInsets.all(30.0),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Color.fromRGBO(143, 148, 251, .2),
+                                    blurRadius: 20.0,
+                                    offset: Offset(0, 10)
+                                )
+                              ]
+                          ),
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey))
                                 ),
-                              ),
+                                child: TextField(
+                                  controller: Emailcon,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Username",
+                                      hintStyle: TextStyle(color: Colors.grey[400])
+                                  ),
+                                ),
 
-                            ),
-                            pass()
-                          ],
+                              ),
+                              pass()
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 30,),
-                      isLoading ?Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(
-                              color: primaryColor,
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                          ],
-                        ),
-                      ):InkWell(
-                        onTap: () {
-                          print(_password);
-                          if(net==true)
-                            {
-                              if(Emailcon.value.text!=""&&_password!="")
+                        SizedBox(height: 30,),
+                        isLoading ?Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(
+                                color: primaryColor,
+                              ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                            ],
+                          ),
+                        ):InkWell(
+                          onTap: () {
+                            print(_password);
+                            if(net==true)
                               {
-                                setState(() {
-                                  isLoading=true;
-                                });
-                                login(Emailcon.value.text,_password);
+                                if(Emailcon.value.text!=""&&_password!="")
+                                {
+                                  setState(() {
+                                    context.loaderOverlay.show();
+                                  });
+                                  login(Emailcon.value.text,_password);
+                                }
+                                else
+                                {
+                                  final snackBar = SnackBar(
+                                    content: const Text('Fill credincel'),
+                                    backgroundColor: (primaryColor),
+
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                }
+
                               }
-                              else
+                            else
                               {
+
                                 final snackBar = SnackBar(
-                                  content: const Text('Fill credincel'),
+                                  content: const Text('No Internet'),
                                   backgroundColor: (primaryColor),
 
                                 );
                                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                               }
 
-                            }
-                          else
-                            {
-
-                              final snackBar = SnackBar(
-                                content: const Text('No Internet'),
-                                backgroundColor: (primaryColor),
-
-                              );
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                            }
-
-                        } ,
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              gradient: LinearGradient(
-                                  colors: [
-                                    Color.fromRGBO(143, 148, 251, 1),
-                                    Color.fromRGBO(143, 148, 251, .6),
-                                  ]
-                              )
-                          ),
-                          child: Center(
-                            child: Text("Login", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                          } ,
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                gradient: LinearGradient(
+                                    colors: [
+                                      Color.fromRGBO(143, 148, 251, 1),
+                                      Color.fromRGBO(143, 148, 251, .6),
+                                    ]
+                                )
+                            ),
+                            child: Center(
+                              child: Text("Login", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 70,),
-                      Text("Forgot Password?", style: TextStyle(color: Color.fromRGBO(143, 148, 251, 1)),),
-                    ],
-                  ),
-                )
-              ],
+                        SizedBox(height: 70,),
+                        Text("Forgot Password?", style: TextStyle(color: Color.fromRGBO(143, 148, 251, 1)),),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        ):
-        SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/no_internet.png",
-                  height: 300,
-                  width: 300,
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 14.0),
-                  child: Text(
-                    "Looks like you got disconnected, Please check your Internet connection",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: primaryColor,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold),
+          ):
+          SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/no_internet.png",
+                    height: 300,
+                    width: 300,
                   ),
-                )
-              ],
-            ))
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 14.0),
+                    child: Text(
+                      "Looks like you got disconnected, Please check your Internet connection",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: primaryColor,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ))
+      ),
     );
   }
 
@@ -330,7 +333,7 @@ class _HomePageState extends State<HomePage> {
           }
         else{
           setState(() {
-            isLoading=false;
+            context.loaderOverlay.hide();
           });
           final snackBar = SnackBar(
             content: const Text('Login Fail'),

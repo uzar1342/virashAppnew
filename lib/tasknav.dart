@@ -3,6 +3,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'Approvedtask.dart';
 import 'taskAdd.dart';
 import 'approved_task.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
@@ -245,6 +246,17 @@ class _TaskNavState extends State<TaskNav>
             setState(() {
               tabBody =
                   EmpTask(emoid: widget.id, status: 'Rejected', fun: (){},);
+                  //CompTask(emoid: widget.id);
+            });
+          });
+        }else if (index == 4 ){
+          animationController?.reverse().then<dynamic>((data) {
+            if (!mounted) {
+              return;
+            }
+            setState(() {
+              tabBody =
+                  apptask(emoid: widget.id);
                   //CompTask(emoid: widget.id);
             });
           });

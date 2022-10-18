@@ -789,7 +789,8 @@ class _EmpTaskState extends State<EmpTask> {
                                                             ),
                                                           ],
                                                         ),
-                                                      ) else
+                                                      )
+                                                      else
                                                         Padding(
                                                           padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                                                           child: Row(
@@ -1136,7 +1137,7 @@ class _EmpTaskState extends State<EmpTask> {
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                      snapshot.data["data"][position]["rejected_remark"]!="N/A"? Expanded(
+                                                                      snapshot.data["data"][position]["status"]!="Pending"?snapshot.data["data"][position]["rejected_remark"]!="N/A"? Expanded(
                                                                         flex: 1,
                                                                         child: GestureDetector(
                                                                           onTap: ()
@@ -1200,7 +1201,7 @@ class _EmpTaskState extends State<EmpTask> {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                      ):Container(),
+                                                                      ):Container():Container(),
                                                                     ],
                                                                   ),
                                                                 ),

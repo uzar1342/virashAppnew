@@ -121,9 +121,16 @@ class TabIconData {
       animationController: null,
     ),
     TabIconData(
+      imagePath: 'asset/check.png',
+      selectedImagePath: 'asset/check.png',
+      index: 4,
+      lable: "Approve",
+      isSelected: false,
+      animationController: null,
+    ),TabIconData(
       imagePath: 'assets/fitness_app/tab_4.png',
       selectedImagePath: 'assets/fitness_app/tab_4s.png',
-      index: 4,
+      index: 5,
       isSelected: false,
       animationController: null,
     ),

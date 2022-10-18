@@ -719,7 +719,7 @@ var address;
                                 ),
                                 Tooltip(
                                   verticalOffset: -60,
-                                  message: "Holiyday",
+                                  message: "Holiday",
                                   padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
@@ -1447,7 +1447,7 @@ var address;
                                                                                       ),
                                                                                     ),
                                                                                   ),
-                                                                                  snapshot.data["data"][0]["task_img"]!="N/A"?Expanded(
+                                                                                  snapshot.data["data"][0]["task_img"]!="N/A"&&snapshot.data["data"][0]["task_img"]!=null?Expanded(
                                                                                     flex: 1,
                                                                                     child: GestureDetector(
                                                                                       onTap: (){
@@ -1926,15 +1926,7 @@ var address;
                                                               width:
                                                               w * 0.01,
                                                             ),
-                                                            Text(
-                                                              "Absent",
-                                                              style: const TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                            )
+
                                                           ],
                                                         ),
                                                       ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:Virash/taskimg.dart';
 import 'package:dio/dio.dart';
@@ -300,9 +301,8 @@ class _AllEmpTaskState extends State<AllEmpTask> {
     var response = await dio.post('http://training.virash.in/allEmployeeTodaysTask', data: formData);
     if (response.statusCode == 200) {
 
-      print(response.data["data"]);
+      log(response.data["data"].toString());
       print(check);
-
       print(response.data);
       data=response.data;
       setState(() {
@@ -1016,7 +1016,8 @@ class _AllEmpTaskState extends State<AllEmpTask> {
                                                           ),
                                                         ),
                                                       ),
-                                                      data["data"][position]["rejected_remark"]!="N/A"? Expanded(
+                                                      data["data"][position]["status"]!="Pending"?
+                                                      data["data"][position]["rejected_remark"]!="N/A"&&data["data"][position]["rejected_remark"]!=null? Expanded(
                                                         flex: 1,
                                                         child: GestureDetector(
                                                           onTap: ()
@@ -1080,7 +1081,7 @@ class _AllEmpTaskState extends State<AllEmpTask> {
                                                             ),
                                                           ),
                                                         ),
-                                                      ):Container(),
+                                                      ):Container():Container(),
                                                     ],
                                                   ),
                                                 ),
