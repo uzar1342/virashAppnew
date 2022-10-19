@@ -18,7 +18,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'OuttimeForm.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 
-
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 class MonthCalendarPage extends StatefulWidget {
   MonthCalendarPage({Key? key ,required this.name, required  this.id}) : super(key: key);
   String name;
@@ -376,6 +376,14 @@ var address;
   subscription.cancel;
     super.dispose();
   }
+
+  hideloader()
+  {
+    setState(() {
+      context.loaderOverlay.hide();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -431,7 +439,7 @@ var address;
         fontSize: 16,
       ),
       onCalendarChanged: (DateTime date) {
-        this.setState(() {
+        setState(() {
           _targetDateTime = date;
           _currentMonth = DateFormat.yMMM().format(_targetDateTime);
         });
@@ -443,330 +451,331 @@ var address;
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return  Scaffold(
+        key: _scaffoldKey,
         body: net?SafeArea(
-          child: Column(
-            children: [
-              admins.contains(employee_role)?
-              Container(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  height: h * 0.09,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                            // top: 10.0,
-                            left: 15.0,
-                          ),
-                          //padding: const EdgeInsets.only(left: 5.0),
-                          height: h * 0.05,
-                          width: h * 0.05,
-                          decoration: BoxDecoration(
-                            // color: primaryColor,
-                              border: Border.all(color: Colors.black26, width: 1.0),
-                              borderRadius:
-                              const BorderRadius.all(Radius.circular(12.0))),
-                          child: const Icon(
-                            Icons.arrow_back_ios_new,
-                            color: Colors.black87,
-                            size: 18.0,
+          child: LoaderOverlay(
+            child: Column(
+              children: [
+                admins.contains(employee_role)?
+                Container(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    height: h * 0.09,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                              // top: 10.0,
+                              left: 15.0,
+                            ),
+                            //padding: const EdgeInsets.only(left: 5.0),
+                            height: h * 0.05,
+                            width: h * 0.05,
+                            decoration: BoxDecoration(
+                              // color: primaryColor,
+                                border: Border.all(color: Colors.black26, width: 1.0),
+                                borderRadius:
+                                const BorderRadius.all(Radius.circular(12.0))),
+                            child: const Icon(
+                              Icons.arrow_back_ios_new,
+                              color: Colors.black87,
+                              size: 18.0,
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12.0),
-                        child: Text(
-                          widget.name,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: Text(
+                            widget.name,
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor),
+                          ),
+                        ),
+                      ],
+                    )):
+                Container(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    height: h * 0.09,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Monthly Status",
                           style: TextStyle(
                               fontSize: 25.0,
                               fontWeight: FontWeight.bold,
                               color: primaryColor),
                         ),
-                      ),
-                    ],
-                  )):
-              Container(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  height: h * 0.09,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Monthly Status",
-                        style: TextStyle(
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.bold,
-                            color: primaryColor),
-                      ),
-                    ],
-                  )),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        width: w,
-                        child: Column(
-                          children: [
-                            Container(
-                              width: w,
-                              height: 100,
-                              padding: EdgeInsets.all(8),
-                              child:  Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Container(
-                                    width: w*0.3,
-                                    alignment: Alignment.centerLeft,
-                                    child: TextButton(
-                                      child: Text('PREV'),
-                                      onPressed: () {
-                                        _markedDateMap.clear();
-                                        print(_targetDateTime.month);  print(DateTime.now().month);
-                                        setState(() {
-                                          _targetDateTime = DateTime(
-                                              _targetDateTime.year, _targetDateTime.month - 1);
-                                          _currentMonth =
-                                              DateFormat.yMMM().format(_targetDateTime);
-                                          year=_targetDateTime.year;
-                                          month=_targetDateTime.month;
-                                          FetchAttendence();
-                                          _currentDate2=_targetDateTime;
-                                        });
-                                      },
+                      ],
+                    )),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          width: w,
+                          child: Column(
+                            children: [
+                              Container(
+                                width: w,
+                                height: 100,
+                                padding: EdgeInsets.all(8),
+                                child:  Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      width: w*0.3,
+                                      alignment: Alignment.centerLeft,
+                                      child: TextButton(
+                                        child: Text('PREV'),
+                                        onPressed: () {
+                                          _markedDateMap.clear();
+                                          print(_targetDateTime.month);  print(DateTime.now().month);
+                                          setState(() {
+                                            _targetDateTime = DateTime(
+                                                _targetDateTime.year, _targetDateTime.month - 1);
+                                            _currentMonth =
+                                                DateFormat.yMMM().format(_targetDateTime);
+                                            year=_targetDateTime.year;
+                                            month=_targetDateTime.month;
+                                            FetchAttendence();
+                                            _currentDate2=_targetDateTime;
+                                          });
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  Container(
-                                    width: w*0.3,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      _currentMonth,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 24.0,
+                                    Container(
+                                      width: w*0.3,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        _currentMonth,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24.0,
+                                        ),
+                                      ),
+                                    ),
+                                    _targetDateTime.month<DateTime.now().month?Container(
+                                      width: w*0.3,
+                                      alignment: Alignment.centerRight,
+                                      child: TextButton(
+                                        child: Text('NEXT'),
+                                        onPressed: () {
+                                          _markedDateMap.clear();
+                                          print(_targetDateTime.month);
+                                          setState(() {
+
+                                            _targetDateTime = DateTime(
+                                                _targetDateTime.year, _targetDateTime.month + 1);
+                                            _currentMonth =
+                                                DateFormat.yMMM().format(_targetDateTime);
+                                            year=_targetDateTime.year;
+                                            month=_targetDateTime.month;
+                                            FetchAttendence();
+                                            _currentDate2=_targetDateTime;
+                                          });
+                                        },
+                                      ),
+                                    ):Container(
+                                      width: w*0.3,
+                                      alignment: Alignment.centerRight,
+                                      child: TextButton(
+                                        child: Text('NEXT',style: TextStyle(color: Color(0xff656161)),),
+                                        onPressed: () {
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                width: w,
+                                height: h*0.5,
+                                margin: EdgeInsets.symmetric(horizontal: 16.0),
+                                child: monthloader?_calendarCarouselNoHeader:Center(child: CircularProgressIndicator()),
+                              ),
+                              // Generated code for this Row Widget...
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Tooltip(
+                                    verticalOffset: -60,
+                                    message: "Full Day",
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Text(
+                                            'FD',
+                                            style: FlutterFlowTheme.of(context).bodyText1,
+                                          ),
+                                          Container(
+                                            width: 20,
+                                            height: 20,
+                                            decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                  _targetDateTime.month<DateTime.now().month?Container(
-                                    width: w*0.3,
-                                    alignment: Alignment.centerRight,
-                                    child: TextButton(
-                                      child: Text('NEXT'),
-                                      onPressed: () {
-                                        _markedDateMap.clear();
-                                        print(_targetDateTime.month);
-                                        setState(() {
-
-                                          _targetDateTime = DateTime(
-                                              _targetDateTime.year, _targetDateTime.month + 1);
-                                          _currentMonth =
-                                              DateFormat.yMMM().format(_targetDateTime);
-                                          year=_targetDateTime.year;
-                                          month=_targetDateTime.month;
-                                          FetchAttendence();
-                                          _currentDate2=_targetDateTime;
-                                        });
-                                      },
+                                  Tooltip(
+                                    verticalOffset: -60,
+                                    message: "Half Day",
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Text(
+                                            'HD',
+                                            style: FlutterFlowTheme.of(context).bodyText1,
+                                          ),
+                                          Container(
+                                            width: 20,
+                                            height: 20,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.yellow,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ):Container(
-                                    width: w*0.3,
-                                    alignment: Alignment.centerRight,
-                                    child: TextButton(
-                                      child: Text('NEXT',style: TextStyle(color: Color(0xff656161)),),
-                                      onPressed: () {
-                                      },
+                                  ),
+                                  Tooltip(
+                                    verticalOffset: -60,
+                                    message: "Went Early",
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Text(
+                                            'WE',
+                                            style: FlutterFlowTheme.of(context).bodyText1,
+                                          ),
+                                          Container(
+                                            width: 20,
+                                            height: 20,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFFEFAA39),
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  )
+                                  ),
+                                  Tooltip(
+                                    verticalOffset: -60,
+                                    message: "Absent",
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Text(
+                                            'AB',
+                                            style: FlutterFlowTheme.of(context).bodyText1,
+                                          ),
+                                          Container(
+                                            width: 20,
+                                            height: 20,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFFDE3E54),
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Tooltip(
+                                    verticalOffset: -60,
+                                    message: "Week Off",
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Text(
+                                            'WO',
+                                            style: FlutterFlowTheme.of(context).bodyText1,
+                                          ),
+                                          Container(
+                                            width: 20,
+                                            height: 20,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFF398DEF),
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Tooltip(
+                                    verticalOffset: -60,
+                                    message: "Holiday",
+                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text(
+                                          'HO',
+                                          style: FlutterFlowTheme.of(context).bodyText1,
+                                        ),
+                                        Container(
+                                          width: 20,
+                                          height: 20,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF5D10B9),
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Tooltip(
+                                    verticalOffset: -60,
+                                    message: "Planned Leave",
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Text(
+                                            'PL',
+                                            style: FlutterFlowTheme.of(context).bodyText1,
+                                          ),
+                                          Container(
+                                            width: 20,
+                                            height: 20,
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFFcf70a2),
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
-                            Container(
-                              width: w,
-                              height: h*0.5,
-                              margin: EdgeInsets.symmetric(horizontal: 16.0),
-                              child: monthloader?_calendarCarouselNoHeader:Center(child: CircularProgressIndicator()),
-                            ),
-                            // Generated code for this Row Widget...
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Tooltip(
-                                  verticalOffset: -60,
-                                  message: "Full Day",
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          'FD',
-                                          style: FlutterFlowTheme.of(context).bodyText1,
-                                        ),
-                                        Container(
-                                          width: 20,
-                                          height: 20,
-                                          decoration: BoxDecoration(
-                                            color: Colors.green,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Tooltip(
-                                  verticalOffset: -60,
-                                  message: "Half Day",
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          'HD',
-                                          style: FlutterFlowTheme.of(context).bodyText1,
-                                        ),
-                                        Container(
-                                          width: 20,
-                                          height: 20,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.yellow,
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Tooltip(
-                                  verticalOffset: -60,
-                                  message: "Went Early",
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          'WE',
-                                          style: FlutterFlowTheme.of(context).bodyText1,
-                                        ),
-                                        Container(
-                                          width: 20,
-                                          height: 20,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFEFAA39),
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Tooltip(
-                                  verticalOffset: -60,
-                                  message: "Absent",
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          'AB',
-                                          style: FlutterFlowTheme.of(context).bodyText1,
-                                        ),
-                                        Container(
-                                          width: 20,
-                                          height: 20,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFDE3E54),
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Tooltip(
-                                  verticalOffset: -60,
-                                  message: "Week Off",
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          'WO',
-                                          style: FlutterFlowTheme.of(context).bodyText1,
-                                        ),
-                                        Container(
-                                          width: 20,
-                                          height: 20,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFF398DEF),
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Tooltip(
-                                  verticalOffset: -60,
-                                  message: "Holiday",
-                                  padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Text(
-                                        'HO',
-                                        style: FlutterFlowTheme.of(context).bodyText1,
-                                      ),
-                                      Container(
-                                        width: 20,
-                                        height: 20,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFF5D10B9),
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Tooltip(
-                                  verticalOffset: -60,
-                                  message: "Planned Leave",
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          'PL',
-                                          style: FlutterFlowTheme.of(context).bodyText1,
-                                        ),
-                                        Container(
-                                          width: 20,
-                                          height: 20,
-                                          decoration: const BoxDecoration(
-                                            color: Color(0xFFcf70a2),
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            LoaderOverlay(
-                              child: FutureBuilder<dynamic>(
+                              FutureBuilder<dynamic>(
                                 future: fetchEmployList(), // async work
                                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                                   switch (snapshot.connectionState) {
@@ -1052,7 +1061,7 @@ var address;
                                                                                             ),
                                                                                           ),
                                                                                           Text(
-                                                                                            DateFormat("dd ,MMMM yyyy").format(_targetDateTime),
+                                                                                              DateFormat("dd ,MMMM yyyy").format(DateTime.parse("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}")),
                                                                                             style: FlutterFlowTheme.of(context).bodyText1,
                                                                                           ),
                                                                                         ],
@@ -1183,32 +1192,32 @@ var address;
                                                                                                           topRight: Radius.circular(4.0),
                                                                                                         ),
                                                                                                       ),
-                                                                                                      focusedBorder: OutlineInputBorder(
+                                                                                                      focusedBorder: const OutlineInputBorder(
                                                                                                         borderSide: BorderSide(
                                                                                                           color: Color(0xFF504B4B),
                                                                                                           width: 1,
                                                                                                         ),
-                                                                                                        borderRadius: const BorderRadius.only(
+                                                                                                        borderRadius: BorderRadius.only(
                                                                                                           topLeft: Radius.circular(4.0),
                                                                                                           topRight: Radius.circular(4.0),
                                                                                                         ),
                                                                                                       ),
-                                                                                                      errorBorder: OutlineInputBorder(
+                                                                                                      errorBorder: const OutlineInputBorder(
                                                                                                         borderSide: BorderSide(
                                                                                                           color: Color(0x00000000),
                                                                                                           width: 1,
                                                                                                         ),
-                                                                                                        borderRadius: const BorderRadius.only(
+                                                                                                        borderRadius: BorderRadius.only(
                                                                                                           topLeft: Radius.circular(4.0),
                                                                                                           topRight: Radius.circular(4.0),
                                                                                                         ),
                                                                                                       ),
-                                                                                                      focusedErrorBorder: OutlineInputBorder(
+                                                                                                      focusedErrorBorder: const OutlineInputBorder(
                                                                                                         borderSide: BorderSide(
                                                                                                           color: Color(0x00000000),
                                                                                                           width: 1,
                                                                                                         ),
-                                                                                                        borderRadius: const BorderRadius.only(
+                                                                                                        borderRadius: BorderRadius.only(
                                                                                                           topLeft: Radius.circular(4.0),
                                                                                                           topRight: Radius.circular(4.0),
                                                                                                         ),
@@ -1234,9 +1243,9 @@ var address;
 
                                                                                       ElevatedButton(onPressed: () async {
                                                                                         Navigator.pop(context);
-                                                                                        setState(() {
-                                                                                          context.loaderOverlay.show();
-                                                                                        });
+                                                                                         setState(() {
+                                                                                           context.loaderOverlay.show();
+                                                                                         });
                                                                                         Position position = await _getGeoLocationPosition();
                                                                                        var df =  DateFormat("h:mma");
                                                                                         String? h=textController1?.value.text;
@@ -1259,31 +1268,25 @@ var address;
                                                                                         if (response.statusCode == 200) {
                                                                                           print(response.data);
                                                                                           if(response.data["success"]=="1") {
-                                                                                            setState(() {
-                                                                                              context.loaderOverlay.hide();
-                                                                                            });
+                                                                                          hideloader();
 
                                                                                           } else {
-                                                                                            setState(() {
-                                                                                              context.loaderOverlay.hide();
-                                                                                            });
+                                                                                            hideloader();
                                                                                             final snackBar = SnackBar(
                                                                                               content:  Text(response.data["message"]),
                                                                                               backgroundColor: (primaryColor),
                                                                                             );
-                                                                                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                                                                            ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(snackBar);
 
                                                                                           }
                                                                                         } else {
+                                                                                          hideloader();
                                                                                           print(response.statusCode);
                                                                                           final snackBar = SnackBar(
                                                                                             content: const Text('Please try again later'),
                                                                                             backgroundColor: (primaryColor),
                                                                                           );
-                                                                                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                                                                          setState(() {
-                                                                                            context.loaderOverlay.hide();
-                                                                                          });
+                                                                                     ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(snackBar);
 
                                                                                         }
 
@@ -1683,7 +1686,7 @@ var address;
                                                                                       height: 30,
                                                                                       decoration:  BoxDecoration(
                                                                                         color: primaryColor,
-                                                                                        borderRadius: BorderRadius.only(
+                                                                                        borderRadius: const BorderRadius.only(
                                                                                           bottomLeft: Radius.circular(0),
                                                                                           bottomRight: Radius.circular(10),
                                                                                           topLeft: Radius.circular(10),
@@ -2013,16 +2016,16 @@ var address;
                                   }
                                 },
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                  const SizedBox(height: 100,)
-                    ],
+                    const SizedBox(height: 100,)
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ):SafeArea(
             child: Column(

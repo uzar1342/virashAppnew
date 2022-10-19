@@ -23,10 +23,12 @@ class _apptaskState extends State<apptask> {
   fetchemployetask() async {
     Dio dio=Dio();
     var formData = FormData.fromMap({
-      "emp_id":widget.emoid
+      "admin_id":userId,
+      "emp_id":widget.emoid,
+
     });
     print(formData.fields);
-    var response = await dio.post('http://training.virash.in/employeeAllTask', data: formData);
+    var response = await dio.post('http://training.virash.in/approvedTasks', data: formData);
     if (response.statusCode == 200) {
 
       print(response.data);
@@ -46,7 +48,11 @@ class _apptaskState extends State<apptask> {
     }
   }
 
-
+@override
+  void initState() {
+  fetchemployetask();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -418,7 +424,7 @@ class _apptaskState extends State<apptask> {
                                                                     decoration: BoxDecoration(
                                                                       color: snapshot.data["data"][position]["status"]=="Completed"?
                                                                       Color(0xFF91b7ed):snapshot.data["data"][position]["status"]=="Pending"?Color(0xFFedc791):
-                                                                      snapshot.data["data"][position]["status"]=="Rejected"?Color(0xFFed9c91):Colors.grey,
+                                                                      snapshot.data["data"][position]["status"]=="Rejected"?Color(0xFFed9c91):Color(0xff91edbf),
                                                                     ),
                                                                     alignment: AlignmentDirectional(0, 0),
                                                                     child: Row(
@@ -434,71 +440,7 @@ class _apptaskState extends State<apptask> {
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                        snapshot.data["data"][position]["status"]!="Pending"?snapshot.data["data"][position]["rejected_remark"]!="N/A"? Expanded(
-                                                                          flex: 1,
-                                                                          child: GestureDetector(
-                                                                            onTap: ()
-                                                                            {
-                                                                              print(snapshot.data["data"][position]["task_id"].toString());
-                                                                              showDialog(
-                                                                                  context: context,
-                                                                                  builder: (context) => AlertDialog(
-                                                                                    content:
-                                                                                    Row(
-                                                                                      children: [
-                                                                                        Icon(
-                                                                                          Icons
-                                                                                              .assignment,
-                                                                                          color: Colors
-                                                                                              .red.shade200,
-                                                                                        ),
-                                                                                        SizedBox(
-                                                                                          width: w * 0.01,
-                                                                                        ),
-                                                                                        Container(
-                                                                                          width: w*0.5,
-                                                                                          child: Text(
-                                                                                              snapshot.data["data"][position]["rejected_remark"]!=null?snapshot.data["data"][position]["rejected_remark"].toString():"",
-                                                                                              maxLines: 8,
-                                                                                              style: const TextStyle(
-                                                                                                  color: Colors
-                                                                                                      .black54)),
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ));
-                                                                            },
-                                                                            child: Container(
-                                                                              width: 30,
-                                                                              height: 30,
-                                                                              decoration:  BoxDecoration(
-                                                                                color: primaryColor,
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  bottomLeft: Radius.circular(0),
-                                                                                  bottomRight: Radius.circular(10),
-                                                                                  topLeft: Radius.circular(10),
-                                                                                  topRight: Radius.circular(0),
-                                                                                ),
-                                                                              ),
-                                                                              child: Align(
-                                                                                alignment: AlignmentDirectional(0, 0),
-                                                                                child: Text(
-                                                                                  "Remark",
-                                                                                  textAlign: TextAlign.center,
-                                                                                  style: FlutterFlowTheme.of(context)
-                                                                                      .subtitle1
-                                                                                      .override(
-                                                                                    fontFamily: 'Poppins',
-                                                                                    color: FlutterFlowTheme.of(context)
-                                                                                        .primaryBtnText,
-                                                                                    fontSize: 12,
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ):Container():Container(),
-                                                                      ],
+                                                                        ],
                                                                     ),
                                                                   ),
                                                                 ),

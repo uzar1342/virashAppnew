@@ -339,6 +339,8 @@ class _AllEmpTaskState extends State<AllEmpTask> {
     print(mapRes["success"]);
     print(response.statusCode);
     if (response.statusCode == 200) {
+      isLoading=true;
+      fetchemployetask();
       setState(() {
       });
       final snackBar = SnackBar(
@@ -400,7 +402,7 @@ class _AllEmpTaskState extends State<AllEmpTask> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "TASK List",
+                            "Task List",
                             style: TextStyle(
                                 fontSize: 25.0,
                                 fontWeight: FontWeight.bold,
@@ -499,9 +501,12 @@ class _AllEmpTaskState extends State<AllEmpTask> {
                   backgroundColor: Colors.blue,
                   strokeWidth: 4.0,
                   onRefresh: () async {
-                    _refreshIndicatorKey.currentState?.show(); setState(() {
+                    _refreshIndicatorKey.currentState?.show();
+                    isLoading=true;
+                    fetchemployetask();
+                    setState(() {
                     });
-                    return Future<void>.delayed(const Duration(seconds: 3));
+                    return Future<void>.delayed(const Duration(milliseconds: 3));
                   },
                   child: SafeArea(
                       child: data==null?Container(
@@ -932,6 +937,7 @@ class _AllEmpTaskState extends State<AllEmpTask> {
                                                                                     onTap: ()  {
 
                                                                                       Navigator.pop(context);
+
                                                                                       Edittask(data["data"][position]["task_id"].toString(),edtask.value.text,
                                                                                           data["data"][position]["emp_id"].toString(),
                                                                                           taskimg,

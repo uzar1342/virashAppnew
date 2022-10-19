@@ -10,6 +10,8 @@ import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'bottom_navigation_view/TaskBottomBarView.dart';
 import 'completetask.dart';
 import 'emptask.dart';
+import 'emptask.dart' as d;
+
 import 'virash_app_theme.dart';
 import 'globals.dart';
 import 'models/tabIcon_data.dart';
@@ -57,6 +59,7 @@ class _TaskNavState extends State<TaskNav>
 
   @override
   void initState() {
+    d.isLoading=true;
     checkinternet();
     tabIconsList.forEach((TabIconData tab) {
       tab.isSelected = false;
@@ -211,6 +214,7 @@ class _TaskNavState extends State<TaskNav>
             if (!mounted) {
               return;
             }
+            d.isLoading=true;
             setState(() {
               tabBody =
                   Taskadd(empid: widget.id);
@@ -221,6 +225,7 @@ class _TaskNavState extends State<TaskNav>
             if (!mounted) {
               return;
             }
+
             setState(() {
               tabBody =
                   EmpTask(emoid: widget.id, status: 'Pending', fun: (){},);
@@ -232,6 +237,7 @@ class _TaskNavState extends State<TaskNav>
               return;
             }
             setState(() {
+              d.isLoading=true;
               tabBody =
                   ApprovedTask(emoid: widget.id, name: widget.name,);
               // EmpTask(emoid: widget.id, status: 'complete',);
@@ -246,7 +252,7 @@ class _TaskNavState extends State<TaskNav>
             setState(() {
               tabBody =
                   EmpTask(emoid: widget.id, status: 'Rejected', fun: (){},);
-                  //CompTask(emoid: widget.id);
+              //CompTask(emoid: widget.id);
             });
           });
         }else if (index == 4 ){
@@ -254,6 +260,7 @@ class _TaskNavState extends State<TaskNav>
             if (!mounted) {
               return;
             }
+            d.isLoading=true;
             setState(() {
               tabBody =
                   apptask(emoid: widget.id);

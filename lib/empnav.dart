@@ -5,6 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'TodayBatch.dart';
 import 'globals.dart';
 import 'emptask.dart';
+import 'emptask.dart'as d;
+
 class EmpTaskNav extends StatelessWidget  {
   const EmpTaskNav({Key? key}) : super(key: key);
 
@@ -82,12 +84,11 @@ refress()
       setState(() {
         isLoading = false;
       });
-
     }
   }
-
   @override
   void initState() {
+    d.isLoading=true;
     fetchemployetask();
     super.initState();
   }
@@ -127,6 +128,10 @@ int index=0;
                         height: 45,
                         child:  TabBar(
                           onTap: (i){
+                            d.isLoading=true;
+                            setState(() {
+                              index=i;
+                            });
                           },
                           indicator: BoxDecoration(
                               color: primaryColor,
@@ -141,9 +146,17 @@ int index=0;
                                   child: Text( 'Pending',),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left: 2.0),
-                                  child: Text(pend.toString(),style: TextStyle(fontSize: 15),),
-                                ),
+                           padding: EdgeInsets.only(left: 2),
+                           child: Container(
+                               height: 20,
+                               width: 20,
+                               decoration: BoxDecoration(
+                                 color: index!=0?primaryColor:Colors.white,
+                                 borderRadius: BorderRadius.circular(10),
+                               ),
+
+                               child: Center(child: Text(pend.toString(),style: TextStyle(fontSize: 15,color:index==0?primaryColor:Colors.white)))),
+                         ),
                               ],
                             ),
                             Row(
@@ -154,8 +167,16 @@ int index=0;
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 2),
-                                  child: Text(comp.toString(),style: TextStyle(fontSize: 15),),
-                                ),
+                                  child: Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                        color: index!=1?primaryColor:Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+
+                                       child: Center(child: Text(comp.toString(),style: TextStyle(fontSize: 15,color:index==1?primaryColor:Colors.white)))),
+                                       ),
                               ],
                             ),
                             Row(
@@ -166,7 +187,15 @@ int index=0;
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 2),
-                                  child: Text(rej.toString(),style: TextStyle(fontSize: 15)),
+                                  child: Container(
+                                    height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                        color: index!=2?primaryColor:Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+
+                                      child: Center(child: Text(rej.toString(),style: TextStyle(fontSize: 15,color:index==2?primaryColor:Colors.white)))),
                                 ),
                               ],
                             ),
@@ -177,6 +206,7 @@ int index=0;
                         child: Container(
                           height: h*0.72,
                           child: TabBarView(
+                            physics: NeverScrollableScrollPhysics(),
                             children:  [
                             EmpTask(emoid: userId, status: 'Pending', fun: ()=>{refress()},),
                               EmpTask(emoid: userId, status: 'Completed', fun: ()=>refress(),),

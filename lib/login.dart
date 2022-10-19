@@ -326,8 +326,6 @@ class _HomePageState extends State<HomePage> {
             employee_role=prefs.getString(Userrole) ?? "";
             employee_name=prefs.getString(Username) ?? "";
             userId = prefs.getString(userIdKey) ?? '';
-
-
             acess();
 
           }
