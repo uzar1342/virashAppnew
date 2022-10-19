@@ -85,13 +85,13 @@ class _viewimageState extends State<viewimage> {
                             padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.7,
-                              decoration: BoxDecoration(
-                                color: primaryColor,
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(10),
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(0),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(5),
+                                  bottomRight: Radius.circular(5),
+                                  topLeft: Radius.circular(5),
+                                  topRight: Radius.circular(5),
                                 ),
                               ),
                               child: Text(
@@ -168,10 +168,15 @@ class _viewimageState extends State<viewimage> {
                             padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.7,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context).secondaryBackground,
-                                borderRadius: BorderRadius.circular(10),
+                               decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(5),
+                                bottomRight: Radius.circular(5),
+                                topLeft: Radius.circular(5),
+                                topRight: Radius.circular(5),
                               ),
+                            ),
                               child: Text(
                                 'Out time',
                                 textAlign: TextAlign.center,
