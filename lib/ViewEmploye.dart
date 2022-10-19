@@ -88,183 +88,185 @@ class _viewempState extends State<viewemp> {
    var w=MediaQuery.of(context).size.width;
     return Scaffold(
       body:net?SafeArea(
-        child: Column(
-          children: [
-            taskbar(refress),
-            FutureBuilder<dynamic>(
-              future: fetchemployelist(), // async work
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting: return const Center(child: CircularProgressIndicator());
-                  default:
-                    if (snapshot.hasError) {
-                      return SafeArea(
-                          child: Container(
-                            width: double.infinity,
-                            color: Colors
-                                .white,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  "asset/somthing_went_wrong.png",
-                                  height: 300,
-                                  width: 300,
-                                ),
-                                const SizedBox(
-                                  height: 10.0,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 14.0),
-                                  child: const Text(
-                                    "somthing went wrong",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              taskbar(refress),
+              FutureBuilder<dynamic>(
+                future: fetchemployelist(), // async work
+                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting: return const Center(child: CircularProgressIndicator());
+                    default:
+                      if (snapshot.hasError) {
+                        return SafeArea(
+                            child: Container(
+                              width: double.infinity,
+                              color: Colors
+                                  .white,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    "asset/somthing_went_wrong.png",
+                                    height: 300,
+                                    width: 300,
                                   ),
-                                )
-                              ],
-                            ),
-                          ));
-                    } else {
-                      Color primaryColor = const Color(0xff1f7396);
-                      return   snapshot.data["success"].toString().trim()=="1"?
-                      Container(
-                        height: h*0.75,
-                        child: ListView.builder(
-                          itemCount: snapshot.data["data"].length,
-                          physics: ScrollPhysics(),
-                          itemBuilder: (context, position) {
-                            if (snapshot.data["data"][position]['emp_name']
-                                .toString()
-                                .toLowerCase()
-                                .contains(
-                                _searchController.text.toLowerCase())) {
-                              return
-                              snapshot.data["data"][position]["emp_id"].toString().trim()!=userId?
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                onTap:()=>{},
-                                child: Card(
-                                  shape:RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0)
+                                  const SizedBox(
+                                    height: 10.0,
                                   ),
-                                  elevation: 5,
-                                  child: ListTile(
-                                    leading:
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets
-                                          .all(8.0),
-                                      child: Container(
-                                          width: 50,
-                                          height: 50,
-                                          clipBehavior: Clip
-                                              .antiAlias,
-                                          decoration:
-                                          BoxDecoration(
-                                            shape: BoxShape
-                                                .circle,
-                                          ),
-                                          child: Image
-                                              .network(
-                                            snapshot.data[
-                                            "data"]
-                                            [
-                                            position]
-                                            [
-                                            "profile_img"],
-                                            loadingBuilder: (BuildContext
-                                            context,
-                                                Widget
-                                                child,
-                                                ImageChunkEvent?
-                                                loadingProgress) {
-                                              if (loadingProgress ==
-                                                  null) {
-                                                return child;
-                                              }
-                                              return Center(
-                                                child:
-                                                CircularProgressIndicator(
-                                                  value: loadingProgress.expectedTotalBytes !=
-                                                      null
-                                                      ? loadingProgress.cumulativeBytesLoaded /
-                                                      loadingProgress.expectedTotalBytes!
-                                                      : null,
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 14.0),
+                                    child: const Text(
+                                      "somthing went wrong",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ));
+                      } else {
+                        Color primaryColor = const Color(0xff1f7396);
+                        return   snapshot.data["success"].toString().trim()=="1"?
+                        Container(
+                          height: h*0.75,
+                          child: ListView.builder(
+                            itemCount: snapshot.data["data"].length,
+                            physics: ScrollPhysics(),
+                            itemBuilder: (context, position) {
+                              if (snapshot.data["data"][position]['emp_name']
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(
+                                  _searchController.text.toLowerCase())) {
+                                return
+                                snapshot.data["data"][position]["emp_id"].toString().trim()!=userId?
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: InkWell(
+                                  onTap:()=>{},
+                                  child: Card(
+                                    shape:RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0)
+                                    ),
+                                    elevation: 5,
+                                    child: ListTile(
+                                      leading:
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets
+                                            .all(8.0),
+                                        child: Container(
+                                            width: 50,
+                                            height: 50,
+                                            clipBehavior: Clip
+                                                .antiAlias,
+                                            decoration:
+                                            BoxDecoration(
+                                              shape: BoxShape
+                                                  .circle,
+                                            ),
+                                            child: Image
+                                                .network(
+                                              snapshot.data[
+                                              "data"]
+                                              [
+                                              position]
+                                              [
+                                              "profile_img"],
+                                              loadingBuilder: (BuildContext
+                                              context,
+                                                  Widget
+                                                  child,
+                                                  ImageChunkEvent?
+                                                  loadingProgress) {
+                                                if (loadingProgress ==
+                                                    null) {
+                                                  return child;
+                                                }
+                                                return Center(
+                                                  child:
+                                                  CircularProgressIndicator(
+                                                    value: loadingProgress.expectedTotalBytes !=
+                                                        null
+                                                        ? loadingProgress.cumulativeBytesLoaded /
+                                                        loadingProgress.expectedTotalBytes!
+                                                        : null,
+                                                  ),
+                                                );
+                                              },
+                                            )),
+                                      ),
+                                      title: Text(snapshot.data["data"][position]["emp_name"]),
+                                      trailing: PopupMenuButton<int>(
+                                        icon: Container(child:Icon(Icons.more_vert)),
+                                        itemBuilder: (context) => [
+                                          // PopupMenuItem 1
+                                          PopupMenuItem(
+                                            value: 1,
+                                            // row with 2 children
+                                            child: Row(
+                                              children: const [
+                                                Icon(Icons.task),
+                                                SizedBox(
+                                                  width: 10,
                                                 ),
-                                              );
-                                            },
-                                          )),
-                                    ),
-                                    title: Text(snapshot.data["data"][position]["emp_name"]),
-                                    trailing: PopupMenuButton<int>(
-                                      icon: Container(child:Icon(Icons.more_vert)),
-                                      itemBuilder: (context) => [
-                                        // PopupMenuItem 1
-                                        PopupMenuItem(
-                                          value: 1,
-                                          // row with 2 children
-                                          child: Row(
-                                            children: const [
-                                              Icon(Icons.task),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text("Task")
-                                            ],
+                                                Text("Task")
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        // PopupMenuItem 2
-                                        PopupMenuItem(
-                                          value: 2,
-                                          // row with two children
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.calendar_month),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text("Monthly Status")
-                                            ],
+                                          // PopupMenuItem 2
+                                          PopupMenuItem(
+                                            value: 2,
+                                            // row with two children
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.calendar_month),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text("Monthly Status")
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                      offset: Offset(0, 40),
-                                      color: Colors.white,
-                                      elevation: 2,
-                                      // on selected we show the dialog box
-                                      onSelected: (value) {
-                                        // if value 1 show dialog
-                                        if (value == 1) {
-                                          Navigator.push(context, MaterialPageRoute(builder: (c)=>
-                                              TaskNav(id: snapshot.data["data"][position]["emp_id"].toString(), name: snapshot.data["data"][position]["emp_name"].toString(),)));
-                                          // if value 2 show dialog
-                                        } else if (value == 2) {
+                                        ],
+                                        offset: Offset(0, 40),
+                                        color: Colors.white,
+                                        elevation: 2,
+                                        // on selected we show the dialog box
+                                        onSelected: (value) {
+                                          // if value 1 show dialog
+                                          if (value == 1) {
                                             Navigator.push(context, MaterialPageRoute(builder: (c)=>
-                                                MonthCalendarPage(name: snapshot.data["data"][position]["emp_name"].toString(), id: snapshot.data["data"][position]["emp_id"].toString(),))
-                                            );
-                                        }
-                                      },
+                                                TaskNav(id: snapshot.data["data"][position]["emp_id"].toString(), name: snapshot.data["data"][position]["emp_name"].toString(),)));
+                                            // if value 2 show dialog
+                                          } else if (value == 2) {
+                                              Navigator.push(context, MaterialPageRoute(builder: (c)=>
+                                                  MonthCalendarPage(name: snapshot.data["data"][position]["emp_name"].toString(), id: snapshot.data["data"][position]["emp_id"].toString(),))
+                                              );
+                                          }
+                                        },
+                                      ),
                                     ),
                                   ),
-                                ),
-                            ),
-                              ):Container();
-                            }
-                            else
-                              return Container();
-                          },
-                        ),
-                      ):Image.asset("assets/no_data.png");
-                    }
-                }
-              },
-            ),
-          ],
+                              ),
+                                ):Container();
+                              }
+                              else
+                                return Container();
+                            },
+                          ),
+                        ):Image.asset("assets/no_data.png");
+                      }
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ):SafeArea(
           child: Column(

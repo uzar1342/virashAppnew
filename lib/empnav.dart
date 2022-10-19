@@ -163,7 +163,7 @@ int index=0;
                               children:  <Widget>[
                                 const Padding(
                                   padding: EdgeInsets.zero,
-                                  child: Text( 'Completed',style: TextStyle(fontSize: 14)),
+                                  child: Text( 'Completed',style: TextStyle(fontSize: 12)),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 2),
