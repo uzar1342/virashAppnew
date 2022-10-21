@@ -169,6 +169,7 @@ class _apptaskState extends State<apptask> {
                               print("object");
                               return
                                 snapshot.data["data"]!=null?
+                                snapshot.data["data"].length>0?
                                 ListView.builder(
                                     shrinkWrap: true,
                                     itemCount: snapshot.data["data"].length,
@@ -458,7 +459,7 @@ class _apptaskState extends State<apptask> {
                                         return Container();
                                       }
                                     }
-                                ):Center(child: Image.asset("assets/no_data.png"));}
+                                ):Center(child: Image.asset("assets/no_data.png")):Center(child: Image.asset("assets/no_data.png"));}
                         }
                       },
                     ),

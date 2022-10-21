@@ -237,7 +237,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                       Image.asset(widget.tabIconData!.isSelected
                           ? widget.tabIconData!.selectedImagePath
                           : widget.tabIconData!.imagePath,height: 25,),
-                      Text(widget.tabIconData!.lable,style: TextStyle(fontSize: 15),)
+                      Text(widget.tabIconData!.lable,style: TextStyle(fontSize: 13),)
                     ],
                   ),
                 ),

@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'flutter_flow/flutter_flow_drop_down.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'globals.dart';
 
@@ -125,58 +126,26 @@ class _PrioretyState extends State<Priorety> {
     return Container(
       child:
       Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          width: double.infinity - 50,
-          child: DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue, width: 2),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue, width: 2),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              filled: true,
-              fillColor: Colors.blueGrey,
-            ),
-            dropdownColor: Colors.blueGrey,
-            isExpanded: false,
-               items: item
-            // const [
-              //   DropdownMenuItem(
-              //     value: "low",
-              //     child: Text("low"),
-              //   ),
-              //   DropdownMenuItem(
-              //     value: "medium",
-              //     child: Text("medium"),
-              //   ),
-              //   DropdownMenuItem(value: "high", child: Text("high")),
-              //
-              // ]
-               ,
-              onChanged: (value) {
-        setState(() {
-        _value = value.toString();
-        widget.cartItem.itemName = _value;
-        });
-        },
-            value: _value,
-            hint: const Text(
-              "Select Priority",
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black,
-            ),
+        padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+        child: FlutterFlowDropDown(
+          initialOption: _value,
+          options: const ['Low'],
+          onChanged: (val) => setState(() => _value = val!),
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: 50,
+          textStyle: FlutterFlowTheme.of(context).bodyText1.override(
+            fontFamily: 'Poppins',
+            color: Colors.black,
           ),
+          fillColor: Colors.white,
+          elevation: 2,
+          borderColor: FlutterFlowTheme.of(context).primaryBtnText,
+          borderWidth: 0,
+          borderRadius: 2,
+          margin: const EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
+          hidesUnderline: true,
         ),
-      ),
+      )
 
 
     );
@@ -313,7 +282,7 @@ class _pickerImageState extends State<pickerImage> {
                             ),
                           ));
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.image,
                       color: Colors.black,
                       size: 24,

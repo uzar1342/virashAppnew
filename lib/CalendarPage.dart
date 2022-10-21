@@ -167,7 +167,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   void dispose() {
-
+    _searchController.clear();
     subscription.cancel();
     super.dispose();
   }

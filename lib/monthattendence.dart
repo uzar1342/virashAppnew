@@ -171,7 +171,7 @@ static Widget _holidayIcon = new Container(
        for(i=0;i<num;i++)
          {
         if(response.data["data"][i]["attendance_date"]!=null)
-  {
+          {
 
     if( response.data["data"][i]["Presentee"]=="Present")
       {
@@ -199,7 +199,8 @@ static Widget _holidayIcon = new Container(
             Event(
               dot: Text("●",style: TextStyle(color: Colors.redAccent,fontSize: 20)), date: DateTime.now(),
             ));
-      }else if(response.data["data"][i]["Presentee"]=="Went early")
+      }
+    else if(response.data["data"][i]["Presentee"]=="Went early")
       {
         Week.addAll({response.data["data"][i]["attendance_date"]:"Absent"});
         String date=  response.data["data"][i]["attendance_date"];
@@ -210,7 +211,8 @@ static Widget _holidayIcon = new Container(
             Event(
               dot: Text("●",style: TextStyle(color: Color(0xFFEFAA39),fontSize: 20)), date: DateTime.now(),
             ));
-      }else if(response.data["data"][i]["Presentee"]=="Planned Leave")
+      }
+    else if(response.data["data"][i]["Presentee"]=="Planned Leave")
       {
         Week.addAll({response.data["data"][i]["attendance_date"]:"Absent"});
         String date=  response.data["data"][i]["attendance_date"];
@@ -221,7 +223,8 @@ static Widget _holidayIcon = new Container(
             Event(
               dot: Text("●",style: TextStyle(color: Color(0xFFcf70a2),fontSize: 20)), date: DateTime.now(),
             ));
-      }else if(response.data["data"][i]["Presentee"]=="Half Day")
+      }
+    else if(response.data["data"][i]["Presentee"]=="Half Day")
       {
         Week.addAll({response.data["data"][i]["attendance_date"]:"Absent"});
         String date=  response.data["data"][i]["attendance_date"];
@@ -232,7 +235,8 @@ static Widget _holidayIcon = new Container(
             Event(
               dot: Text("●",style: TextStyle(color: Colors.yellow,fontSize: 20)), date: DateTime.now(),
             ));
-      }else if(response.data["data"][i]["Presentee"]=="Full Day")
+      }
+    else if(response.data["data"][i]["Presentee"]=="Full Day")
       {
         Week.addAll({response.data["data"][i]["attendance_date"]:"Absent"});
         String date=  response.data["data"][i]["attendance_date"];
@@ -255,7 +259,8 @@ static Widget _holidayIcon = new Container(
             Event(
               dot: Text("●",style: TextStyle(color: Colors.blue,fontSize: 20)), date: DateTime.now(),
             ));
-      }else if(response.data["data"][i]["Presentee"]=="Holiday")
+      }
+    else if(response.data["data"][i]["Presentee"]=="Holiday")
       {
         Holiyday.addAll({response.data["data"][i]["attendance_date"]:response.data["data"][i]["occassion"]});
         String date=  response.data["data"][i]["attendance_date"];
@@ -267,7 +272,8 @@ static Widget _holidayIcon = new Container(
             Event(
               dot: Text("●",style: TextStyle(color: Color(0xff5D10B9),fontSize: 20)), date: DateTime.now(),
             ));
-      }else if(response.data["data"][i]["Presentee"]=="N/A")
+      }
+    else if(response.data["data"][i]["Presentee"]=="N/A")
       {
         String date=  response.data["data"][i]["attendance_date"];
         var d1=  date.split("-");
@@ -389,12 +395,15 @@ var address;
 
 
     /// Example Calendar Carousel without header and custom prev & next button
-    final _calendarCarouselNoHeader = CalendarCarousel<Event>(
+    final calendarCarouselNoHeader = CalendarCarousel<Event>(
       todayBorderColor: Colors.black,
       onDayPressed: (date, events) {
-        if(_targetDateTime.year==date.year&&_targetDateTime.month==date.month)
-        this.setState(() => _currentDate2 = date);
-        events.forEach((event) => {day=date.day,year=date.year,month=date.month});
+        if(_targetDateTime.year==date.year&&_targetDateTime.month==date.month) {
+          setState(() => _currentDate2 = date);
+        }
+        for (var event in events) {
+          {day=date.day;year=date.year;month=date.month;};
+        }
       },
       selectedDayButtonColor: Color(0xffc4cfa1),
       showOnlyCurrentMonthDate: false,
@@ -600,7 +609,7 @@ var address;
                                 width: w,
                                 height: h*0.5,
                                 margin: EdgeInsets.symmetric(horizontal: 16.0),
-                                child: monthloader?_calendarCarouselNoHeader:Center(child: CircularProgressIndicator()),
+                                child: monthloader?calendarCarouselNoHeader:Center(child: CircularProgressIndicator()),
                               ),
                               // Generated code for this Row Widget...
                               Row(
@@ -1623,7 +1632,7 @@ var address;
                                                                                       height: 30,
                                                                                       decoration:  BoxDecoration(
                                                                                         color: primaryColor,
-                                                                                        borderRadius: BorderRadius.only(
+                                                                                        borderRadius: const BorderRadius.only(
                                                                                           bottomLeft: Radius.circular(0),
                                                                                           bottomRight: Radius.circular(10),
                                                                                           topLeft: Radius.circular(10),
@@ -1724,241 +1733,19 @@ var address;
                                                             ),
                                                           ),
                                                         );
-                                                      //   Card(
-                                                      //     elevation: 4,child: Column(
-                                                      //   children: [
-                                                      //     Padding(
-                                                      //       padding: const EdgeInsets.all(8.0),
-                                                      //       child: Row(
-                                                      //         mainAxisAlignment:
-                                                      //         MainAxisAlignment
-                                                      //             .spaceBetween,
-                                                      //         children: [
-                                                      //           Row(
-                                                      //             children: [
-                                                      //
-                                                      //               SizedBox(
-                                                      //                 width: w * 0.02,
-                                                      //               ),
-                                                      //               Text(
-                                                      //                 "Priority : "+snapshot.data["data"][0]["task"][0]["priority"].toString(),
-                                                      //                 style: const TextStyle(
-                                                      //                     color: Colors
-                                                      //                         .black54,
-                                                      //                     fontWeight:
-                                                      //                     FontWeight
-                                                      //                         .bold,
-                                                      //                     fontSize: 17.0),
-                                                      //               )
-                                                      //             ],
-                                                      //           ),
-                                                      //
-                                                      //         ],
-                                                      //       ),
-                                                      //     ),
-                                                      //     const Divider(),
-                                                      //     Padding(
-                                                      //       padding: const EdgeInsets.all(8.0),
-                                                      //       child: Row(
-                                                      //         mainAxisAlignment:
-                                                      //         MainAxisAlignment
-                                                      //             .spaceBetween,
-                                                      //         children: [
-                                                      //           Row(
-                                                      //             crossAxisAlignment:
-                                                      //             CrossAxisAlignment
-                                                      //                 .center,
-                                                      //             mainAxisAlignment:
-                                                      //             MainAxisAlignment
-                                                      //                 .start,
-                                                      //             children: [
-                                                      //
-                                                      //               SizedBox(
-                                                      //                 width: w * 0.02,
-                                                      //               ),
-                                                      //               Container(
-                                                      //                 width: w*0.8,
-                                                      //                 child: Text(
-                                                      //                   "TASK : "+snapshot.data["data"][0]["task"][0]["title"].toString(),
-                                                      //                   softWrap: true,maxLines:8,style: const TextStyle(
-                                                      //                   color: Colors
-                                                      //                       .black54,
-                                                      //                   fontWeight:
-                                                      //                   FontWeight
-                                                      //                       .bold,
-                                                      //                 ),
-                                                      //                 ),
-                                                      //               )
-                                                      //             ],
-                                                      //           ),
-                                                      //
-                                                      //         ],
-                                                      //       ),
-                                                      //     ),
-                                                      //
-                                                      //     Padding(
-                                                      //       padding: const EdgeInsets.all(8.0),
-                                                      //       child: Container(
-                                                      //         width: w,
-                                                      //         color: snapshot.data["data"][0]["task"][0]["task_status"]=="Completed"?
-                                                      //         Color(0xFF91b7ed):snapshot.data["data"][0]["task"][0]["task_status"]=="Pending"?Color(0xFFedc791):
-                                                      //         snapshot.data["data"][0]["task"][0]["task_status"]=="Rejected"?Color(0xFFed9c91):Color(0xff91edbf),
-                                                      //         child: Padding(
-                                                      //           padding: const EdgeInsets.all(8.0),
-                                                      //           child: Row(
-                                                      //             mainAxisAlignment:
-                                                      //             MainAxisAlignment
-                                                      //                 .spaceBetween,
-                                                      //             children: [
-                                                      //               Row(
-                                                      //                 crossAxisAlignment:
-                                                      //                 CrossAxisAlignment
-                                                      //                     .center,
-                                                      //                 mainAxisAlignment:
-                                                      //                 MainAxisAlignment
-                                                      //                     .start,
-                                                      //                 children: [
-                                                      //
-                                                      //                   if(snapshot.data["data"][0]["task"][0]["task_status"]=="Completed")
-                                                      //                     Text(
-                                                      //                       "Status : "+snapshot.data["data"][0]["task"][0]["task_status"].toString(),
-                                                      //                       style: const TextStyle(
-                                                      //                           color: Color(0xff0e1163),
-                                                      //                           fontWeight:
-                                                      //                           FontWeight
-                                                      //                               .bold,
-                                                      //                           fontSize: 17.0),
-                                                      //                     )else if(snapshot.data["data"][0]["task"][0]["task_status"]=="Pending")
-                                                      //                     Text(
-                                                      //                       "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
-                                                      //                       style: const TextStyle(
-                                                      //                           color: Color(
-                                                      //                               0xff63400e),
-                                                      //                           fontWeight:
-                                                      //                           FontWeight
-                                                      //                               .bold,
-                                                      //                           fontSize: 17.0),
-                                                      //                     )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected")
-                                                      //                       Text(
-                                                      //                         "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
-                                                      //                         style: const TextStyle(
-                                                      //                             color: Color(0xff63190e),
-                                                      //                             fontWeight:
-                                                      //                             FontWeight
-                                                      //                                 .bold,
-                                                      //                             fontSize: 17.0),
-                                                      //                       )else if(snapshot.data["data"][0]["task"][index]["task_status"]=="Approved")
-                                                      //                         Text(
-                                                      //                           "Status : "+snapshot.data["data"][0]["task"][index]["task_status"].toString(),
-                                                      //                           style: const TextStyle(
-                                                      //                               color: Color(0xff0e6339),
-                                                      //                               fontWeight:
-                                                      //                               FontWeight
-                                                      //                                   .bold,
-                                                      //                               fontSize: 17.0),
-                                                      //                         ),
-                                                      //                   SizedBox(width: 2,)
-                                                      //                 ],
-                                                      //               ),
-                                                      //
-                                                      //             ],
-                                                      //           ),
-                                                      //         ),
-                                                      //       ),
-                                                      //     ),
-                                                      //   ],
-                                                      // ));
+
 
                                                     }):Image.asset("assets/no_data.png"),
                                               ): Image.asset("assets/no_data.png"),
                                             ],
                                           ):
                                           Week.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}")?
-                                          Card(
-                                            elevation: 3.0,
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(14.0))),
-                                            child:            Column(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      crossAxisAlignment:
-                                                      CrossAxisAlignment
-                                                          .center,
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .start,
-                                                      children: [
-
-                                                        SizedBox(
-                                                          width: w * 0.02,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: (){
-                                                      },
-                                                      child: Container(
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .all(5.0),
-                                                        height: h * 0.04,
-                                                        decoration:  const BoxDecoration(
-                                                            color:  Colors.red,
-                                                            borderRadius: BorderRadius
-                                                                .all(Radius
-                                                                .circular(
-                                                                20.0))),
-                                                        child: Row(
-                                                          children: [
-                                                            const FaIcon(
-                                                              FontAwesomeIcons
-                                                                  .globe,
-                                                              color: Colors
-                                                                  .white,
-                                                              size: 20.0,
-                                                            ),
-                                                            SizedBox(
-                                                              width:
-                                                              w * 0.01,
-                                                            ),
-
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    )
-
-                                                  ],
-                                                ),
-
-                                              ],
-                                            ),
-                                          ):
+                                          Container():
 
 
                                           Weekoff.keys.contains("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}")?
 
-                                          Card(
-                                            elevation: 3.0,
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(14.0))),
-                                            child:            Column(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                              children: [
-
-
-                                              ],
-                                            ),
-                                          ):
+                                          Container():
                                           Card(
                                             elevation: 3.0,
                                             shape: const RoundedRectangleBorder(

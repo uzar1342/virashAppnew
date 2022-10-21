@@ -73,6 +73,7 @@ var data;
   }
  @override
  void dispose() {
+   _searchController.clear();
    subscription.cancel;
    super.dispose();
  }
@@ -105,7 +106,7 @@ var data;
                     .contains(
                     _searchController.text.toLowerCase())) {
                   return
-                    data["data"][position]["emp_id"].toString().trim()!=userId?
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
@@ -163,7 +164,7 @@ var data;
                                   )),
                             ),
                             title: Text(data["data"][position]["emp_name"]),
-                            trailing: PopupMenuButton<int>(
+                            trailing:data["data"][position]["emp_id"].toString().trim()!=userId? PopupMenuButton<int>(
                               icon: Container(child:Icon(Icons.more_vert)),
                               itemBuilder: (context) => [
                                 // PopupMenuItem 1
@@ -211,11 +212,46 @@ var data;
                                   );
                                 }
                               },
+                            ):PopupMenuButton<int>(
+                              icon: Container(child:Icon(Icons.more_vert)),
+                              itemBuilder: (context) => [
+                                // PopupMenuItem 1
+                                // PopupMenuItem 2
+                                PopupMenuItem(
+                                  value: 2,
+                                  // row with two children
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.calendar_month),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text("Monthly Status")
+                                    ],
+                                  ),
+                                ),
+                              ],
+                              offset: Offset(0, 40),
+                              color: Colors.white,
+                              elevation: 2,
+                              // on selected we show the dialog box
+                              onSelected: (value) {
+                                // if value 1 show dialog
+                                if (value == 1) {
+                                  Navigator.push(context, MaterialPageRoute(builder: (c)=>
+                                      TaskNav(id: data["data"][position]["emp_id"].toString(), name: data["data"][position]["emp_name"].toString(),)));
+                                  // if value 2 show dialog
+                                } else if (value == 2) {
+                                  Navigator.push(context, MaterialPageRoute(builder: (c)=>
+                                      MonthCalendarPage(name: data["data"][position]["emp_name"].toString(), id: data["data"][position]["emp_id"].toString(),))
+                                  );
+                                }
+                              },
                             ),
                           ),
                         ),
                       ),
-                    ):Container();
+                    );
                 }
                 else
                   return Container();

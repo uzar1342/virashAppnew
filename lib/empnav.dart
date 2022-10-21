@@ -57,8 +57,8 @@ refress()
         for(int i=0;i<len;i++)
         {
           if (response.data["data"][i]["status"] == "Rejected") {rej++;}
-          if (response.data["data"][i]["status"] == "Completed") {comp++;}
-          if (response.data["data"][i]["status"] == "Pending") {pend++;}
+         else if (response.data["data"][i]["status"] == "Completed") {comp++;}
+         else if (response.data["data"][i]["status"] == "Pending") {pend++;}
         }
       }
       setState(() {
