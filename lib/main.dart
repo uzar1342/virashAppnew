@@ -114,12 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       final snackBar = SnackBar(
         content: const Text('Fail to load Priority'),
-        backgroundColor: (primaryColor),
-        action: SnackBarAction(
-          label: 'dismiss',
-          onPressed: () {
-          },
-        ),
+        backgroundColor: (Colors.red),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -180,12 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
           {
             final snackBar = SnackBar(
               content: const Text('Acess Dineid'),
-              backgroundColor: (primaryColor),
-              action: SnackBarAction(
-                label: 'dismiss',
-                onPressed: () {
-                },
-              ),
+              backgroundColor: (Colors.red),
             );
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }

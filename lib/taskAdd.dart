@@ -10,11 +10,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'flutter_flow/flutter_flow_drop_down.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
+import 'flutter_flow/flutter_flow_widgets.dart';
 import 'globals.dart';
 
 class Taskadd extends StatefulWidget {
-   Taskadd({Key? key,required this.empid}) : super(key: key);
+   Taskadd({Key? key,required this.empid,required this.name}) : super(key: key);
     String empid;
+    String name;
+
   @override
   State<Taskadd> createState() => _TaskaddState();
 }
@@ -22,7 +25,7 @@ class Taskadd extends StatefulWidget {
 class _TaskaddState extends State<Taskadd> {
   @override
   Widget build(BuildContext context) {
-    return MyHomePage(title: 'Add Task', empid: widget.empid,);
+    return MyHomePage(title: 'Add Task', empid: widget.empid, name: widget.name,);
   }
 }
 
@@ -52,20 +55,19 @@ class _TaskState extends State<Task> {
   @override
   Widget build(BuildContext context) {
     return // Generated code for this Container Widget...
-      Expanded(
-        child: Container(
-          width: 200,
-          decoration: BoxDecoration(
-            color: FlutterFlowTheme.of(context).primaryBtnText,
-          ),
-          child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+      Container(
+        decoration: BoxDecoration(
+          color: FlutterFlowTheme.of(context).primaryBtnText,
+        ),
+        child: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+          child: Card(
+            elevation: 3,
             child: TextFormField(
               onChanged: (value){
                 _value = value.toString();
                 widget.cartItem.flavor = value.toString();
               },
-              autofocus: true,
               obscureText: false,
               decoration: InputDecoration(
                 hintText: 'Enter Task',
@@ -171,10 +173,11 @@ class _PrioretyState extends State<Priorety> {
 
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({ Key? key, required this.title,required this.empid}) : super(key: key);
+  MyHomePage({ Key? key, required this.title,required this.empid,required this.name}) : super(key: key);
 
   final String title;
-  final String empid;
+  final String empid,name;
+
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -206,7 +209,7 @@ class _pickerImageState extends State<pickerImage> {
     print(img64);
     widget.cartItem.img=img64;
     setState(() {
-      cam=false;
+      gall=false;
     });
   }
   picimg()
@@ -217,7 +220,7 @@ class _pickerImageState extends State<pickerImage> {
     print(img64);
     widget.cartItem.img=img64;
     setState(() {
-      gall=false;
+      cam=false;
     });
   }
  @override
@@ -227,6 +230,8 @@ class _pickerImageState extends State<pickerImage> {
   }
   @override
   Widget build(BuildContext context) {
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
     return Row(
       children: [
         Expanded(
@@ -239,15 +244,80 @@ class _pickerImageState extends State<pickerImage> {
                 cam?  Expanded(
                   child: GestureDetector(
                     onTap: (){
-                      addimg();
-                    },
+                      widget.cartItem.img.trim()==""?
+                      addimg():
+                      {
+                        showDialog(
+                            context: context,
+                            builder: (context) =>
+                                AlertDialog(
+                                  title: Text(
+                                    "View Image",
+                                    style: TextStyle(
+                                        color: primaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  content: Container(
+                                    child: SingleChildScrollView(
+                                      child: Form(
+                                        child: Column(
+                                          children: [
+                                            Image.memory(base64Decode( widget.cartItem.img)),
+                                            SizedBox(
+                                              height: h * 0.04,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: [
+                                                InkWell(
+                                                  onTap: ()  {
+                                                    Navigator.pop(context);
+                                                    setState(() {
+                                                      gall=true;cam=true;
+                                                      widget.cartItem.img="";
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    height: h * 0.04,
+                                                    width: w*0.5,
+                                                    padding: const EdgeInsets.symmetric(
+                                                        horizontal: 10.0),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: const BorderRadius.all(
+                                                          Radius.circular(6.0),
+                                                        ),
+                                                        color: primaryColor),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Cancle",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight: FontWeight.bold,
+                                                            fontSize: 15.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ))
+                      };},
                     child: const Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
                       child: Center(
-                        child: Icon(
-                          Icons.image,
-                          color: Colors.black,
-                          size: 28,
+                        child: Card(
+                          elevation: 3,
+                          child: Icon(
+                            Icons.image,
+                            color: Colors.black,
+                            size: 28,
+                          ),
                         ),
                       ),
                     ),
@@ -256,13 +326,80 @@ class _pickerImageState extends State<pickerImage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: (){
+                      widget.cartItem.img.trim()==""?
+                      addimg():
+                      {
+                        showDialog(
+                            context: context,
+                            builder: (context) =>
+                                AlertDialog(
+                                  title: Text(
+                                    "View Image",
+                                    style: TextStyle(
+                                        color: primaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  content: Container(
+                                    child: SingleChildScrollView(
+                                      child: Form(
+                                        child: Column(
+                                          children: [
+                                            Image.memory(base64Decode( widget.cartItem.img)),
+                                            SizedBox(
+                                              height: h * 0.04,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: [
+                                                InkWell(
+                                                  onTap: ()  {
+                                                    Navigator.pop(context);
+                                                    setState(() {
+                                                      gall=true;cam=true;
+                                                      widget.cartItem.img="";
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    height: h * 0.04,
+                                                    width: w*0.5,
+                                                    padding: const EdgeInsets.symmetric(
+                                                        horizontal: 10.0),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: const BorderRadius.all(
+                                                          Radius.circular(6.0),
+                                                        ),
+                                                        color: primaryColor),
+                                                    child: const Center(
+                                                      child: Text(
+                                                        "Cancle",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight: FontWeight.bold,
+                                                            fontSize: 15.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ))
+                      };
                     },
                     child: const Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                      child: Icon(
-                        Icons.image,
-                        color: Colors.grey,
-                        size: 24,
+                      child: Card(
+                        elevation: 3,
+                        child: Icon(
+                          Icons.image,
+                          color: Colors.grey,
+                          size: 28,
+                        ),
                       ),
                     ),
                   ),
@@ -275,10 +412,13 @@ class _pickerImageState extends State<pickerImage> {
                     child: const Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                       child: Center(
-                        child: Icon(
-                          Icons.photo_camera_sharp,
-                          color: Colors.black,
-                          size: 28,
+                        child: Card(
+                          elevation: 3,
+                          child: Icon(
+                            Icons.photo_camera_sharp,
+                            color: Colors.black,
+                            size: 28,
+                          ),
                         ),
                       ),
                     ),
@@ -290,10 +430,13 @@ class _pickerImageState extends State<pickerImage> {
                     },
                     child: const Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                      child: Icon(
-                        Icons.photo_camera_sharp,
-                        color: Colors.grey,
-                        size: 25,
+                      child: Card(
+                        elevation: 3,
+                        child: Icon(
+                          Icons.photo_camera_sharp,
+                          color: Colors.grey,
+                          size: 28,
+                        ),
                       ),
                     ),
                   ),
@@ -327,8 +470,6 @@ class _CartWidgetState extends State<CartWidget> {
   @override
   Widget build(BuildContext context) {
     return
-
-      // Generated code for this Row Widget...
       Row(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -464,11 +605,6 @@ class _MyHomePageState extends State<MyHomePage> {
           final snackBar = SnackBar(
             content: const Text('Sucessfull Send'),
             backgroundColor: (primaryColor),
-            action: SnackBarAction(
-              label: 'dismiss',
-              onPressed: () {
-              },
-            ),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
@@ -478,13 +614,8 @@ class _MyHomePageState extends State<MyHomePage> {
             context.loaderOverlay.hide();
           });
           final snackBar = SnackBar(
-            content: const Text('Unable to send task'),
-            backgroundColor: (primaryColor),
-            action: SnackBarAction(
-              label: 'dismiss',
-              onPressed: () {
-              },
-            ),
+            content: const Text('Unable to send task',),
+            backgroundColor: (Colors.red),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
@@ -515,142 +646,184 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
     });
     return Scaffold(
+      bottomSheet: Container(
+        color: Colors.transparent,
+        child: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+          child: FFButtonWidget(
+            onPressed: () {
+              var count=0;
+              var data=[];
+              cart.forEach((element) {
+                if(element.flavor.trim()!="")
+                {
+                  var item={"task":element.flavor,"priority":element.itemName,"task_img": element.img};
+                  data.add(item);
+                }
+                else
+                {
+                  count++;
+                }
+
+              });
+              log(data.toString());
+              if(count==0)
+              {
+                if(data.length>0) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: new Text('Are you sure?'),
+                      content: new Text('Do you want ADD Task'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: new Text('No'),
+                        ),
+                        TextButton(
+                          onPressed: () => {
+                            Navigator.of(context).pop(false),
+                            Sendtask({
+                              "emp_id": userId,
+                              "assigned_to": widget.empid,
+                              "tasks": data
+                            })
+                          },
+                          child: new Text('Yes'),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  final snackBar = SnackBar(
+                    content: const Text('Add Task',style: TextStyle(color: Colors.red),),
+                    backgroundColor: (primaryColor),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+              }
+              else
+              {
+                final snackBar = SnackBar(
+                  content: const Text('Fill Task'),
+                  backgroundColor: (Colors.red),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            },
+            text: 'Send',
+            options: FFButtonOptions(
+              width: double.infinity,
+              height: 40,
+              color: Color(0xFF398DEF),
+              textStyle: FlutterFlowTheme.of(context).subtitle2.override(
+                fontFamily: 'Poppins',
+                color: Colors.white,
+              ),
+              borderSide: const BorderSide(
+                color: Colors.transparent,
+                width: 1,
+              ),
+              borderRadius: 10,
+            ),
+          ),
+        ),
+      ),
       body: LoaderOverlay(
         child: SafeArea(
-          child: Column(
-            children: <Widget>[
-              Container(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  height: h * 0.09,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 6,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    height: h * 0.09,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
                           child: Container(
-                            child: Text(
-                              widget.title,
-                              style: TextStyle(
-                                  fontSize: 25.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: primaryColor),
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.only(
+                              // top: 10.0,
+                              left: 15.0,
+                            ),
+                            //padding: const EdgeInsets.only(left: 5.0),
+                            height: h * 0.05,
+                            width: h * 0.05,
+                            decoration: BoxDecoration(
+                              // color: primaryColor,
+                                border: Border.all(color: Colors.black26, width: 1.0),
+                                borderRadius:
+                                const BorderRadius.all(Radius.circular(12.0))),
+                            child: const Icon(
+                              Icons.arrow_back_ios_new,
+                              color: Colors.black87,
+                              size: 18.0,
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: IconButton(
-                            onPressed: () {
-                              cart.add(CartItem(
-                                  productType: "",
-                                  itemName: "",
-                                  flavor: "",
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            widget.name,
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor),
+                          ),
+                        ),
+                      ],
+                    )),
+
+                Column(
+                  children: [
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                        key: UniqueKey(),
+                        itemCount: cart.length,
+                        itemBuilder: (BuildContext ctxt, int index) {
+                          return ListTile(
+                            title: CartWidget(
+                                cart: cart, index: index, callback: refresh),
+                          );
+                        }),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FloatingActionButton(
+                          onPressed: () {
+
+
+
+                            cart.add(CartItem(
+                                productType: "",
+                                itemName: "",
+                                flavor: "",
                                 img:""
-                              ));
-                              setState(() {
-                              });
-                            },
-                            icon: const Icon(Icons.add),
-                          ),
+                            ));
+                            setState(() {
+                            });
+
+
+                          },
+                          backgroundColor: Colors.blueAccent,
+                          child: Icon(Icons.add),
                         ),
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: IconButton(
-                            onPressed: () {
-                              var count=0;
-                              var data=[];
-                              cart.forEach((element) {
-                                if(element.flavor.trim()!="")
-                                {
-                                  var item={"task":element.flavor,"priority":element.itemName,"task_img": element.img};
-                                  data.add(item);
-                                }
-                                else
-                                {
-                                  count++;
-                                }
+                    )
+                    ,
+                    SizedBox(height: 60,)
+                  ],
+                ),
 
-                              });
-                              log(data.toString());
-                              if(count==0)
-                              {
-                                if(data.length>0) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: new Text('Are you sure?'),
-                                      content: new Text('Do you want ADD Task'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () => Navigator.of(context).pop(false),
-                                          child: new Text('No'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () => {
-                                            Navigator.of(context).pop(false),
-                                            Sendtask({
-                                              "emp_id": userId,
-                                              "assigned_to": widget.empid,
-                                              "tasks": data
-                                            })
-                                          },
-                                          child: new Text('Yes'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                } else {
-                                  final snackBar = SnackBar(
-                                    content: const Text('Add Task'),
-                                    backgroundColor: (primaryColor),
-                                    action: SnackBarAction(
-                                      label: 'dismiss',
-                                      onPressed: () {
-                                      },
-                                    ),
-                                  );
-                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                }
-                              }
-                              else
-                              {
-                                final snackBar = SnackBar(
-                                  content: const Text('Fill Task'),
-                                  backgroundColor: (primaryColor),
-                                  action: SnackBarAction(
-                                    label: 'dismiss',
-                                    onPressed: () {
-                                    },
-                                  ),
-                                );
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-                              }
-                            },icon: const Icon(Icons.send),
-                          ),
-                        ),
-                      )
-                    ],
-                  )),
-              Expanded(
-                child: ListView.builder(
-                    key: UniqueKey(),
-                    itemCount: cart.length,
-                    itemBuilder: (BuildContext ctxt, int index) {
-                      return ListTile(
-                        title: CartWidget(
-                            cart: cart, index: index, callback: refresh),
-                      );
-                    }),
-              ),
-
-            ],
+              ],
+            ),
           ),
         ),
       )

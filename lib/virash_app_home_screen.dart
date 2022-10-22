@@ -201,11 +201,7 @@ class _VirashAppHomeScreenState extends State<VirashAppHomeScreen>
                 });
                 }
                 else{
-                  setState(() {
-                  tabBody =
-                      TrainingScreen(animationController: animationController);
 
-                });
                 }
               });
             }

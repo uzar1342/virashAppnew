@@ -67,7 +67,7 @@ class _TaskNavState extends State<TaskNav>
     tabIconsList[0].isSelected = true;
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = Taskadd(empid: widget.id,);
+    tabBody = Taskadd(empid: widget.id, name: widget.name,);
     super.initState();
   }
   @override
@@ -88,12 +88,12 @@ class _TaskNavState extends State<TaskNav>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircularProgressIndicator(
-                color: primaryColor,
+                color: Colors.lightBlue,
               ),
               SizedBox(
                 height: 10.0,
               ),
-              CircularProgressIndicator()
+              CircularProgressIndicator(color: Colors.lightBlue,)
             ],
           ),
         ):
@@ -106,49 +106,6 @@ class _TaskNavState extends State<TaskNav>
               return SafeArea(
                 child: Column(
                   children: [
-                    Container(
-                        padding: const EdgeInsets.only(top: 0.0),
-                        height: h * 0.09,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                margin: const EdgeInsets.only(
-                                  // top: 10.0,
-                                  left: 15.0,
-                                ),
-                                //padding: const EdgeInsets.only(left: 5.0),
-                                height: h * 0.05,
-                                width: h * 0.05,
-                                decoration: BoxDecoration(
-                                  // color: primaryColor,
-                                    border: Border.all(color: Colors.black26, width: 1.0),
-                                    borderRadius:
-                                    const BorderRadius.all(Radius.circular(12.0))),
-                                child: const Icon(
-                                  Icons.arrow_back_ios_new,
-                                  color: Colors.black87,
-                                  size: 18.0,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                widget.name,
-                                style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: primaryColor),
-                              ),
-                            ),
-                          ],
-                        )),
                     Expanded(
                       flex: 20,
                       child: Container(
@@ -217,7 +174,7 @@ class _TaskNavState extends State<TaskNav>
             d.isLoading=true;
             setState(() {
               tabBody =
-                  Taskadd(empid: widget.id);
+                  Taskadd(empid: widget.id, name: widget.name,);
             });
           });
         } else if (index == 1 ) {
@@ -228,7 +185,7 @@ class _TaskNavState extends State<TaskNav>
 
             setState(() {
               tabBody =
-                  EmpTask(emoid: widget.id, status: 'Pending', fun: (){},);
+                  EmpTask(emoid: widget.id, status: 'Pending', fun: (){},name: widget.name, check: 'A',);
             });
           });
         }else if (index == 2 ){
@@ -251,7 +208,7 @@ class _TaskNavState extends State<TaskNav>
             }
             setState(() {
               tabBody =
-                  EmpTask(emoid: widget.id, status: 'Rejected', fun: (){},);
+                  EmpTask(emoid: widget.id, status: 'Rejected', fun: (){},name: widget.name, check: 'A',);
               //CompTask(emoid: widget.id);
             });
           });

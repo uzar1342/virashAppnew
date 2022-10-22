@@ -493,7 +493,7 @@ return response.data;
                                                             crossAxisAlignment:
                                                             CrossAxisAlignment.end,
                                                             children: <Widget>[
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                 width: 28,
                                                                 height: 28,
                                                                 child: Icon(Icons.access_time_filled_outlined,color: Colors.blue,),
@@ -505,7 +505,7 @@ return response.data;
                                                                 child: Text(
                                                                   intime,
                                                                   textAlign: TextAlign.center,
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                     fontFamily:
                                                                     VirashAppTheme
                                                                         .fontName,
@@ -721,28 +721,7 @@ return response.data;
                 },
           ),
         ),
-           admins.contains(employee_role)? Container(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 24, right: 24),
-                child: Row(
-                  children: const <Widget>[
-                    Expanded(
-                      child: Text(
-                        "Task List",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: VirashAppTheme.fontName,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
-                          letterSpacing: 0.5,
-                          color: VirashAppTheme.lightText,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ):Container(),
+
             admins.contains(employee_role)?Container(
               height: 216,
               width: double.infinity,

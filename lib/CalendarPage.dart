@@ -792,7 +792,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                                 hideloader();
                                                                                 final snackBar = SnackBar(
                                                                                   content:  Text(response.data["message"]),
-                                                                                  backgroundColor: (primaryColor),
+                                                                                  backgroundColor: (Colors.red),
                                                                                 );
                                                                                 ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(snackBar);
 
@@ -802,7 +802,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                               print(response.statusCode);
                                                                               final snackBar = SnackBar(
                                                                                 content: const Text('Please try again later'),
-                                                                                backgroundColor: (primaryColor),
+                                                                                backgroundColor: (Colors.red),
                                                                               );
                                                                               ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(snackBar);
 
@@ -859,7 +859,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   ),
                 ),
               ],
-            ):Center(child: CircularProgressIndicator())):
+            ):Center(child: CircularProgressIndicator(color:Colors.lightBlue))):
         SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -976,6 +976,7 @@ class _taskbarState extends State<taskbar> {
                 borderRadius: BorderRadius.all(
                     Radius.circular(12))),
             child: TextFormField(
+              autofocus: true,
               controller: _searchController,
               onChanged: (value) {
                 widget.refress();
@@ -1016,6 +1017,7 @@ class _taskbarState extends State<taskbar> {
         TextButton(
             onPressed: () {
               setState(() {
+                _searchController.clear();
                 showSearch = !showSearch;
               });
             },

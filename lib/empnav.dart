@@ -73,12 +73,7 @@ refress()
       final snackBar = SnackBar(
         margin: EdgeInsets.only(bottom: 100.0),
         content: const Text('Unable to fetch bank list'),
-        backgroundColor: (primaryColor),
-        action: SnackBarAction(
-          label: 'dismiss',
-          onPressed: () {
-          },
-        ),
+        backgroundColor: (Colors.red),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       setState(() {
@@ -208,9 +203,9 @@ int index=0;
                           child: TabBarView(
                             physics: NeverScrollableScrollPhysics(),
                             children:  [
-                            EmpTask(emoid: userId, status: 'Pending', fun: ()=>{refress()},),
-                              EmpTask(emoid: userId, status: 'Completed', fun: ()=>refress(),),
-                              EmpTask(emoid: userId, status: 'Rejected', fun: ()=> refress(),),
+                            EmpTask(emoid: userId, status: 'Pending', fun: ()=>{refress()}, name: employee_name, check: 'E',),
+                              EmpTask(emoid: userId, status: 'Completed', fun: ()=>refress(), name: employee_name, check: 'E',),
+                              EmpTask(emoid: userId, status: 'Rejected', fun: ()=> refress(), name: employee_name, check: 'E',),
                             ],
                           ),
                         ),

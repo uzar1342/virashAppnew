@@ -367,7 +367,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
         });
         final snackBar = SnackBar(
           content:  Text(value.toString()),
-          backgroundColor: (primaryColor),
+          backgroundColor: (Colors.red),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
@@ -494,7 +494,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                   });
                                   final snackBar = SnackBar(
                                     content:  Text(value.toString()),
-                                    backgroundColor: (primaryColor),
+                                    backgroundColor: (Colors.red),
 
                                   );
                                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -506,7 +506,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                           else {
                             final snackBar = SnackBar(
                               content:  Text("fill Task"),
-                              backgroundColor: (primaryColor),
+                              backgroundColor: (Colors.red),
 
                             );
                             ScaffoldMessenger.of(context).showSnackBar(snackBar);

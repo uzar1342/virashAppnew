@@ -100,7 +100,7 @@ class _pickerImageState extends State<pickerImage> {
     taskimg=img64;
     widget.cartItem=img64;
     setState(() {
-      cam=false;
+      gall=false;
     });
   }
   picimg()
@@ -112,7 +112,7 @@ class _pickerImageState extends State<pickerImage> {
     taskimg=img64;
     widget.cartItem=img64;
     setState(() {
-      gall=false;
+      cam=false;
     });
   }
   @override
@@ -124,6 +124,8 @@ class _pickerImageState extends State<pickerImage> {
   }
   @override
   Widget build(BuildContext context) {
+    double h = MediaQuery.of(context).size.height;
+    double w = MediaQuery.of(context).size.width;
     return Row(
       children: [
         Expanded(
@@ -136,7 +138,71 @@ class _pickerImageState extends State<pickerImage> {
                 cam?  Expanded(
                   child: GestureDetector(
                     onTap: (){
-                      addimg();
+                      widget.cartItem.trim()==""?
+                      addimg():
+                      {
+                        showDialog(
+                            context: context,
+                            builder: (context) =>
+                                AlertDialog(
+                                  title: Text(
+                                    "View Image",
+                                    style: TextStyle(
+                                        color: primaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  content: Container(
+                                    child: SingleChildScrollView(
+                                      child: Form(
+                                        child: Column(
+                                          children: [
+                                            !_validURL?Image.memory(base64Decode(widget.cartItem)):Image.network(widget.cartItem),
+                                            SizedBox(
+                                              height: h * 0.04,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: [
+                                                InkWell(
+                                                  onTap: ()  {
+                                                    Navigator.pop(context);
+                                                    setState(() {
+                                                      _validURL = false;
+                                                      gall=true;cam=true;
+                                                      widget.cartItem="";
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    height: h * 0.04,
+                                                    width: w*0.5,
+                                                    padding: const EdgeInsets.symmetric(
+                                                        horizontal: 10.0),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: const BorderRadius.all(
+                                                          Radius.circular(6.0),
+                                                        ),
+                                                        color: primaryColor),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Cancle",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight: FontWeight.bold,
+                                                            fontSize: 15.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ))
+                      };
                     },
                     child: const Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
@@ -212,11 +278,12 @@ class _pickerImageState extends State<pickerImage> {
 
 bool isLoading=true;
 class EmpTask extends StatefulWidget {
-
-  EmpTask({Key? key,required this.emoid,required this.status,required this.fun,}) : super(key: key);
+  EmpTask({Key? key,required this.emoid,required this.status,required this.fun, required  this.name,required  this.check,}) : super(key: key);
   Function fun;
-  String emoid;
+  String emoid,check;
   String status;
+  String name;
+
   @override
   State<EmpTask> createState() => _EmpTaskState();
 }
@@ -234,12 +301,7 @@ class _EmpTaskState extends State<EmpTask> {
   TextEditingController remark=new TextEditingController();
   TextEditingController edtask=new TextEditingController();
   late int check;
-
   final TextEditingController _searchController = TextEditingController();
-
-
-
-
 
 var data;
   fetchemployetask() async {
@@ -266,7 +328,6 @@ var data;
 
 
       print(check);print(widget.status);
-
       print(response.data);
       data= response.data;
       setState(() {
@@ -275,11 +336,10 @@ var data;
     } else {
       final snackBar = SnackBar(
         content: const Text('Unable to fetch employetask'),
-        backgroundColor: (primaryColor),
+        backgroundColor: (Colors.red),
 
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
       setState(() {
         context.loaderOverlay.hide();
       });
@@ -292,7 +352,6 @@ var data;
   }
   @override
   void dispose() {
-
     super.dispose();
     scaleStateController?.dispose();
   }
@@ -302,7 +361,7 @@ var data;
     super.initState();
     scaleStateController?.scaleState = PhotoViewScaleState.originalSize;
   }
-
+  bool showSearch = true;
   updatetask(taskid) async {
     print(remark.value.text);
     final url = Uri.parse('http://training.virash.in/markTaskCompleted');
@@ -339,7 +398,7 @@ var data;
     } else {
       final snackBar = SnackBar(
         content:  Text(mapRes["message"]),
-        backgroundColor: (primaryColor),
+        backgroundColor: (Colors.red),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(mapRes["message"]);
@@ -381,7 +440,7 @@ var data;
     } else {
       final snackBar = SnackBar(
         content:  Text(mapRes["message"]),
-        backgroundColor: (primaryColor),
+        backgroundColor: (Colors.red),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(mapRes["message"]);
@@ -398,17 +457,125 @@ var data;
             height: admins.contains(employee_role)?h:h*0.75,
             child: Column(
               children: [
+                widget.check=="E"? Container(
+                  width: w * 0.9,
+                  child: Card(
+                    elevation: 4,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(12))),
+                    child: TextFormField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {});
+                      },
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.orange.shade200,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: const Icon(
+                              Icons.close,
+                              color: Colors.black38,
+                              size: 20.0,
+                            ),
+                            onPressed: () {
+                              setState(() {
+
+                                _searchController.clear();
+                              });
+                            },
+                          ),
+                          hintText: "Search",
+                          hintStyle: const TextStyle(
+                              color: Colors.black26),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(18.0)),
+                          ),
+                          contentPadding:
+                          const EdgeInsets.symmetric(
+                              horizontal: 20.0,
+                              vertical: 16.0)),
+                    ),
+                  ),
+                ):
+                showSearch?Container(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    height: h * 0.09,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                              // top: 10.0,
+                              left: 15.0,
+                            ),
+                            //padding: const EdgeInsets.only(left: 5.0),
+                            height: h * 0.05,
+                            width: h * 0.05,
+                            decoration: BoxDecoration(
+                              // color: primaryColor,
+                                border: Border.all(color: Colors.black26, width: 1.0),
+                                borderRadius:
+                                const BorderRadius.all(Radius.circular(12.0))),
+                            child: const Icon(
+                              Icons.arrow_back_ios_new,
+                              color: Colors.black87,
+                              size: 18.0,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            widget.name,
+                            style: TextStyle(
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      showSearch = !showSearch;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.search,
+                                    color: primaryColor,
+                                  )),
+                            ],
+                          ),
+                        )
+                      ],
+                    )):
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      width: w * 0.9,
+                      width: w * 0.7,
                       child: Card(
                         elevation: 4,
                         shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                                 Radius.circular(12))),
                         child: TextFormField(
+                          autofocus: true,
                           controller: _searchController,
                           onChanged: (value) {
                             setState(() {});
@@ -448,6 +615,18 @@ var data;
                         ),
                       ),
                     ),
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _searchController.clear();
+                            showSearch = !showSearch;
+                          });
+                        },
+                        child: Text("Close",
+                            style: TextStyle(
+                              color: Colors.black54,
+                              decoration: TextDecoration.underline,
+                            ))),
                   ],
                 ),
                 Expanded(
@@ -726,7 +905,7 @@ var data;
                                                           alignment: AlignmentDirectional(0, 0),
                                                           child: Row(
                                                             children: [
-                                                              if (!admins.contains(employee_role))
+                                                              if (widget.check=="E")
                                                                 Expanded(
                                                                   flex: 1,
                                                                   child: GestureDetector(
@@ -946,50 +1125,47 @@ var data;
                                                                                                         ),
                                                                                                         child: Padding(
                                                                                                             padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
-                                                                                                            child:  Expanded(
-                                                                                                              child: Container(
-                                                                                                                width: 200,
-                                                                                                                decoration: BoxDecoration(
-                                                                                                                  color: FlutterFlowTheme.of(context).primaryBtnText,
-                                                                                                                ),
-                                                                                                                child: Padding(
-                                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
-                                                                                                                  child: TextFormField(
-                                                                                                                    maxLines: 8,
-                                                                                                                    controller: edtask,
-                                                                                                                    autofocus: true,
-                                                                                                                    obscureText: false,
-                                                                                                                    decoration: InputDecoration(
-                                                                                                                      hintText: 'Enter Task',
-                                                                                                                      hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                                                                                                                      enabledBorder: OutlineInputBorder(
-                                                                                                                        borderSide: BorderSide(
-                                                                                                                          color: FlutterFlowTheme.of(context).lineColor,
-                                                                                                                          width: 0,
-                                                                                                                        ),
-                                                                                                                        borderRadius: BorderRadius.circular(10),
+                                                                                                            child:  Container(
+                                                                                                              decoration: BoxDecoration(
+                                                                                                                color: FlutterFlowTheme.of(context).primaryBtnText,
+                                                                                                              ),
+                                                                                                              child: Padding(
+                                                                                                                padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                                                                                                                child: TextFormField(
+                                                                                                                  maxLines: 8,
+                                                                                                                  controller: edtask,
+                                                                                                                  autofocus: true,
+                                                                                                                  obscureText: false,
+                                                                                                                  decoration: InputDecoration(
+                                                                                                                    hintText: 'Enter Task',
+                                                                                                                    hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                                                                                                    enabledBorder: OutlineInputBorder(
+                                                                                                                      borderSide: BorderSide(
+                                                                                                                        color: FlutterFlowTheme.of(context).lineColor,
+                                                                                                                        width: 0,
                                                                                                                       ),
-                                                                                                                      focusedBorder: OutlineInputBorder(
-                                                                                                                        borderSide: BorderSide(
-                                                                                                                          color: FlutterFlowTheme.of(context).lineColor,
-                                                                                                                          width: 0,
-                                                                                                                        ),
-                                                                                                                        borderRadius: BorderRadius.circular(10),
+                                                                                                                      borderRadius: BorderRadius.circular(10),
+                                                                                                                    ),
+                                                                                                                    focusedBorder: OutlineInputBorder(
+                                                                                                                      borderSide: BorderSide(
+                                                                                                                        color: FlutterFlowTheme.of(context).lineColor,
+                                                                                                                        width: 0,
                                                                                                                       ),
-                                                                                                                      errorBorder: OutlineInputBorder(
-                                                                                                                        borderSide: BorderSide(
-                                                                                                                          color: Color(0x00000000),
-                                                                                                                          width: 0,
-                                                                                                                        ),
-                                                                                                                        borderRadius: BorderRadius.circular(10),
+                                                                                                                      borderRadius: BorderRadius.circular(10),
+                                                                                                                    ),
+                                                                                                                    errorBorder: OutlineInputBorder(
+                                                                                                                      borderSide: BorderSide(
+                                                                                                                        color: Color(0x00000000),
+                                                                                                                        width: 0,
                                                                                                                       ),
-                                                                                                                      focusedErrorBorder: OutlineInputBorder(
-                                                                                                                        borderSide: BorderSide(
-                                                                                                                          color: Color(0x00000000),
-                                                                                                                          width: 0,
-                                                                                                                        ),
-                                                                                                                        borderRadius: BorderRadius.circular(10),
+                                                                                                                      borderRadius: BorderRadius.circular(10),
+                                                                                                                    ),
+                                                                                                                    focusedErrorBorder: OutlineInputBorder(
+                                                                                                                      borderSide: BorderSide(
+                                                                                                                        color: Color(0x00000000),
+                                                                                                                        width: 0,
                                                                                                                       ),
+                                                                                                                      borderRadius: BorderRadius.circular(10),
                                                                                                                     ),
                                                                                                                   ),
                                                                                                                 ),
@@ -1196,7 +1372,7 @@ var data;
               ],
             ),
           ),
-        ):Center(child: CircularProgressIndicator())
+        ):Center(child: CircularProgressIndicator(color: Colors.lightBlue))
 
     );
   }
@@ -1226,7 +1402,7 @@ class _TasktrailState extends State<Tasktrail> {
     } else {
       final snackBar = SnackBar(
         content: const Text('Unable to fetch taskTrail'),
-        backgroundColor: (primaryColor),
+        backgroundColor: (Colors.red),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return response.data;
@@ -1259,7 +1435,8 @@ class _TasktrailState extends State<Tasktrail> {
 
                 // if we got our data
               } else if (snapshot.hasData) {
-
+                double h = MediaQuery.of(context).size.height;
+                double w = MediaQuery.of(context).size.width;
                 int len=int.parse(snapshot.data["data"].length.toString());
                 return
                 ListView.builder(
@@ -1324,7 +1501,12 @@ class _TasktrailState extends State<Tasktrail> {
                                       flex: 1,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: primaryColor,
+                                          color:
+                                          snapshot.data["data"][position]["Status"]=="Completed"?
+                                          Color(0xFF91b7ed):snapshot.data["data"][position]["Status"]=="Pending"?Color(0xFFedc791):
+                                          snapshot.data["data"][position]["Status"]=="Rejected"?Color(0xFFed9c91):
+                                          snapshot.data["data"][position]["Status"]=="Approved"?Colors.green:Colors.grey,
+
                                           shape: BoxShape.circle,
                                         ),
                                       ),
@@ -1355,11 +1537,45 @@ class _TasktrailState extends State<Tasktrail> {
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
-                                      Text(
-                                        snapshot.data["data"][position]["Status"],
-                                        style: FlutterFlowTheme.of(context).bodyText1.override(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 20,
+                                      GestureDetector(
+                                        onTap: (){
+                                          if(snapshot.data["data"][position]["Status"]=="Rejected"&&snapshot.data["data"][position]["rejected_remark"]!=null)
+                                            {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) => AlertDialog(
+                                                    content:
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons
+                                                              .assignment,
+                                                          color: Colors
+                                                              .red.shade200,
+                                                        ),
+                                                        SizedBox(
+                                                          width: w * 0.01,
+                                                        ),
+                                                        Container(
+                                                          width: w*0.5,
+                                                          child: Text(
+                                                              snapshot.data["data"][position]["rejected_remark"]!=null?snapshot.data["data"][position]["rejected_remark"].toString():"",
+                                                              maxLines: 8,
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .black54)),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ));
+                                            }
+                                        },
+                                        child: Text(
+                                          snapshot.data["data"][position]["Status"],
+                                          style: FlutterFlowTheme.of(context).bodyText1.override(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 20,
+                                          ),
                                         ),
                                       ),
                                       Text(

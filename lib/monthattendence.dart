@@ -16,6 +16,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:loader_overlay/loader_overlay.dart';
 import 'OuttimeForm.dart';
+import 'emptask.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -299,7 +300,7 @@ static Widget _holidayIcon = new Container(
       print(response.statusCode);
       final snackBar = SnackBar(
         content: const Text('Please try again later'),
-        backgroundColor: (primaryColor),
+        backgroundColor: (Colors.red),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       setState(() {
@@ -322,7 +323,7 @@ static Widget _holidayIcon = new Container(
       print(response.statusCode);
       final snackBar = SnackBar(
         content: const Text('Please try again later'),
-        backgroundColor: (primaryColor),
+        backgroundColor: (Colors.red),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return response.data;
@@ -609,7 +610,7 @@ var address;
                                 width: w,
                                 height: h*0.5,
                                 margin: EdgeInsets.symmetric(horizontal: 16.0),
-                                child: monthloader?calendarCarouselNoHeader:Center(child: CircularProgressIndicator()),
+                                child: monthloader?calendarCarouselNoHeader:Center(child: CircularProgressIndicator(color: Colors.lightBlue)),
                               ),
                               // Generated code for this Row Widget...
                               Row(
@@ -788,7 +789,7 @@ var address;
                                 future: fetchEmployList(), // async work
                                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                                   switch (snapshot.connectionState) {
-                                    case ConnectionState.waiting: return Center(child: CircularProgressIndicator());
+                                    case ConnectionState.waiting: return Center(child: CircularProgressIndicator(color: Colors.lightBlue));
                                     default:
                                       if (snapshot.hasError) {
                                         return SafeArea(
@@ -907,38 +908,68 @@ var address;
                                                           const Divider(),
                                                           snapshot.data["data"][0]["remaining_hours"]!=null?Container(
                                                             child: snapshot.data["data"][0]["remaining_hours"]!="0"
-                                                                ?Row(
+                                                                ?Padding(
+                                                                  padding: const EdgeInsets.only(left: 12.0),
+                                                                  child: Row(
                                                               mainAxisAlignment:
                                                               MainAxisAlignment
-                                                                  .spaceBetween,
+                                                                    .spaceBetween,
                                                               children: [
-                                                                Row(
-                                                                  children: [
-                                                                    Text("Remaining hours: "),
-                                                                    SizedBox(
-                                                                      width: w * 0.01,
-                                                                    ),
-                                                                    Text(
-                                                                        snapshot.data["data"][0]["remaining_hours"].toString(),
-                                                                        style: const TextStyle(
-                                                                            color: Colors
-                                                                                .black54)),
-                                                                  ],
-                                                                )
+                                                                  Row(
+                                                                    children: [
+                                                                      Text("Remaining hours: "),
+                                                                      SizedBox(
+                                                                        width: w * 0.01,
+                                                                      ),
+                                                                      Text(
+                                                                          snapshot.data["data"][0]["remaining_hours"].toString(),
+                                                                          style: const TextStyle(
+                                                                              color: Colors
+                                                                                  .black54)),
+                                                                    ],
+                                                                  )
                                                               ],
-                                                            ):Row(
+                                                            ),
+                                                                ):Padding(
+                                                              padding: const EdgeInsets.only(left: 12.0),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                                children: [
+                                                                  Row(
+                                                                    children: [
+                                                                      Text("Extra Hours: "),
+                                                                      SizedBox(
+                                                                        width: w * 0.01,
+                                                                      ),
+                                                                      Text(
+                                                                          snapshot.data["data"][0]["extra_hours"].toString(),
+                                                                          style: const TextStyle(
+                                                                              color: Colors
+                                                                                  .black54)),
+                                                                    ],
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ):Container(),
+                                                          const Divider(),
+                                                          Padding(
+                                                            padding:  const EdgeInsets.only(left: 12.0),
+                                                            child: Row(
                                                               mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .spaceBetween,
                                                               children: [
                                                                 Row(
                                                                   children: [
-                                                                    Text("Extra Hours: "),
+                                                                    Text("Late : "),
                                                                     SizedBox(
                                                                       width: w * 0.01,
                                                                     ),
                                                                     Text(
-                                                                        snapshot.data["data"][0]["extra_hours"].toString(),
+                                                                        snapshot.data["data"][0]["late"].toString(),
                                                                         style: const TextStyle(
                                                                             color: Colors
                                                                                 .black54)),
@@ -946,27 +977,6 @@ var address;
                                                                 )
                                                               ],
                                                             ),
-                                                          ):Container(),
-                                                          const Divider(),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                            children: [
-                                                              Row(
-                                                                children: [
-                                                                  Text("Late : "),
-                                                                  SizedBox(
-                                                                    width: w * 0.01,
-                                                                  ),
-                                                                  Text(
-                                                                      snapshot.data["data"][0]["late"].toString(),
-                                                                      style: const TextStyle(
-                                                                          color: Colors
-                                                                              .black54)),
-                                                                ],
-                                                              )
-                                                            ],
                                                           ),
                                                           snapshot.data["data"][0]["extra_task"]!=null? Divider():Container(),
                                                           snapshot.data["data"][0]["extra_task"]!=null? Row(
@@ -1293,7 +1303,7 @@ var address;
                                                                                           print(response.statusCode);
                                                                                           final snackBar = SnackBar(
                                                                                             content: const Text('Please try again later'),
-                                                                                            backgroundColor: (primaryColor),
+                                                                                            backgroundColor: (Colors.red),
                                                                                           );
                                                                                      ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(snackBar);
 
@@ -1375,96 +1385,124 @@ var address;
                                                     itemCount: snapshot.data["data"][0]["task"].length,
                                                     itemBuilder: (BuildContext context, int index){
                                                       return
-                                                        Padding(
-                                                          padding: const EdgeInsets.only(bottom: 4),
-                                                          child: Container(
-                                                            decoration: BoxDecoration(
-                                                              boxShadow: [
-                                                                BoxShadow(
-                                                                  color: Colors.blueGrey.withOpacity(0.1),
-                                                                  spreadRadius: 3,
-                                                                  blurRadius:2,
-                                                                  offset: Offset(0, 7), // changes position of shadow
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            child: Card(
-                                                              elevation: 3,
-                                                              surfaceTintColor: Colors.red,
-                                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(
-                                                                bottomLeft: Radius.circular(10),
-                                                                bottomRight: Radius.circular(10),
-                                                                topLeft: Radius.circular(10),
-                                                                topRight: Radius.circular(10),
-                                                              )),
-                                                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                                                              child: Column(
-                                                                mainAxisSize: MainAxisSize.max,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: const EdgeInsets.all(8.0),
-                                                                    child: Row(
-                                                                      mainAxisSize: MainAxisSize.max,
-                                                                      children: [
-                                                                        Expanded(
-                                                                          child: Column(
-                                                                            mainAxisSize: MainAxisSize.max,
-                                                                            children: [
-                                                                              Row(
-                                                                                mainAxisSize: MainAxisSize.max,
-                                                                                children: [
-                                                                                  Expanded(
-                                                                                    flex: 3,
-                                                                                    child: Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                                                                                      child:
-                                                                                      GestureDetector(
-                                                                                        onTap: (){
-                                                                                          showDialog(
-                                                                                              context: context,
-                                                                                              builder: (context) => AlertDialog(
-                                                                                                content:
-                                                                                                Row(
-                                                                                                  children: [
-                                                                                                    Icon(
-                                                                                                      Icons
-                                                                                                          .assignment,
-                                                                                                      color: Colors
-                                                                                                          .red.shade200,
-                                                                                                    ),
-                                                                                                    SizedBox(
-                                                                                                      width: w * 0.01,
-                                                                                                    ),
-                                                                                                    Container(
-                                                                                                      width: w*0.5,
-                                                                                                      child: Text(
-                                                                                                          snapshot.data["data"][0]["task"]!=null?snapshot.data["data"][0]["task"].toString():"",
-                                                                                                          maxLines: 8,
-                                                                                                          style: const TextStyle(
-                                                                                                              color: Colors
-                                                                                                                  .black54)),
-                                                                                                    ),
-                                                                                                  ],
-                                                                                                ),
-                                                                                              ));
-                                                                                        },
-                                                                                        child: RichText(
-                                                                                          maxLines: 1,
-                                                                                          overflow: TextOverflow.ellipsis,
-                                                                                          strutStyle: StrutStyle(fontSize: 17.0),
-                                                                                          text: TextSpan(
-                                                                                              style:  FlutterFlowTheme.of(context).bodyText1,
-                                                                                              text: snapshot.data["data"][0]["task"][index]["title"].toString()),
+                                                        GestureDetector(
+                                                          onTap: (){
+                                                            if(snapshot.data["data"][0]["task"][index]['task_status']!="Pending") {
+                                                              showModalBottomSheet<void>(
+                                                                context: context,
+                                                                builder: (BuildContext context) {
+                                                                  return Tasktrail(id: snapshot.data["data"][0]["task"][index]["task_id"],);
+                                                                },
+                                                              );
+                                                            }
+                                                          },
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.only(bottom: 4),
+                                                            child: Container(
+                                                              decoration: BoxDecoration(
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                    color: Colors.blueGrey.withOpacity(0.1),
+                                                                    spreadRadius: 3,
+                                                                    blurRadius:2,
+                                                                    offset: Offset(0, 7), // changes position of shadow
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              child: Card(
+                                                                elevation: 3,
+                                                                surfaceTintColor: Colors.red,
+                                                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(
+                                                                  bottomLeft: Radius.circular(10),
+                                                                  bottomRight: Radius.circular(10),
+                                                                  topLeft: Radius.circular(10),
+                                                                  topRight: Radius.circular(10),
+                                                                )),
+                                                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                                child: Column(
+                                                                  mainAxisSize: MainAxisSize.max,
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.all(8.0),
+                                                                      child: Row(
+                                                                        mainAxisSize: MainAxisSize.max,
+                                                                        children: [
+                                                                          Expanded(
+                                                                            child: Column(
+                                                                              mainAxisSize: MainAxisSize.max,
+                                                                              children: [
+                                                                                Row(
+                                                                                  mainAxisSize: MainAxisSize.max,
+                                                                                  children: [
+                                                                                    Expanded(
+                                                                                      flex: 3,
+                                                                                      child: Padding(
+                                                                                        padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                                                                                        child:
+                                                                                        GestureDetector(
+                                                                                          onTap: (){
+                                                                                            showDialog(
+                                                                                                context: context,
+                                                                                                builder: (context) => AlertDialog(
+                                                                                                  content:
+                                                                                                  Row(
+                                                                                                    children: [
+                                                                                                      Icon(
+                                                                                                        Icons
+                                                                                                            .assignment,
+                                                                                                        color: Colors
+                                                                                                            .red.shade200,
+                                                                                                      ),
+                                                                                                      SizedBox(
+                                                                                                        width: w * 0.01,
+                                                                                                      ),
+                                                                                                      Container(
+                                                                                                        width: w*0.5,
+                                                                                                        child: Text(
+                                                                                                            snapshot.data["data"][0]["task"]!=null?snapshot.data["data"][0]["task"][index]["title"].toString():"",
+                                                                                                            maxLines: 8,
+                                                                                                            style: const TextStyle(
+                                                                                                                color: Colors
+                                                                                                                    .black54)),
+                                                                                                      ),
+                                                                                                    ],
+                                                                                                  ),
+                                                                                                ));
+                                                                                          },
+                                                                                          child: RichText(
+                                                                                            maxLines: 1,
+                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                            strutStyle: StrutStyle(fontSize: 17.0),
+                                                                                            text: TextSpan(
+                                                                                                style:  FlutterFlowTheme.of(context).bodyText1,
+                                                                                                text: snapshot.data["data"][0]["task"][index]["title"].toString()),
+                                                                                          ),
                                                                                         ),
                                                                                       ),
                                                                                     ),
-                                                                                  ),
-                                                                                  snapshot.data["data"][0]["task_img"]!="N/A"&&snapshot.data["data"][0]["task_img"]!=null?Expanded(
-                                                                                    flex: 1,
-                                                                                    child: GestureDetector(
-                                                                                      onTap: (){
-                                                                                        Navigator.push(context, MaterialPageRoute(builder: (c)=>Taskimg(img:  snapshot.data["data"][0]["task_img"],)));
-                                                                                      },
+                                                                                    snapshot.data["data"][0]["task_img"]!="N/A"&&snapshot.data["data"][0]["task_img"]!=null?Expanded(
+                                                                                      flex: 1,
+                                                                                      child: GestureDetector(
+                                                                                        onTap: (){
+                                                                                          Navigator.push(context, MaterialPageRoute(builder: (c)=>Taskimg(img:  snapshot.data["data"][0]["task_img"],)));
+                                                                                        },
+                                                                                        child: Container(
+                                                                                          width: 30,
+                                                                                          height: 30,
+                                                                                          decoration: const BoxDecoration(
+                                                                                            color: Color(0x00FFFFFF),
+                                                                                            shape: BoxShape.rectangle,
+                                                                                          ),
+                                                                                          child: const Icon(
+                                                                                            Icons.image_sharp,
+                                                                                            color: Colors.black,
+                                                                                            size: 24,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ):
+                                                                                    Expanded(
+                                                                                      flex: 1,
                                                                                       child: Container(
                                                                                         width: 30,
                                                                                         height: 30,
@@ -1473,63 +1511,150 @@ var address;
                                                                                           shape: BoxShape.rectangle,
                                                                                         ),
                                                                                         child: const Icon(
-                                                                                          Icons.image_sharp,
-                                                                                          color: Colors.black,
+                                                                                          Icons.image_not_supported_outlined,
+                                                                                          color: Color(0xFF898585),
                                                                                           size: 24,
                                                                                         ),
                                                                                       ),
                                                                                     ),
-                                                                                  ):
-                                                                                  Expanded(
-                                                                                    flex: 1,
-                                                                                    child: Container(
-                                                                                      width: 30,
-                                                                                      height: 30,
-                                                                                      decoration: const BoxDecoration(
-                                                                                        color: Color(0x00FFFFFF),
-                                                                                        shape: BoxShape.rectangle,
-                                                                                      ),
-                                                                                      child: const Icon(
-                                                                                        Icons.image_not_supported_outlined,
-                                                                                        color: Color(0xFF898585),
-                                                                                        size: 24,
+                                                                                  ],
+                                                                                ),
+                                                                                Row(
+                                                                                  mainAxisSize: MainAxisSize.max,
+                                                                                  children: [
+                                                                                    Expanded(
+                                                                                      flex: 3,
+                                                                                      child: Padding(
+                                                                                        padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                                                                                        child: Text(
+                                                                                          snapshot.data["data"][0]["task"][index]["task_date"].toString()+"@"+snapshot.data["data"][0]["task"][index]["assigned_time"].toString(),
+                                                                                          style: FlutterFlowTheme.of(context).bodyText2.override(
+                                                                                            fontFamily: 'Poppins',
+                                                                                            color: Color(0xFF888C91),
+                                                                                            fontWeight: FontWeight.normal,
+                                                                                          ),
+                                                                                        ),
                                                                                       ),
                                                                                     ),
-                                                                                  ),
-                                                                                ],
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Padding(
+                                                                                        padding:
+                                                                                        EdgeInsetsDirectional.fromSTEB(10, 0, 10, 10),
+                                                                                        child: Container(
+                                                                                          width: 30,
+                                                                                          height: 30,
+                                                                                          decoration:  BoxDecoration(
+                                                                                            color: snapshot.data["data"][0]["task"][index]["priority"]=="High"?
+                                                                                            Colors
+                                                                                                .red:snapshot.data["data"][0]["task"][index]["priority"]=="Medium"?snapshot.data["data"][0]["task"][index]["priority"]=="N/A"?Colors
+                                                                                                .grey:Colors
+                                                                                                .blue:Colors
+                                                                                                .green,
+                                                                                            borderRadius: const BorderRadius.only(
+                                                                                              bottomLeft: Radius.circular(0),
+                                                                                              bottomRight: Radius.circular(10),
+                                                                                              topLeft: Radius.circular(10),
+                                                                                              topRight: Radius.circular(0),
+                                                                                            ),
+                                                                                          ),
+                                                                                          child: Align(
+                                                                                            alignment: AlignmentDirectional(0, 0),
+                                                                                            child: Text(
+                                                                                              snapshot.data["data"][0]["task"][index]["priority"],
+                                                                                              textAlign: TextAlign.center,
+                                                                                              style: FlutterFlowTheme.of(context)
+                                                                                                  .subtitle1
+                                                                                                  .override(
+                                                                                                fontFamily: 'Poppins',
+                                                                                                color: FlutterFlowTheme.of(context)
+                                                                                                    .primaryBtnText,
+                                                                                                fontSize: 12,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                     Padding(
+                                                                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                                                                      child: Row(
+                                                                        mainAxisSize: MainAxisSize.max,
+                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Expanded(
+                                                                            child: Container(
+                                                                              decoration: BoxDecoration(
+                                                                                color: snapshot.data["data"][0]["task"][index]["task_status"]=="Completed"?
+                                                                                Color(0xFF91b7ed):snapshot.data["data"][0]["task"][index]["task_status"]=="Pending"?Color(0xFFedc791):
+                                                                                snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected"?Color(0xFFed9c91):
+                                                                                snapshot.data["data"][0]["task"][index]["task_status"]=="Approved"?Colors.green:Colors.grey,
                                                                               ),
-                                                                              Row(
-                                                                                mainAxisSize: MainAxisSize.max,
+                                                                              alignment: AlignmentDirectional(0, 0),
+                                                                              child: Row(
                                                                                 children: [
                                                                                   Expanded(
                                                                                     flex: 3,
                                                                                     child: Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                                                                                      padding: const EdgeInsets.all(5.0),
                                                                                       child: Text(
-                                                                                        snapshot.data["data"][0]["task"][index]["task_date"].toString()+"@"+snapshot.data["data"][0]["task"][index]["assigned_time"].toString(),
-                                                                                        style: FlutterFlowTheme.of(context).bodyText2.override(
-                                                                                          fontFamily: 'Poppins',
-                                                                                          color: Color(0xFF888C91),
-                                                                                          fontWeight: FontWeight.normal,
-                                                                                        ),
+                                                                                        snapshot.data["data"][0]["task"][index]["task_status"],
+                                                                                        textAlign: TextAlign.center,
+                                                                                        style: FlutterFlowTheme.of(context).bodyText1,
                                                                                       ),
                                                                                     ),
                                                                                   ),
+                                                                                  snapshot.data["data"][0]["task"][index]["task_status"]!="Approved"&&snapshot.data["data"][0]["task"][index]["task_status"]!="Approved"?
+
+                                                                                  snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected"?
+                                                                                  snapshot.data["data"][0]["task"][index]["rejected_remark"]!="N/A"&&snapshot.data["data"][0]["task"][index]["rejected_remark"]!=null?
                                                                                   Expanded(
                                                                                     flex: 1,
-                                                                                    child: Padding(
-                                                                                      padding:
-                                                                                      EdgeInsetsDirectional.fromSTEB(10, 0, 10, 10),
+                                                                                    child: GestureDetector(
+                                                                                      onTap: ()
+                                                                                      {
+                                                                                        print(snapshot.data["data"][0]["task"][index]["task_id"].toString());
+                                                                                        showDialog(
+                                                                                            context: context,
+                                                                                            builder: (context) => AlertDialog(
+                                                                                              content:
+                                                                                              Row(
+                                                                                                children: [
+                                                                                                  Icon(
+                                                                                                    Icons
+                                                                                                        .assignment,
+                                                                                                    color: Colors
+                                                                                                        .red.shade200,
+                                                                                                  ),
+                                                                                                  SizedBox(
+                                                                                                    width: w * 0.01,
+                                                                                                  ),
+                                                                                                  Container(
+                                                                                                    width: w*0.5,
+                                                                                                    child: Text(
+                                                                                                        snapshot.data["data"][0]["task"][index]["rejected_remark"]!=null?snapshot.data["data"][0]["task"][index]["rejected_remark"].toString():"",
+                                                                                                        maxLines: 8,
+                                                                                                        style: const TextStyle(
+                                                                                                            color: Colors
+                                                                                                                .black54)),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ));
+                                                                                      },
                                                                                       child: Container(
                                                                                         width: 30,
                                                                                         height: 30,
                                                                                         decoration:  BoxDecoration(
-                                                                                          color: snapshot.data["data"][0]["task"][index]["priority"]=="High"?
-                                                                                          Colors
-                                                                                              .red:snapshot.data["data"][0]["task"][index]["priority"]=="Medium"?snapshot.data["data"][0]["task"][index]["priority"]=="N/A"?Colors
-                                                                                              .grey:Colors
-                                                                                              .blue:Colors
-                                                                                              .green,
+                                                                                          color: primaryColor,
                                                                                           borderRadius: const BorderRadius.only(
                                                                                             bottomLeft: Radius.circular(0),
                                                                                             bottomRight: Radius.circular(10),
@@ -1540,7 +1665,7 @@ var address;
                                                                                         child: Align(
                                                                                           alignment: AlignmentDirectional(0, 0),
                                                                                           child: Text(
-                                                                                            snapshot.data["data"][0]["task"][index]["priority"],
+                                                                                            "Remark",
                                                                                             textAlign: TextAlign.center,
                                                                                             style: FlutterFlowTheme.of(context)
                                                                                                 .subtitle1
@@ -1554,181 +1679,85 @@ var address;
                                                                                         ),
                                                                                       ),
                                                                                     ),
-                                                                                  ),
+                                                                                  ):
+                                                                                  Container()
+                                                                                  :
+                                                                                  snapshot.data["data"][0]["task"][index]["task_status"]=="Completed"?
+                                                                                  snapshot.data["data"][0]["task"][index]["completed_remark"]!="N/A"&&snapshot.data["data"][0]["task"][index]["completed_remark"]!=null?
+                                                                                      Expanded(
+                                                                                    flex: 1,
+                                                                                    child: GestureDetector(
+                                                                                      onTap: ()
+                                                                                      {
+                                                                                        print(snapshot.data["data"][0]["task"][index]["task_id"].toString());
+                                                                                        showDialog(
+                                                                                            context: context,
+                                                                                            builder: (context) => AlertDialog(
+                                                                                              content:
+                                                                                              Row(
+                                                                                                children: [
+                                                                                                  Icon(
+                                                                                                    Icons
+                                                                                                        .assignment,
+                                                                                                    color: Colors
+                                                                                                        .red.shade200,
+                                                                                                  ),
+                                                                                                  SizedBox(
+                                                                                                    width: w * 0.01,
+                                                                                                  ),
+                                                                                                  Container(
+                                                                                                    width: w*0.5,
+                                                                                                    child: Text(
+                                                                                                        snapshot.data["data"][0]["task"][index]["completed_remark"]!=null?snapshot.data["data"][0]["task"][index]["completed_remark"].toString():"",
+                                                                                                        maxLines: 8,
+                                                                                                        style: const TextStyle(
+                                                                                                            color: Colors
+                                                                                                                .black54)),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ));
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        width: 30,
+                                                                                        height: 30,
+                                                                                        decoration:  BoxDecoration(
+                                                                                          color: primaryColor,
+                                                                                          borderRadius: const BorderRadius.only(
+                                                                                            bottomLeft: Radius.circular(0),
+                                                                                            bottomRight: Radius.circular(10),
+                                                                                            topLeft: Radius.circular(10),
+                                                                                            topRight: Radius.circular(0),
+                                                                                          ),
+                                                                                        ),
+                                                                                        child: Align(
+                                                                                          alignment: AlignmentDirectional(0, 0),
+                                                                                          child: Text(
+                                                                                            "Remark",
+                                                                                            textAlign: TextAlign.center,
+                                                                                            style: FlutterFlowTheme.of(context)
+                                                                                                .subtitle1
+                                                                                                .override(
+                                                                                              fontFamily: 'Poppins',
+                                                                                              color: FlutterFlowTheme.of(context)
+                                                                                                  .primaryBtnText,
+                                                                                              fontSize: 12,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ):Container():Container():Container()
                                                                                 ],
                                                                               ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                   Padding(
-                                                                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                                                                    child: Row(
-                                                                      mainAxisSize: MainAxisSize.max,
-                                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                                      children: [
-                                                                        Expanded(
-                                                                          child: Container(
-                                                                            decoration: BoxDecoration(
-                                                                              color: snapshot.data["data"][0]["task"][index]["task_status"]=="Completed"?
-                                                                              Color(0xFF91b7ed):snapshot.data["data"][0]["task"][index]["task_status"]=="Pending"?Color(0xFFedc791):
-                                                                              snapshot.data["data"][0]["task"][index]["task_status"]=="Rejected"?Color(0xFFed9c91):
-                                                                              snapshot.data["data"][0]["task"][index]["task_status"]=="Approved"?Colors.green:Colors.grey,
-                                                                            ),
-                                                                            alignment: AlignmentDirectional(0, 0),
-                                                                            child: Row(
-                                                                              children: [
-                                                                                Expanded(
-                                                                                  flex: 3,
-                                                                                  child: Padding(
-                                                                                    padding: const EdgeInsets.all(5.0),
-                                                                                    child: Text(
-                                                                                      snapshot.data["data"][0]["task"][index]["task_status"],
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: FlutterFlowTheme.of(context).bodyText1,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                snapshot.data["data"][0]["task"][index]["task_status"]!="Completed"?
-                                                                                snapshot.data["data"][0]["task"][index]["rejected_remark"]!="N/A"&&snapshot.data["data"][0]["task"][index]["rejected_remark"]!=null?
-                                                                                Expanded(
-                                                                                  flex: 1,
-                                                                                  child: GestureDetector(
-                                                                                    onTap: ()
-                                                                                    {
-                                                                                      print(snapshot.data["data"][0]["task"][index]["task_id"].toString());
-                                                                                      showDialog(
-                                                                                          context: context,
-                                                                                          builder: (context) => AlertDialog(
-                                                                                            content:
-                                                                                            Row(
-                                                                                              children: [
-                                                                                                Icon(
-                                                                                                  Icons
-                                                                                                      .assignment,
-                                                                                                  color: Colors
-                                                                                                      .red.shade200,
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  width: w * 0.01,
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  width: w*0.5,
-                                                                                                  child: Text(
-                                                                                                      snapshot.data["data"][0]["task"][index]["rejected_remark"]!=null?snapshot.data["data"][0]["task"][index]["rejected_remark"].toString():"",
-                                                                                                      maxLines: 8,
-                                                                                                      style: const TextStyle(
-                                                                                                          color: Colors
-                                                                                                              .black54)),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                          ));
-                                                                                    },
-                                                                                    child: Container(
-                                                                                      width: 30,
-                                                                                      height: 30,
-                                                                                      decoration:  BoxDecoration(
-                                                                                        color: primaryColor,
-                                                                                        borderRadius: const BorderRadius.only(
-                                                                                          bottomLeft: Radius.circular(0),
-                                                                                          bottomRight: Radius.circular(10),
-                                                                                          topLeft: Radius.circular(10),
-                                                                                          topRight: Radius.circular(0),
-                                                                                        ),
-                                                                                      ),
-                                                                                      child: Align(
-                                                                                        alignment: AlignmentDirectional(0, 0),
-                                                                                        child: Text(
-                                                                                          "Remark",
-                                                                                          textAlign: TextAlign.center,
-                                                                                          style: FlutterFlowTheme.of(context)
-                                                                                              .subtitle1
-                                                                                              .override(
-                                                                                            fontFamily: 'Poppins',
-                                                                                            color: FlutterFlowTheme.of(context)
-                                                                                                .primaryBtnText,
-                                                                                            fontSize: 12,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                ):Container():Expanded(
-                                                                                  flex: 1,
-                                                                                  child: GestureDetector(
-                                                                                    onTap: ()
-                                                                                    {
-                                                                                      print(snapshot.data["data"][0]["task"][index]["task_id"].toString());
-                                                                                      showDialog(
-                                                                                          context: context,
-                                                                                          builder: (context) => AlertDialog(
-                                                                                            content:
-                                                                                            Row(
-                                                                                              children: [
-                                                                                                Icon(
-                                                                                                  Icons
-                                                                                                      .assignment,
-                                                                                                  color: Colors
-                                                                                                      .red.shade200,
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  width: w * 0.01,
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  width: w*0.5,
-                                                                                                  child: Text(
-                                                                                                      snapshot.data["data"][0]["task"][index]["completed_remark"]!=null?snapshot.data["data"][0]["task"][index]["completed_remark"].toString():"",
-                                                                                                      maxLines: 8,
-                                                                                                      style: const TextStyle(
-                                                                                                          color: Colors
-                                                                                                              .black54)),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                          ));
-                                                                                    },
-                                                                                    child: Container(
-                                                                                      width: 30,
-                                                                                      height: 30,
-                                                                                      decoration:  BoxDecoration(
-                                                                                        color: primaryColor,
-                                                                                        borderRadius: const BorderRadius.only(
-                                                                                          bottomLeft: Radius.circular(0),
-                                                                                          bottomRight: Radius.circular(10),
-                                                                                          topLeft: Radius.circular(10),
-                                                                                          topRight: Radius.circular(0),
-                                                                                        ),
-                                                                                      ),
-                                                                                      child: Align(
-                                                                                        alignment: AlignmentDirectional(0, 0),
-                                                                                        child: Text(
-                                                                                          "Remark",
-                                                                                          textAlign: TextAlign.center,
-                                                                                          style: FlutterFlowTheme.of(context)
-                                                                                              .subtitle1
-                                                                                              .override(
-                                                                                            fontFamily: 'Poppins',
-                                                                                            color: FlutterFlowTheme.of(context)
-                                                                                                .primaryBtnText,
-                                                                                            fontSize: 12,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ],
                                                                             ),
                                                                           ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
+                                                                        ],
+                                                                      ),
 
-                                                                  )
-                                                                ],
+                                                                    )
+                                                                  ],
+                                                                ),
                                                               ),
                                                             ),
                                                           ),

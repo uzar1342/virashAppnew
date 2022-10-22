@@ -257,7 +257,7 @@ var data;
                   return Container();
               },
             ),
-          ):Image.asset("assets/no_data.png"):Center(child: CircularProgressIndicator()),
+          ):Image.asset("assets/no_data.png"):Center(child: CircularProgressIndicator(color: Colors.lightBlue)),
             ],
           ),
         ),
@@ -357,6 +357,7 @@ class _taskbarState extends State<taskbar> {
                 borderRadius: BorderRadius.all(
                     Radius.circular(12))),
             child: TextFormField(
+              autofocus: true,
               controller: _searchController,
               onChanged: (value) {
                 widget.refress();
@@ -397,6 +398,7 @@ class _taskbarState extends State<taskbar> {
         TextButton(
             onPressed: () {
               setState(() {
+                _searchController.clear();
                 showSearch = !showSearch;
               });
             },
