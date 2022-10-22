@@ -36,7 +36,6 @@ class Task extends StatefulWidget {
 
 class _TaskState extends State<Task> {
   String _value = "";
-
   void initState() {
     super.initState();
     _value= widget.cartItem.flavor!=""?widget.cartItem.flavor:"";
@@ -52,44 +51,61 @@ class _TaskState extends State<Task> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child:TextFormField(
-        initialValue: _value,
-        maxLines:8,
-        minLines: 5,
-        onChanged: (value) {
-          setState(() {
-            _value = value.toString();
-            widget.cartItem.flavor = value.toString();
-          });
-        },
-        cursorColor: primaryColor,
-        decoration: InputDecoration(
-            suffixIcon: Icon(
-              Icons.assignment,
-              color: Colors.red.shade200,
+    return // Generated code for this Container Widget...
+      Expanded(
+        child: Container(
+          width: 200,
+          decoration: BoxDecoration(
+            color: FlutterFlowTheme.of(context).primaryBtnText,
+          ),
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+            child: TextFormField(
+              onChanged: (value){
+                _value = value.toString();
+                widget.cartItem.flavor = value.toString();
+              },
+              autofocus: true,
+              obscureText: false,
+              decoration: InputDecoration(
+                hintText: 'Enter Task',
+                hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: FlutterFlowTheme.of(context).lineColor,
+                    width: 0,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: FlutterFlowTheme.of(context).lineColor,
+                    width: 0,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0x00000000),
+                    width: 0,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0x00000000),
+                    width: 0,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              style: FlutterFlowTheme.of(context).subtitle1,
+              maxLines: 5,
             ),
-            hintText: "Task",
-            hintStyle: const TextStyle(
-              color: Colors.black26,
-              fontWeight: FontWeight.bold,
-              fontSize: 14.0,
-            ),
-            filled: true,
-            fillColor: Colors.white,
-            border: const OutlineInputBorder(
-              gapPadding: 9,
-              borderSide: BorderSide(),
-              borderRadius: BorderRadius.all(
-                  Radius.circular(12.0)),
-            ),
-            contentPadding:
-            const EdgeInsets.symmetric(
-                horizontal: 20.0,
-                vertical: 16.0)),
-      ),
-
-    );
+          ),
+        ),
+      )
+    ;
   }
 }
 
@@ -106,6 +122,7 @@ class _PrioretyState extends State<Priorety> {
   @override
   void initState() {
     super.initState();
+    print(widget.cartItem.itemName);
     _value= widget.cartItem.itemName!=""?widget.cartItem.itemName:"Low";
     widget.cartItem.itemName=_value;
   }
@@ -118,9 +135,6 @@ class _PrioretyState extends State<Priorety> {
     super.didUpdateWidget(oldWidget);
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -129,8 +143,8 @@ class _PrioretyState extends State<Priorety> {
         padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
         child: FlutterFlowDropDown(
           initialOption: _value,
-          options: const ['Low'],
-          onChanged: (val) => setState(() => _value = val!),
+          options:  item,
+          onChanged: (val) => setState(() => {_value = val!,widget.cartItem.itemName=_value}),
           width: MediaQuery.of(context).size.width * 0.5,
           height: 50,
           textStyle: FlutterFlowTheme.of(context).bodyText1.override(
@@ -182,7 +196,7 @@ class pickerImage extends StatefulWidget {
   State<pickerImage> createState() => _pickerImageState();
 }
 class _pickerImageState extends State<pickerImage> {
-  late bool selectimg;
+  late bool gall=true,cam=true;
   final ImagePicker _picker = ImagePicker();
   addimg()
   async {
@@ -192,7 +206,7 @@ class _pickerImageState extends State<pickerImage> {
     print(img64);
     widget.cartItem.img=img64;
     setState(() {
-      selectimg=!selectimg;
+      cam=false;
     });
   }
   picimg()
@@ -203,110 +217,92 @@ class _pickerImageState extends State<pickerImage> {
     print(img64);
     widget.cartItem.img=img64;
     setState(() {
-      selectimg=!selectimg;
+      gall=false;
     });
   }
  @override
   void initState() {
-    widget.cartItem.img!=""?selectimg=false:selectimg=true;
+    widget.cartItem.img!=""?gall=false:gall=true;
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    return  selectimg?Row(
+    return Row(
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(onPressed: (){
-              picimg();
-            }, child: Text("Image from camera")),
-          ),
-        ), 
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(onPressed: (){
-              addimg();
-            }, child: Text("Image from gallery")),
-          ),
-        ),
-      ],
-    ):
-    Container(
-      decoration: BoxDecoration(
-        color: Color(0xb1eee7e7),
-        borderRadius: BorderRadius.circular(50),
-        shape: BoxShape.rectangle,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Text(
-              'Setected',
-              textAlign: TextAlign.center,
-              style: FlutterFlowTheme.of(context).title1,
-            ),
-          ),
-          Expanded(
-            flex: 1,
+            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              mainAxisAlignment: MainAxisAlignment.end,
+              children:  [
+                cam?  Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                      addimg();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                      child: Center(
+                        child: Icon(
+                          Icons.image,
+                          color: Colors.black,
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                  ),
+                ):
                 Expanded(
                   child: GestureDetector(
                     onTap: (){
-                      var _byteImage = Base64Decoder().convert(widget.cartItem.img);
-                      showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text(
-                              "View Image",
-                              style: TextStyle(
-                                  color: primaryColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            content: Container(
-                              child: SingleChildScrollView(
-                                child: Form(
-                                  child: Column(
-                                    children: [
-                                      Image.memory(_byteImage,height: 200,)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ));
                     },
-                    child: const Icon(
-                      Icons.image,
-                      color: Colors.black,
-                      size: 24,
+                    child: const Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                      child: Icon(
+                        Icons.image,
+                        color: Colors.grey,
+                        size: 24,
+                      ),
                     ),
                   ),
-                ), 
-                GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      widget.cartItem.img="";
-                      selectimg=true;
-                    });
-                  },
-                  child: const Icon(
-                    Icons.cancel,
-                    color: Colors.black,
-                    size: 24,
+                ),
+                gall? Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                      picimg();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                      child: Center(
+                        child: Icon(
+                          Icons.photo_camera_sharp,
+                          color: Colors.black,
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                  ),
+                ):
+                Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                    },
+                    child: const Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                      child: Icon(
+                        Icons.photo_camera_sharp,
+                        color: Colors.grey,
+                        size: 25,
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        )
+      ],
     );
   }
 }
@@ -330,30 +326,112 @@ class _CartWidgetState extends State<CartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(flex: 9,child: Priorety(cartItem: widget.cart[widget.index])),
-            widget.index!=0? Expanded(
-              flex: 1,
-              child: IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {
-                  setState(() {
-                    print(widget.index);
-                    widget.cart.removeAt(widget.index);
-                    widget.callback();
-                  });
-                },
+    return
+
+      // Generated code for this Row Widget...
+      Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+              child: Card(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                color: FlutterFlowTheme.of(context).primaryBtnText,
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Card(
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          color: FlutterFlowTheme.of(context).primaryBtnText,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Priorety(cartItem: widget.cart[widget.index],),
+                        ),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(flex: 2,child: pickerImage(cartItem: widget.cart[widget.index],)),
+                          widget.index!=0? Expanded(
+                                      flex: 1,
+                                      child: IconButton(
+                                        icon: Icon(Icons.delete,color: Colors.black,),
+                                        onPressed: () {
+                                          setState(() {
+                                            print(widget.index);
+                                            widget.cart.removeAt(widget.index);
+                                            widget.callback();
+                                          });
+                                        })):Container()
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            width: 200,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context).primaryBtnText,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                              child:  Task(cartItem: widget.cart[widget.index]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ):Container()
-          ],
-        ),
-        Task(cartItem: widget.cart[widget.index]),
-        pickerImage(cartItem: widget.cart[widget.index],)
-      ],
-    );
+            ),
+          ),
+        ],
+      );
+
+
+
+
+
+
+
+
+    // Column(
+    //   children: [
+    //     Row(
+    //       children: [
+    //         Expanded(flex: 9,child: Priorety(cartItem: widget.cart[widget.index])),
+    //         widget.index!=0? Expanded(
+    //           flex: 1,
+    //           child: IconButton(
+    //             icon: Icon(Icons.delete),
+    //             onPressed: () {
+    //               setState(() {
+    //                 print(widget.index);
+    //                 widget.cart.removeAt(widget.index);
+    //                 widget.callback();
+    //               });
+    //             },
+    //           ),
+    //         ):Container()
+    //       ],
+    //     ),
+    //     Task(cartItem: widget.cart[widget.index]),
+    //     pickerImage(cartItem: widget.cart[widget.index],)
+    //   ],
+    // );
   }
 }
 

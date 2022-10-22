@@ -33,7 +33,7 @@ class _TaskimgState extends State<Taskimg> {
           children: [
             Container(
                 padding: const EdgeInsets.only(top: 0.0),
-                height: MediaQuery.of(context).size.height * 0.08,
+                height: MediaQuery.of(context).size.height * 0.063,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [

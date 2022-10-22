@@ -12,4 +12,4 @@ String employee_address="";
 var admins = ['Admin','Super Admin','Faculty & Admin'];
 var faculties = ['Faculty','Faculty & Admin','Developer & Faculty'];
 var employees = ['Developer','Developer & Faculty','Intern'];
-final List<DropdownMenuItem<String>> item=[];
+final List<String> item=[];

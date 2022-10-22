@@ -104,10 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
         int len=int.parse(response.data["data"].length.toString());
         for(int i=0;i<len;i++)
         {
-          item.add(DropdownMenuItem(
-            value: response.data["data"][i].toString(),
-            child: Text(response.data["data"][i].toString()),
-          )) ;
+          item.add(response.data["data"][i].toString()) ;
         }
       }
 

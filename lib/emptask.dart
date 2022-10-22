@@ -17,6 +17,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 import 'empnav.dart';
+import 'flutter_flow/flutter_flow_drop_down.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'globals.dart';
 String remarks= '';
@@ -47,45 +48,26 @@ class _PrioretyState extends State<Priorety> {
     return Container(
       child:
       Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          width: double.infinity - 50,
-          child: DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue, width: 2),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue, width: 2),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              filled: true,
-              fillColor: Colors.blueGrey,
-            ),
-            dropdownColor: Colors.blueGrey,
-            isExpanded: false,
-            items: item
-
-            ,
-            onChanged: (value) {
-              setState(() {
-                _value = value.toString();
-                widget.cartItem = _value;
-              });
-            },
-            value: _value,
-            hint: const Text(
-              "Select Priority",
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black,
-            ),
+        padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+        child: FlutterFlowDropDown(
+          initialOption: _value,
+          options:  item,
+          onChanged: (val) => setState(() => {_value = val!,
+            widget.cartItem=_value
+          }),
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: 50,
+          textStyle: FlutterFlowTheme.of(context).bodyText1.override(
+            fontFamily: 'Poppins',
+            color: Colors.black,
           ),
+          fillColor: Colors.white,
+          elevation: 2,
+          borderColor: FlutterFlowTheme.of(context).primaryBtnText,
+          borderWidth: 0,
+          borderRadius: 2,
+          margin: const EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
+          hidesUnderline: true,
         ),
       ),
 
@@ -101,7 +83,11 @@ class pickerImage extends StatefulWidget {
   @override
   State<pickerImage> createState() => _pickerImageState();
 }
+
+
+
 class _pickerImageState extends State<pickerImage> {
+  late bool gall=true,cam=true;
   late bool selectimg;
   bool _validURL=false;
   final ImagePicker _picker = ImagePicker();
@@ -114,7 +100,7 @@ class _pickerImageState extends State<pickerImage> {
     taskimg=img64;
     widget.cartItem=img64;
     setState(() {
-      selectimg=!selectimg;
+      cam=false;
     });
   }
   picimg()
@@ -126,147 +112,103 @@ class _pickerImageState extends State<pickerImage> {
     taskimg=img64;
     widget.cartItem=img64;
     setState(() {
-      selectimg=!selectimg;
+      gall=false;
     });
   }
   @override
   void initState() {
     _validURL = Uri.parse(widget.cartItem).isAbsolute;
     !_validURL?taskimg=widget.cartItem:"";
-    widget.cartItem!="N/A"?selectimg=false:selectimg=true;
+    widget.cartItem!="N/A"?gall=false:gall=true;
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    return  selectimg?Row(
+    return Row(
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(onPressed: (){
-              picimg();
-            }, child: Text("Image from camera")),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(onPressed: (){
-              addimg();
-            }, child: Text("Image from gallery")),
-          ),
-        ),
-      ],
-    ):
-    Container(
-      decoration: BoxDecoration(
-        color: Color(0xb1eee7e7),
-        borderRadius: BorderRadius.circular(50),
-        shape: BoxShape.rectangle,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Text(
-              'Setected',
-              textAlign: TextAlign.center,
-              style: FlutterFlowTheme.of(context).title1,
-            ),
-          ),
-          Expanded(
-            flex: 1,
+            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              mainAxisAlignment: MainAxisAlignment.end,
+              children:  [
+                cam?  Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                      addimg();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                      child: Center(
+                        child: Icon(
+                          Icons.image,
+                          color: Colors.black,
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                  ),
+                ):
                 Expanded(
                   child: GestureDetector(
                     onTap: (){
-                      if(!_validURL) {
-                        var _byteImage = Base64Decoder().convert(
-                            taskimg);
-                        showDialog(
-                            context: context,
-                            builder: (context) =>
-                                AlertDialog(
-                                  title: Text(
-                                    "View Image",
-                                    style: TextStyle(
-                                        color: primaryColor,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  content: Container(
-                                    child: SingleChildScrollView(
-                                      child: Form(
-                                        child: Column(
-                                          children: [
-                                            Image.memory(
-                                              _byteImage, height: 200,)
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ));
-                      }
-                      else
-                      {
-                        showDialog(
-                            context: context,
-                            builder: (context) =>
-                                AlertDialog(
-                                  title: Text(
-                                    "View Image",
-                                    style: TextStyle(
-                                        color: primaryColor,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  content: Container(
-                                    child: SingleChildScrollView(
-                                      child: Form(
-                                        child: Column(
-                                          children: [
-                                            Image.network(
-                                              widget.cartItem, height: 200,)
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ));
-                      }
                     },
-                    child: Icon(
-                      Icons.image,
-                      color: Colors.black,
-                      size: 24,
+                    child: const Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                      child: Icon(
+                        Icons.image,
+                        color: Colors.grey,
+                        size: 24,
+                      ),
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      widget.cartItem="";
-                      _validURL=false;
-                      selectimg=true;
-                    });
-                  },
-                  child: const Icon(
-                    Icons.cancel,
-                    color: Colors.black,
-                    size: 24,
+                gall? Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                      picimg();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                      child: Center(
+                        child: Icon(
+                          Icons.photo_camera_sharp,
+                          color: Colors.black,
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                  ),
+                ):
+                Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                    },
+                    child: const Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                      child: Icon(
+                        Icons.photo_camera_sharp,
+                        color: Colors.grey,
+                        size: 25,
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        )
+      ],
     );
   }
 }
+
+
+
+
+
+
 
 bool isLoading=true;
 class EmpTask extends StatefulWidget {
@@ -955,119 +897,165 @@ var data;
                                                                                   color: primaryColor,
                                                                                   fontWeight: FontWeight.bold),
                                                                             ),
-                                                                            content: Container(
-                                                                              height: h*0.6,
-                                                                              child: Scaffold(
-                                                                                resizeToAvoidBottomInset:false,
-                                                                                body: SingleChildScrollView(
-                                                                                  child: Form(
-                                                                                    child: Column(
-                                                                                      children: [
-                                                                                        Priorety(cartItem: data["data"][position]["priority"]),
-                                                                                        const Text("Please Edit Task",
-                                                                                            style: TextStyle(
-                                                                                                color: Colors.black54,
-                                                                                                fontWeight: FontWeight.bold)),
-                                                                                        SizedBox(
-                                                                                          height: h * 0.01,
+                                                                            content: SingleChildScrollView(
+                                                                              child: Container(
+                                                                                height: h*0.6,
+                                                                                child: Column(
+                                                                                  children: [
+                                                                                    Expanded(
+                                                                                      flex: 2,
+                                                                                      child: Card(
+                                                                                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                                                        color: FlutterFlowTheme.of(context).primaryBtnText,
+                                                                                        elevation: 2,
+                                                                                        shape: RoundedRectangleBorder(
+                                                                                          borderRadius: BorderRadius.circular(5),
                                                                                         ),
-                                                                                        Container(
-                                                                                          //  height: h * 0.07,
-                                                                                          width: w * 0.95,
-                                                                                          child: Card(
-                                                                                            elevation: 3.0,
-                                                                                            child: TextFormField(
-                                                                                              controller: edtask,
-                                                                                              maxLines: 8,
-                                                                                              cursorColor: primaryColor,
-                                                                                              decoration: InputDecoration(
-                                                                                                  suffixIcon: Icon(
-                                                                                                    Icons.assignment,
-                                                                                                    color: Colors.red.shade200,
-                                                                                                  ),
-                                                                                                  hintText: "Task",
-                                                                                                  hintStyle: const TextStyle(
-                                                                                                    color: Colors.black26,
-                                                                                                    fontWeight: FontWeight.bold,
-                                                                                                    fontSize: 14.0,
-                                                                                                  ),
-                                                                                                  filled: true,
-                                                                                                  fillColor: Colors.white,
-                                                                                                  border: const OutlineInputBorder(
-                                                                                                    gapPadding: 9,
-                                                                                                    borderSide: BorderSide.none,
-                                                                                                    borderRadius: BorderRadius.all(
-                                                                                                        Radius.circular(12.0)),
-                                                                                                  ),
-                                                                                                  contentPadding:
-                                                                                                  const EdgeInsets.symmetric(
-                                                                                                      horizontal: 20.0,
-                                                                                                      vertical: 16.0)),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                        SizedBox(
-                                                                                          height: h * 0.04,
-                                                                                        ),
-                                                                                        pickerImage(cartItem: data["data"][position]["task_img"]),
-                                                                                        SizedBox(
-                                                                                          height: h * 0.04,
-                                                                                        ),
-                                                                                        Row(
-                                                                                          mainAxisAlignment:
-                                                                                          MainAxisAlignment.spaceBetween,
+                                                                                        child: Column(
+                                                                                          mainAxisSize: MainAxisSize.max,
                                                                                           children: [
-                                                                                            TextButton(
-                                                                                              onPressed: () {
-                                                                                                Navigator.pop(context);
-                                                                                              },
-                                                                                              child: const Text(
-                                                                                                "Cancel",
-                                                                                                style: TextStyle(
-                                                                                                  color: Colors.black54,
-                                                                                                  fontWeight: FontWeight.bold,
-                                                                                                  decoration:
-                                                                                                  TextDecoration.underline,
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                            InkWell(
-                                                                                              onTap: ()  {
-
-                                                                                                Navigator.pop(context);
-                                                                                                Edittask(data["data"][position]["task_id"].toString(),edtask.value.text,
-                                                                                                    data["data"][position]["emp_id"].toString(),
-                                                                                                    taskimg,
-                                                                                                    _value);
-
-                                                                                              },
-                                                                                              child: Container(
-                                                                                                height: h * 0.04,
-                                                                                                padding: const EdgeInsets.symmetric(
-                                                                                                    horizontal: 10.0),
-                                                                                                decoration: BoxDecoration(
-                                                                                                    borderRadius: const BorderRadius.all(
-                                                                                                      Radius.circular(6.0),
+                                                                                            Row(
+                                                                                              mainAxisSize: MainAxisSize.max,
+                                                                                              children: [
+                                                                                                Expanded(
+                                                                                                  child: Card(
+                                                                                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                                                                    color: FlutterFlowTheme.of(context).primaryBtnText,
+                                                                                                    shape: RoundedRectangleBorder(
+                                                                                                      borderRadius: BorderRadius.circular(5),
                                                                                                     ),
-                                                                                                    color: primaryColor),
-                                                                                                child: const Center(
-                                                                                                  child: Text(
-                                                                                                    "Apply",
-                                                                                                    style: TextStyle(
-                                                                                                        color: Colors.white,
-                                                                                                        fontWeight: FontWeight.bold,
-                                                                                                        fontSize: 15.0),
+                                                                                                    child:  Priorety(cartItem: data["data"][position]["priority"]),
                                                                                                   ),
                                                                                                 ),
-                                                                                              ),
+                                                                                                Expanded(
+                                                                                                  child: Row(
+                                                                                                    children: [
+                                                                                                      Expanded(flex: 2,child: pickerImage(cartItem: data["data"][position]["task_img"]),),
+                                                                                                    ],
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                            Row(
+                                                                                              mainAxisSize: MainAxisSize.max,
+                                                                                              children: [
+                                                                                                Expanded(
+                                                                                                    child: Container(
+                                                                                                        decoration: BoxDecoration(
+                                                                                                          color: FlutterFlowTheme.of(context).primaryBtnText,
+                                                                                                        ),
+                                                                                                        child: Padding(
+                                                                                                            padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                                                                                                            child:  Expanded(
+                                                                                                              child: Container(
+                                                                                                                width: 200,
+                                                                                                                decoration: BoxDecoration(
+                                                                                                                  color: FlutterFlowTheme.of(context).primaryBtnText,
+                                                                                                                ),
+                                                                                                                child: Padding(
+                                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                                                                                                                  child: TextFormField(
+                                                                                                                    maxLines: 8,
+                                                                                                                    controller: edtask,
+                                                                                                                    autofocus: true,
+                                                                                                                    obscureText: false,
+                                                                                                                    decoration: InputDecoration(
+                                                                                                                      hintText: 'Enter Task',
+                                                                                                                      hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                                                                                                      enabledBorder: OutlineInputBorder(
+                                                                                                                        borderSide: BorderSide(
+                                                                                                                          color: FlutterFlowTheme.of(context).lineColor,
+                                                                                                                          width: 0,
+                                                                                                                        ),
+                                                                                                                        borderRadius: BorderRadius.circular(10),
+                                                                                                                      ),
+                                                                                                                      focusedBorder: OutlineInputBorder(
+                                                                                                                        borderSide: BorderSide(
+                                                                                                                          color: FlutterFlowTheme.of(context).lineColor,
+                                                                                                                          width: 0,
+                                                                                                                        ),
+                                                                                                                        borderRadius: BorderRadius.circular(10),
+                                                                                                                      ),
+                                                                                                                      errorBorder: OutlineInputBorder(
+                                                                                                                        borderSide: BorderSide(
+                                                                                                                          color: Color(0x00000000),
+                                                                                                                          width: 0,
+                                                                                                                        ),
+                                                                                                                        borderRadius: BorderRadius.circular(10),
+                                                                                                                      ),
+                                                                                                                      focusedErrorBorder: OutlineInputBorder(
+                                                                                                                        borderSide: BorderSide(
+                                                                                                                          color: Color(0x00000000),
+                                                                                                                          width: 0,
+                                                                                                                        ),
+                                                                                                                        borderRadius: BorderRadius.circular(10),
+                                                                                                                      ),
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                            ))))],
                                                                                             ),
                                                                                           ],
-                                                                                        )
-
-
-                                                                                      ],
+                                                                                        ),
+                                                                                      ),
                                                                                     ),
-                                                                                  ),
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment:
+                                                                                        MainAxisAlignment.spaceBetween,
+                                                                                        children: [
+                                                                                          TextButton(
+                                                                                            onPressed: () {
+                                                                                              Navigator.pop(context);
+                                                                                            },
+                                                                                            child: const Text(
+                                                                                              "Cancel",
+                                                                                              style: TextStyle(
+                                                                                                color: Colors.black54,
+                                                                                                fontWeight: FontWeight.bold,
+                                                                                                decoration:
+                                                                                                TextDecoration.underline,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                          InkWell(
+                                                                                            onTap: ()  {
+
+                                                                                              Navigator.pop(context);
+                                                                                              Edittask(data["data"][position]["task_id"].toString(),edtask.value.text,
+                                                                                                  data["data"][position]["emp_id"].toString(),
+                                                                                                  taskimg,
+                                                                                                  _value);
+
+                                                                                            },
+                                                                                            child: Container(
+                                                                                              height: h * 0.04,
+                                                                                              padding: const EdgeInsets.symmetric(
+                                                                                                  horizontal: 10.0),
+                                                                                              decoration: BoxDecoration(
+                                                                                                  borderRadius: const BorderRadius.all(
+                                                                                                    Radius.circular(6.0),
+                                                                                                  ),
+                                                                                                  color: primaryColor),
+                                                                                              child: const Center(
+                                                                                                child: Text(
+                                                                                                  "Apply",
+                                                                                                  style: TextStyle(
+                                                                                                      color: Colors.white,
+                                                                                                      fontWeight: FontWeight.bold,
+                                                                                                      fontSize: 15.0),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    )
+
+
+                                                                                  ],
                                                                                 ),
                                                                               ),
                                                                             ),
