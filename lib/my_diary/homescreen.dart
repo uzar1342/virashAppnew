@@ -5,6 +5,8 @@ import 'package:analog_clock/analog_clock.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../login.dart';
 import '../main.dart';
 import '../models/meals_list_data.dart';
 import '../virash_app_theme.dart';
@@ -163,11 +165,23 @@ return response.data;
                   child: Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: Icon(
-                          Icons.calendar_today,
-                          color: VirashAppTheme.grey,
-                          size: 18,
+                        padding:  EdgeInsets.only(right: 8),
+                        child: GestureDetector(
+                          onTap:() async {
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            prefs.clear();
+                            Navigator.pushReplacement(context,
+                                MaterialPageRoute(builder:
+                                    (context) =>
+                                    HomePage()
+                                )
+                            );
+                          },
+                          child: Icon(
+                            Icons.calendar_today,
+                            color: VirashAppTheme.grey,
+                            size: 18,
+                          ),
                         ),
                       ),
                       Text(

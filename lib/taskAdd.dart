@@ -68,6 +68,7 @@ class _TaskState extends State<Task> {
                 _value = value.toString();
                 widget.cartItem.flavor = value.toString();
               },
+              initialValue: _value,
               obscureText: false,
               decoration: InputDecoration(
                 hintText: 'Enter Task',
@@ -290,7 +291,7 @@ class _pickerImageState extends State<pickerImage> {
                                                         color: primaryColor),
                                                     child: Center(
                                                       child: Text(
-                                                        "Cancle",
+                                                        "Cancel",
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -315,7 +316,7 @@ class _pickerImageState extends State<pickerImage> {
                           elevation: 3,
                           child: Icon(
                             Icons.image,
-                            color: Colors.black,
+                            color: Colors.lightBlue,
                             size: 28,
                           ),
                         ),
@@ -416,7 +417,7 @@ class _pickerImageState extends State<pickerImage> {
                           elevation: 3,
                           child: Icon(
                             Icons.photo_camera_sharp,
-                            color: Colors.black,
+                            color: Colors.lightBlue,
                             size: 28,
                           ),
                         ),

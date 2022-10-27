@@ -593,7 +593,6 @@ var data;
                                 ),
                                 onPressed: () {
                                   setState(() {
-
                                     _searchController.clear();
                                   });
                                 },
@@ -636,6 +635,7 @@ var data;
                     backgroundColor: Colors.blue,
                     strokeWidth: 4.0,
                     onRefresh: () async {
+                      widget.fun();
                       fetchemployetask();
                       isLoading=true;
                       setState(() {
@@ -1007,7 +1007,7 @@ var data;
                                                                                                       Radius.circular(6.0),
                                                                                                     ),
                                                                                                     color: primaryColor),
-                                                                                                child: Center(
+                                                                                                child: const Center(
                                                                                                   child: Text(
                                                                                                     "Apply",
                                                                                                     style: TextStyle(
@@ -1043,7 +1043,7 @@ var data;
                                                                       child: Align(
                                                                         alignment: AlignmentDirectional(0, 0),
                                                                         child: Text(
-                                                                          "Check",
+                                                                          "Done",
                                                                           textAlign: TextAlign.center,
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .subtitle1
@@ -1400,8 +1400,8 @@ class _TasktrailState extends State<Tasktrail> {
       print(response.data);
       return response.data;
     } else {
-      final snackBar = SnackBar(
-        content: const Text('Unable to fetch taskTrail'),
+      final snackBar = const SnackBar(
+        content: Text('Unable to fetch taskTrail'),
         backgroundColor: (Colors.red),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -1426,10 +1426,18 @@ class _TasktrailState extends State<Tasktrail> {
             if (snapshot.connectionState == ConnectionState.done) {
               // If we got an error
               if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error} occurred',
-                    style: TextStyle(fontSize: 18),
+                return Container(
+                  color: Colors.white,
+                  child: Center(
+                    child: Column(
+                        children: [
+                          Image.asset("asset/somthing_went_wrong.png")
+                          ,const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text("somthing went wrong",style: TextStyle(color: Colors.red,fontSize: 20),),
+                          )
+                        ],
+                    ),
                   ),
                 );
 

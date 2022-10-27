@@ -3,6 +3,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'Approvedtask.dart';
 import 'taskAdd.dart';
 import 'approved_task.dart';
@@ -28,6 +29,14 @@ class TaskNav extends StatefulWidget {
 class _TaskNavState extends State<TaskNav>
     with TickerProviderStateMixin {
   AnimationController? animationController;
+
+
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+  TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
+    List<Widget> _widgetOptions=[] ;
+
+
 
   bool net = true;
   var subscription;
@@ -59,6 +68,15 @@ class _TaskNavState extends State<TaskNav>
 
   @override
   void initState() {
+    _widgetOptions = <Widget>[
+      Taskadd(empid: widget.id, name: widget.name,),
+      EmpTask(emoid: widget.id, status: 'Pending', fun: (){},name: widget.name, check: 'A',),
+      ApprovedTask(emoid: widget.id, name: widget.name,),
+      EmpTask(emoid: widget.id, status: 'Rejected', fun: (){},name: widget.name, check: 'A',),
+      apptask(emoid: widget.id),
+    ];
+
+
     d.isLoading=true;
     checkinternet();
     tabIconsList.forEach((TabIconData tab) {
@@ -86,7 +104,7 @@ class _TaskNavState extends State<TaskNav>
         body: widget.isLoading?Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: const [
               CircularProgressIndicator(
                 color: Colors.lightBlue,
               ),
@@ -103,20 +121,94 @@ class _TaskNavState extends State<TaskNav>
             if (!snapshot.hasData) {
               return const SizedBox();
             } else {
-              return SafeArea(
-                child: Column(
-                  children: [
-                    Expanded(
-                      flex: 20,
-                      child: Container(
-                          child: tabBody),
+              return Scaffold(
+                body: SafeArea(
+                  child: Center(
+                    child: _widgetOptions.elementAt(_selectedIndex),
+                  ),
+                ),
+                bottomNavigationBar: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 20,
+                        color: Colors.black.withOpacity(.1),
+                      )
+                    ],
+                  ),
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0,10,0,10),
+                      child: GNav(
+                        rippleColor: Colors.grey[300]!,
+                        hoverColor: Colors.grey[100]!,
+                        gap: 8,
+                        activeColor: Colors.black,
+                        iconSize: 20,
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        duration: const Duration(milliseconds: 400),
+                        tabBackgroundColor: Colors.grey[100]!,
+                        color: Colors.black,
+                        tabs:   [
+                          GButton(
+                            iconColor: Colors.cyan,
+                            iconActiveColor: Color(0xff343BA8),
+                            textColor: Color(0xff343BA8),
+                            backgroundColor: Color(0xffcad9fa),
+                            onPressed: (){
+                              d.isLoading=true;
+                            },
+                            icon: Icons.add_circle,
+                            text: 'Add',
+                          ),
+                          GButton(
+                            iconActiveColor: Color(0xff343BA8),
+                            textColor: Color(0xff343BA8),
+                            backgroundColor: Color(0xff99CCC8),
+                            icon: Icons.pending,
+                            text: 'Pending',
+                          ),
+                          GButton(
+                            iconActiveColor: Color(0xff1B632A),
+                            textColor: Color(0xff1B632A),
+                            backgroundColor: Color(0xff99CCC8),
+                            onPressed: (){
+                              d.isLoading=true;
+                            },
+                            icon: Icons.check_circle,
+                            text: 'Completed',
+                          ),
+                          const GButton(
+                            iconActiveColor: Color(0xffad1c11),
+                            textColor: Color(0xffad1c11),
+                            backgroundColor: Color(0xffF7ADA8),
+                            icon: Icons.cancel,
+                            text: 'Rejected',
+                          ),
+                           GButton(
+                             iconActiveColor: Color(0xff1B632A),
+                             textColor: Color(0xff1B632A),
+                             backgroundColor: Color(0xff99CCC8),
+                             onPressed: (){
+                               d.isLoading=true;
+                             },
+                            icon:  Icons.thumb_up,
+                            text: 'Approved',
+                          ),
+                        ],
+                        selectedIndex: _selectedIndex,
+                        onTabChange: (index) {
+                          setState(() {
+                            _selectedIndex = index;
+                          });
+                        },
+                      ),
                     ),
-                    Expanded(
-                      flex: 3,
-                      child: Container(
-                          child: bottomBar()),
-                    ),
-                  ],),
+                  ),
+                )
+
+
               );
             }
           },
@@ -135,7 +227,7 @@ class _TaskNavState extends State<TaskNav>
                   height: 10.0,
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 14.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
                   child: Text(
                     "Looks like you got disconnected, Please check your Internet connection",
                     textAlign: TextAlign.center,

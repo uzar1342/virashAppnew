@@ -187,8 +187,8 @@ class _apptaskState extends State<apptask> {
         isloading=false;
       });
     } else {
-      final snackBar = SnackBar(
-        content: const Text('Unable to fetch employetask'),
+      final snackBar = const SnackBar(
+        content: Text('Unable to fetch employetask'),
         backgroundColor: (Colors.red),
 
       );

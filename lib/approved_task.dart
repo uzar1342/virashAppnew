@@ -18,6 +18,7 @@ import 'package:http/http.dart' as http;
 
 
 final TextEditingController _searchController = TextEditingController();
+
 class taskbar extends StatefulWidget {
   taskbar(Function() this.refress, this.name ,{Key? key}) : super(key: key);
   var refress;
@@ -245,7 +246,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
 
   multichecktask(rejid, appid) async {
     setState(() {
-
+isloading=true;
     });
     var id=rejid;
     print(id);
@@ -277,6 +278,7 @@ class _ApprovedTaskState extends State<ApprovedTask> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       setState(() {
+        fetchemployetask();
       });
     } else {
       final snackBar = SnackBar(
@@ -285,6 +287,8 @@ class _ApprovedTaskState extends State<ApprovedTask> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       setState(() {
+
+        isloading=false;
       });
     }
   }
@@ -293,9 +297,9 @@ class _ApprovedTaskState extends State<ApprovedTask> {
     fetchemployetask();
     super.initState();
   }
-  
   var data;
   fetchemployetask() async {
+    data=[];
     check=0;
     print(widget.emoid);
     Dio dio=Dio();
@@ -495,7 +499,6 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                   return Tasktrail(id: data["data"][position]["task_id"],);
                                 },
                               );
-
                             },
                             child: Card(
                               elevation: 3.0,
@@ -511,12 +514,6 @@ class _ApprovedTaskState extends State<ApprovedTask> {
                                         flex: 4,
                                         child: GestureDetector(
                                           onTap: (){
-
-
-
-
-
-
 
 
 
@@ -1142,7 +1139,7 @@ class _checktaskState extends State<checktask> {
                   showDialog(
                     barrierDismissible: false,
                       context: context,
-                      builder: (context) => AlertDialog(
+                      builder: (c) => AlertDialog(
                         title: Text(
                           "Edit Task",
                           style: TextStyle(
@@ -1224,11 +1221,25 @@ class _checktaskState extends State<checktask> {
                                       ),
                                       InkWell(
                                         onTap: ()  {
-                                          Navigator.pop(context);
-                                          rejectid[widget.position]={"id": widget.id, "remark":edtask.value.text};
-                                          print(rejectid);
-                                          setState(() {
-                                          });
+                                          if(edtask.value.text.trim()!="")
+                                          {
+                                            Navigator.pop(context);
+                                            rejectid[widget.position] = {
+                                              "id": widget.id,
+                                              "remark": edtask.value.text
+                                            };
+                                            print(rejectid);
+                                            setState(() {});
+                                          }
+                                          else
+                                            {
+                                              final snackBar = SnackBar(
+                                                behavior: SnackBarBehavior.floating,
+                                                content:  Text("Fill Remark"),
+                                                backgroundColor: (Colors.red),
+                                              );
+                                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                            }
                                         },
                                         child: Container(
                                           height: h * 0.04,

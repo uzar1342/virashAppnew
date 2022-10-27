@@ -70,9 +70,9 @@ refress()
       print(response.data);
 
     } else {
-      final snackBar = SnackBar(
+      const snackBar = SnackBar(
         margin: EdgeInsets.only(bottom: 100.0),
-        content: const Text('Unable to fetch bank list'),
+        content: Text('Unable to employeeAllTask'),
         backgroundColor: (Colors.red),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
