@@ -73,7 +73,7 @@ class _TaskNavState extends State<TaskNav>
       EmpTask(emoid: widget.id, status: 'Pending', fun: (){},name: widget.name, check: 'A',),
       ApprovedTask(emoid: widget.id, name: widget.name,),
       EmpTask(emoid: widget.id, status: 'Rejected', fun: (){},name: widget.name, check: 'A',),
-      apptask(emoid: widget.id),
+      apptask(emoid: widget.id, name: widget.name,),
     ];
 
 
@@ -162,7 +162,7 @@ class _TaskNavState extends State<TaskNav>
                             icon: Icons.add_circle,
                             text: 'Add',
                           ),
-                          GButton(
+                          const GButton(
                             iconActiveColor: Color(0xff343BA8),
                             textColor: Color(0xff343BA8),
                             backgroundColor: Color(0xff99CCC8),
@@ -289,7 +289,7 @@ class _TaskNavState extends State<TaskNav>
               d.isLoading=true;
               tabBody =
                   ApprovedTask(emoid: widget.id, name: widget.name,);
-              // EmpTask(emoid: widget.id, status: 'complete',);
+                  // EmpTask(emoid: widget.id, status: 'complete',);
                  // CompTask(emoid: widget.id);
             });
           });
@@ -312,7 +312,7 @@ class _TaskNavState extends State<TaskNav>
             d.isLoading=true;
             setState(() {
               tabBody =
-                  apptask(emoid: widget.id);
+                  apptask(emoid: widget.id, name: widget.name,);
                   //CompTask(emoid: widget.id);
             });
           });

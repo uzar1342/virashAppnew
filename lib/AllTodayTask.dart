@@ -324,6 +324,9 @@ class _AllEmpTaskState extends State<AllEmpTask> {
   }
   TextEditingController edtask=new TextEditingController();
   Edittask(taskid,task,emoid,img,prio) async {
+    setState(() {
+      isLoading=true;
+    });
     final url = Uri.parse('http://training.virash.in/editTask');
     var map = Map<String, dynamic>();
     map['admin_id'] = userId;
@@ -341,9 +344,9 @@ class _AllEmpTaskState extends State<AllEmpTask> {
     print(mapRes["success"]);
     print(response.statusCode);
     if (response.statusCode == 200) {
-      isLoading=true;
       fetchemployetask();
       setState(() {
+        isLoading = false;
       });
       final snackBar = SnackBar(
         content:  Text(mapRes["message"]),
@@ -351,6 +354,9 @@ class _AllEmpTaskState extends State<AllEmpTask> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
+      setState(() {
+        isLoading = false;
+      });
       final snackBar = SnackBar(
         content:  Text(mapRes["message"]),
         backgroundColor: (Colors.red),
@@ -506,13 +512,16 @@ class _AllEmpTaskState extends State<AllEmpTask> {
                   strokeWidth: 4.0,
                   onRefresh: () async {
                     _refreshIndicatorKey.currentState?.show();
-                    isLoading=true;
-                    fetchemployetask();
+
+
                     setState(() {
+                      isLoading=true;
+                      fetchemployetask();
                     });
+
                     return Future<void>.delayed(const Duration(milliseconds: 3));
                   },
-                  child: SafeArea(
+                  child:!isLoading? SafeArea(
                       child: data==null?Container(
                         width: double.infinity,
                         color: Colors
@@ -1444,7 +1453,7 @@ class _AllEmpTaskState extends State<AllEmpTask> {
                       ):Center(child: Image.asset("assets/no_data.png"))
 
 
-                  ),
+                  ):Center(child: CircularProgressIndicator(color: Colors.lightBlue,)),
                 ),
               ),
             ],

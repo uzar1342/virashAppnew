@@ -493,12 +493,7 @@ isloading=true;
                           data["data"][position]["status"]!="Pending"?
                           GestureDetector(
                             onTap: (){
-                              showModalBottomSheet<void>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Tasktrail(id: data["data"][position]["task_id"],);
-                                },
-                              );
+
                             },
                             child: Card(
                               elevation: 3.0,
@@ -515,7 +510,12 @@ isloading=true;
                                         child: GestureDetector(
                                           onTap: (){
 
-
+                                            showModalBottomSheet<void>(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Tasktrail(id: data["data"][position]["task_id"],);
+                                              },
+                                            );
 
                                           },
                                           child: Padding(
@@ -1120,9 +1120,9 @@ class _checktaskState extends State<checktask> {
               },
             ),
           ),
-        ):Expanded(
+        ):const Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Checkbox(value: false, onChanged: null),
           ),
         ),
@@ -1141,133 +1141,134 @@ class _checktaskState extends State<checktask> {
                       context: context,
                       builder: (c) => AlertDialog(
                         title: Text(
-                          "Edit Task",
+                          "Remark",
                           style: TextStyle(
                               color: primaryColor,
                               fontWeight: FontWeight.bold),
                         ),
-                        content: Container(
-                          height: h*0.4,
-                          child: Scaffold(
-                            resizeToAvoidBottomInset:false,
-                            body: Form(
-                              child: Column(
-                                children: [
-                                  const Text("Please Edit Task",
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold)),
-                                  SizedBox(
-                                    height: h * 0.01,
-                                  ),
-                                  Container(
-                                    //  height: h * 0.07,
-                                    width: w * 0.95,
-                                    child: Card(
-                                      elevation: 3.0,
-                                      child: TextFormField(
-                                        controller: edtask,
-                                        maxLines: 8,
-                                        cursorColor: primaryColor,
-                                        decoration: InputDecoration(
-                                            suffixIcon: Icon(
+                        content:  Container(
+                          height: h*0.6,
+                          child: Column(
+                              children: [
+                                const Text("Please Enter Remark",
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.bold)),
+                                SizedBox(
+                                  height: h * 0.01,
+                                ),
+                                Container(
+                                  //  height: h * 0.07,
+                                  width: w * 0.95,
+                                  child: Card(
+                                    elevation: 3.0,
+                                    child: TextFormField(
+                                      controller: edtask,
+                                      maxLines: 8,
+                                      cursorColor: primaryColor,
+                                      decoration: InputDecoration(
+                                          suffixIcon: GestureDetector(
+                                            onTap: (){
+
+                                            },
+                                            child: Icon(
                                               Icons.assignment,
                                               color: Colors.red.shade200,
                                             ),
-                                            hintText: "Task",
-                                            hintStyle: const TextStyle(
-                                              color: Colors.black26,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14.0,
-                                            ),
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                            border: const OutlineInputBorder(
-                                              gapPadding: 9,
-                                              borderSide: BorderSide.none,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(12.0)),
-                                            ),
-                                            contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 20.0,
-                                                vertical: 16.0)),
-                                      ),
+                                          ),
+                                          hintText: "Task",
+                                          hintStyle: const TextStyle(
+                                            color: Colors.black26,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14.0,
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          border: const OutlineInputBorder(
+                                            gapPadding: 9,
+                                            borderSide: BorderSide.none,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(12.0)),
+                                          ),
+                                          contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 20.0,
+                                              vertical: 16.0)),
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: h * 0.04,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
+                                ),
+                                SizedBox(
+                                  height: h * 0.04,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        setState(() {
+                                          reject=false;
+                                        });
+                                      },
+                                      child: const Text(
+                                        "Cancel",
+                                        style: TextStyle(
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.bold,
+                                          decoration:
+                                          TextDecoration.underline,
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: ()  {
+                                        if(edtask.value.text.trim()!="")
+                                        {
                                           Navigator.pop(context);
-                                          setState(() {
-                                            reject=false;
-                                          });
-                                        },
-                                        child: const Text(
-                                          "Cancel",
-                                          style: TextStyle(
-                                            color: Colors.black54,
-                                            fontWeight: FontWeight.bold,
-                                            decoration:
-                                            TextDecoration.underline,
-                                          ),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: ()  {
-                                          if(edtask.value.text.trim()!="")
+                                          rejectid[widget.position] = {
+                                            "id": widget.id,
+                                            "remark": edtask.value.text
+                                          };
+                                          print(rejectid);
+                                          setState(() {});
+                                        }
+                                        else
                                           {
-                                            Navigator.pop(context);
-                                            rejectid[widget.position] = {
-                                              "id": widget.id,
-                                              "remark": edtask.value.text
-                                            };
-                                            print(rejectid);
-                                            setState(() {});
+                                            const snackBar = SnackBar(
+                                              behavior: SnackBarBehavior.floating,
+                                              content:  Text("Kindly Provide Remark"),
+                                              backgroundColor: (Colors.red),
+                                            );
+                                            ScaffoldMessenger.of(c).showSnackBar(snackBar);
                                           }
-                                          else
-                                            {
-                                              final snackBar = SnackBar(
-                                                behavior: SnackBarBehavior.floating,
-                                                content:  Text("Fill Remark"),
-                                                backgroundColor: (Colors.red),
-                                              );
-                                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                            }
-                                        },
-                                        child: Container(
-                                          height: h * 0.04,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0),
-                                          decoration: BoxDecoration(
-                                              borderRadius: const BorderRadius.all(
-                                                Radius.circular(6.0),
-                                              ),
-                                              color: primaryColor),
-                                          child: const Center(
-                                            child: Text(
-                                              "Apply",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15.0),
+                                      },
+                                      child: Container(
+                                        height: h * 0.04,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(
+                                              Radius.circular(6.0),
                                             ),
+                                            color: primaryColor),
+                                        child: const Center(
+                                          child: Text(
+                                            "Apply",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15.0),
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  )
-                                ],
-                              ),
+                                    ),
+                                  ],
+                                )
+                              ],
                             ),
-                          ),
                         ),
+
                       ));
                 }
                 else

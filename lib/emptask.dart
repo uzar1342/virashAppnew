@@ -138,7 +138,7 @@ class _pickerImageState extends State<pickerImage> {
                 cam?  Expanded(
                   child: GestureDetector(
                     onTap: (){
-                      widget.cartItem.trim()==""?
+                      widget.cartItem.trim()==""||widget.cartItem.trim()=="N/A"?
                       addimg():
                       {
                         showDialog(
@@ -204,12 +204,12 @@ class _pickerImageState extends State<pickerImage> {
                                 ))
                       };
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
                       child: Center(
                         child: Icon(
                           Icons.image,
-                          color: Colors.black,
+                          color: gall?Colors.grey:Colors.lightBlue,
                           size: 28,
                         ),
                       ),
@@ -235,12 +235,12 @@ class _pickerImageState extends State<pickerImage> {
                     onTap: (){
                       picimg();
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                       child: Center(
                         child: Icon(
                           Icons.photo_camera_sharp,
-                          color: Colors.black,
+                          color: cam?Colors.grey:Colors.lightBlue,
                           size: 28,
                         ),
                       ),
@@ -334,8 +334,8 @@ var data;
         isLoading=false;
       });
     } else {
-      final snackBar = SnackBar(
-        content: const Text('Unable to fetch employetask'),
+      const snackBar = SnackBar(
+        content: Text('Unable to fetch employetask'),
         backgroundColor: (Colors.red),
 
       );
@@ -407,6 +407,7 @@ var data;
   }
   Edittask(taskid,task,emoid,img,prio) async {
     setState(() {
+      isLoading=true;
     });
     final url = Uri.parse('http://training.virash.in/editTask');
     var map = Map<String, dynamic>();
@@ -426,7 +427,7 @@ var data;
     print(response);
     if (response.statusCode == 200) {
       setState(() {
-
+        isLoading=false;
       });
       final snackBar = SnackBar(
         content:  Text(mapRes["message"]),
@@ -435,15 +436,18 @@ var data;
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       isLoading=true;
       fetchemployetask();
-      setState(() {
-      });
+
     } else {
+      setState(() {
+        isLoading=false;
+      });
       final snackBar = SnackBar(
         content:  Text(mapRes["message"]),
         backgroundColor: (Colors.red),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(mapRes["message"]);
+
     }
   }
   @override

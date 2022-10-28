@@ -289,7 +289,7 @@ class _pickerImageState extends State<pickerImage> {
                                                           Radius.circular(6.0),
                                                         ),
                                                         color: primaryColor),
-                                                    child: Center(
+                                                    child: const Center(
                                                       child: Text(
                                                         "Cancel",
                                                         style: TextStyle(
@@ -309,14 +309,14 @@ class _pickerImageState extends State<pickerImage> {
                                   ),
                                 ))
                       };},
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
                       child: Center(
                         child: Card(
                           elevation: 3,
                           child: Icon(
                             Icons.image,
-                            color: Colors.lightBlue,
+                            color: gall?Colors.grey:Colors.lightBlue ,
                             size: 28,
                           ),
                         ),
@@ -410,14 +410,14 @@ class _pickerImageState extends State<pickerImage> {
                     onTap: (){
                       picimg();
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                       child: Center(
                         child: Card(
                           elevation: 3,
                           child: Icon(
                             Icons.photo_camera_sharp,
-                            color: Colors.lightBlue,
+                            color: !cam?Colors.lightBlue:Colors.grey,
                             size: 28,
                           ),
                         ),
@@ -429,7 +429,7 @@ class _pickerImageState extends State<pickerImage> {
                   child: GestureDetector(
                     onTap: (){
                     },
-                    child: const Padding(
+                    child:  const Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                       child: Card(
                         elevation: 3,

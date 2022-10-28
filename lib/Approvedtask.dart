@@ -155,10 +155,9 @@ class _taskbarState extends State<taskbar> {
     );
   }
 }
-
-
 class apptask extends StatefulWidget {
-   apptask({Key? key,required this.emoid}) : super(key: key);
+  var name;
+   apptask( {Key? key,required this.emoid,required this.name}) : super(key: key);
 var emoid;
   @override
   State<apptask> createState() => _apptaskState();
@@ -229,7 +228,7 @@ refress()
             height: admins.contains(employee_role)?h:h*0.75,
             child: Column(
               children: [
-               taskbar(refress, "arbaz"),
+               taskbar(refress, widget.name),
                 Expanded(
                   child: RefreshIndicator(
                     key: _refreshIndicatorKey,
