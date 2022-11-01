@@ -258,6 +258,7 @@ class _pickerImageState extends State<pickerImage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children:  [
                 gall?  Expanded(
+                  flex: 1,
                   child: GestureDetector(
                     onTap: (){
                       widget.cartItem.img.trim()==""?
@@ -323,7 +324,8 @@ class _pickerImageState extends State<pickerImage> {
                                     ),
                                   ),
                                 ))
-                      };},
+                      };
+                      },
                     child:  Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
                       child: Center(
@@ -339,25 +341,21 @@ class _pickerImageState extends State<pickerImage> {
                     ),
                   ),
                 ):
-                Expanded(
-                  child: GestureDetector(
-                    onTap: (){
+                GestureDetector(
+                  onTap: (){
 
-                    },
-                    child: const Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                      child: Card(
-                        elevation: 3,
-                        child: Icon(
-                          Icons.image,
-                          color: Colors.grey,
-                          size: 28,
-                        ),
-                      ),
+                  },
+                  child:  const Card(
+                    elevation: 3,
+                    child: Icon(
+                      Icons.image,
+                      color: Colors.grey,
+                      size: 28,
                     ),
                   ),
                 ),
                 cam? Expanded(
+                  flex: 1,
                   child: GestureDetector(
                     onTap: (){
                       widget.cartItem.img.trim()==""?picimg():
@@ -439,20 +437,15 @@ class _pickerImageState extends State<pickerImage> {
                     ),
                   ),
                 ):
-                Expanded(
-                  child: GestureDetector(
-                    onTap: (){
-                    },
-                    child:  const Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                      child: Card(
-                        elevation: 3,
-                        child: Icon(
-                          Icons.photo_camera_sharp,
-                          color: Colors.grey,
-                          size: 28,
-                        ),
-                      ),
+                GestureDetector(
+                  onTap: (){
+                  },
+                  child:  const Card(
+                    elevation: 3,
+                    child: Icon(
+                      Icons.photo_camera_sharp,
+                      color: Colors.grey,
+                      size: 28,
                     ),
                   ),
                 ),
