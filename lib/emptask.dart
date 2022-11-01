@@ -303,6 +303,21 @@ class _EmpTaskState extends State<EmpTask> {
   late int check;
   final TextEditingController _searchController = TextEditingController();
 
+
+  @override
+  void didUpdateWidget(EmpTask oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.status != widget.status) {
+      setState(() {
+        isLoading=true;
+        fetchemployetask();
+      });
+    }
+  }
+
+
+
 var data;
   fetchemployetask() async {
     check=0;
@@ -363,6 +378,9 @@ var data;
   }
   bool showSearch = true;
   updatetask(taskid) async {
+    setState(() {
+      isLoading=true;
+    });
     print(remark.value.text);
     final url = Uri.parse('http://training.virash.in/markTaskCompleted');
     var map = Map<String, dynamic>();
@@ -380,6 +398,7 @@ var data;
     if (response.statusCode == 200) {
       widget.fun();
       setState(() {
+        isLoading=true;
       });
       final snackBar = SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -394,6 +413,7 @@ var data;
       isLoading=true;
       fetchemployetask();
       setState(() {
+        isLoading=true;
       });
     } else {
       final snackBar = SnackBar(
@@ -461,7 +481,8 @@ var data;
             height: admins.contains(employee_role)?h:h*0.75,
             child: Column(
               children: [
-                widget.check=="E"? Container(
+                widget.check=="E"?
+                Container(
                   width: w * 0.9,
                   child: Card(
                     elevation: 4,

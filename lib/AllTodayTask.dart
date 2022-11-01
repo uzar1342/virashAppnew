@@ -135,7 +135,7 @@ class _pickerImageState extends State<pickerImage> {
                 cam?  Expanded(
                   child: GestureDetector(
                     onTap: (){
-                      widget.cartItem.trim()==""?
+                      widget.cartItem.trim()==""||widget.cartItem.trim()=="N/A"?
                       addimg():
                       {
                         showDialog(
@@ -180,7 +180,7 @@ class _pickerImageState extends State<pickerImage> {
                                                           Radius.circular(6.0),
                                                         ),
                                                         color: primaryColor),
-                                                    child: Center(
+                                                    child: const Center(
                                                       child: Text(
                                                         "Cancle",
                                                         style: TextStyle(
@@ -201,12 +201,12 @@ class _pickerImageState extends State<pickerImage> {
                                 ))
                       };
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
                       child: Center(
                         child: Icon(
                           Icons.image,
-                          color: Colors.black,
+                          color: gall?Colors.grey:Colors.lightBlue,
                           size: 28,
                         ),
                       ),
@@ -232,12 +232,12 @@ class _pickerImageState extends State<pickerImage> {
                     onTap: (){
                       picimg();
                     },
-                    child: const Padding(
+                    child:  Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                       child: Center(
                         child: Icon(
                           Icons.photo_camera_sharp,
-                          color: Colors.black,
+                          color: cam?Colors.grey:Colors.lightBlue,
                           size: 28,
                         ),
                       ),

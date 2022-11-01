@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:Virash/taskimg.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -1235,12 +1236,12 @@ class _checktaskState extends State<checktask> {
                                         }
                                         else
                                           {
-                                            const snackBar = SnackBar(
-                                              behavior: SnackBarBehavior.floating,
-                                              content:  Text("Kindly Provide Remark"),
-                                              backgroundColor: (Colors.red),
-                                            );
-                                            ScaffoldMessenger.of(c).showSnackBar(snackBar);
+                                            Flushbar(
+                                              backgroundColor: Colors.red,
+                                              message: "Kindly Provide Remark",
+                                              duration: Duration(seconds: 3),
+                                            ).show(context);
+
                                           }
                                       },
                                       child: Container(

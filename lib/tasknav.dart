@@ -158,16 +158,18 @@ class _TaskNavState extends State<TaskNav>
                             backgroundColor: Color(0xffcad9fa),
                             onPressed: (){
                               d.isLoading=true;
+
                             },
                             icon: Icons.add_circle,
                             text: 'Add',
                           ),
-                          const GButton(
+                           const GButton(
                             iconActiveColor: Color(0xff343BA8),
                             textColor: Color(0xff343BA8),
                             backgroundColor: Color(0xff99CCC8),
                             icon: Icons.pending,
                             text: 'Pending',
+
                           ),
                           GButton(
                             iconActiveColor: Color(0xff1B632A),
@@ -179,7 +181,7 @@ class _TaskNavState extends State<TaskNav>
                             icon: Icons.check_circle,
                             text: 'Completed',
                           ),
-                          const GButton(
+                            const GButton(
                             iconActiveColor: Color(0xffad1c11),
                             textColor: Color(0xffad1c11),
                             backgroundColor: Color(0xffF7ADA8),

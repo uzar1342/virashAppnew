@@ -82,6 +82,7 @@ dependencies:
   date_format: ^2.0.7
   flutter_neat_and_clean_calendar: ^0.3.8+22
   loader_overlay: ^2.1.0
+  another_flushbar: ^1.12.29
 dev_dependencies:
   flutter_test:
     sdk: flutter
