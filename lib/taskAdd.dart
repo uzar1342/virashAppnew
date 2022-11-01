@@ -189,7 +189,9 @@ class CartItem {
   String itemName;
   String flavor;
   String img;
-  CartItem({required this.productType, required this.itemName, required this.flavor,required this.img});
+  bool cam;
+
+  CartItem({required this.productType, required this.itemName, required this.flavor,required this.img,required this.cam,});
 }
 
 
@@ -209,8 +211,10 @@ class _pickerImageState extends State<pickerImage> {
     String img64 = base64Encode(bytes);
     print(img64);
     widget.cartItem.img=img64;
+    widget.cartItem.cam=false;
     setState(() {
-      gall=false;
+      cam=false;
+      gall=true;
     });
   }
   picimg()
@@ -220,13 +224,24 @@ class _pickerImageState extends State<pickerImage> {
     String img64 = base64Encode(bytes);
     print(img64);
     widget.cartItem.img=img64;
+    widget.cartItem.cam=true;
     setState(() {
-      cam=false;
+      cam=true;
+      gall=false;
     });
   }
  @override
   void initState() {
-    widget.cartItem.img!=""?gall=false:gall=true;
+   widget.cartItem.img!=""?
+      {
+        widget.cartItem.cam? {gall = false,cam=true} :{gall = true,cam=false}
+      }
+   :
+      {
+        gall=true,cam=true
+      };
+
+
     super.initState();
   }
   @override
@@ -242,7 +257,7 @@ class _pickerImageState extends State<pickerImage> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               children:  [
-                cam?  Expanded(
+                gall?  Expanded(
                   child: GestureDetector(
                     onTap: (){
                       widget.cartItem.img.trim()==""?
@@ -316,7 +331,7 @@ class _pickerImageState extends State<pickerImage> {
                           elevation: 3,
                           child: Icon(
                             Icons.image,
-                            color: gall?Colors.grey:Colors.lightBlue ,
+                            color: cam?Colors.grey:Colors.lightBlue ,
                             size: 28,
                           ),
                         ),
@@ -327,9 +342,26 @@ class _pickerImageState extends State<pickerImage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: (){
-                      widget.cartItem.img.trim()==""?
-                      addimg():
-                      {
+
+                    },
+                    child: const Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                      child: Card(
+                        elevation: 3,
+                        child: Icon(
+                          Icons.image,
+                          color: Colors.grey,
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                cam? Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                      widget.cartItem.img.trim()==""?picimg():
+                       {
                         showDialog(
                             context: context,
                             builder: (context) =>
@@ -373,7 +405,7 @@ class _pickerImageState extends State<pickerImage> {
                                                         color: primaryColor),
                                                     child: const Center(
                                                       child: Text(
-                                                        "Cancle",
+                                                        "Cancel",
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -390,25 +422,7 @@ class _pickerImageState extends State<pickerImage> {
                                     ),
                                   ),
                                 ))
-                      };
-                    },
-                    child: const Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                      child: Card(
-                        elevation: 3,
-                        child: Icon(
-                          Icons.image,
-                          color: Colors.grey,
-                          size: 28,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                gall? Expanded(
-                  child: GestureDetector(
-                    onTap: (){
-                      picimg();
+                      }; ;
                     },
                     child:  Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
@@ -417,7 +431,7 @@ class _pickerImageState extends State<pickerImage> {
                           elevation: 3,
                           child: Icon(
                             Icons.photo_camera_sharp,
-                            color: !cam?Colors.lightBlue:Colors.grey,
+                            color: gall?Colors.grey:Colors.lightBlue,
                             size: 28,
                           ),
                         ),
@@ -598,7 +612,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 productType: "",
                 itemName: "",
                 flavor: "",
-                img:""
+                img:"",
+                cam: false
             ));
             context.loaderOverlay.hide();
           });
@@ -629,7 +644,7 @@ class _MyHomePageState extends State<MyHomePage> {
         productType: "",
         itemName: "",
         flavor: "",
-        img:""
+        img:"", cam: false
     ));
     setState(() {
     });
@@ -805,7 +820,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 productType: "",
                                 itemName: "",
                                 flavor: "",
-                                img:""
+                                img:"", cam: false
                             ));
                             setState(() {
                             });
