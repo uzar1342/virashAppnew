@@ -558,7 +558,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                           Row(
                                                                             mainAxisSize: MainAxisSize.max,
                                                                             children: [
-                                                                              Padding(
+                                                                              const Padding(
                                                                                 padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
                                                                                 child: Icon(
                                                                                   Icons.calendar_today,
@@ -749,11 +749,11 @@ class _CalendarPageState extends State<CalendarPage> {
 
                                                                           ElevatedButton(onPressed: () async {
                                                                             Navigator.pop(context);
+
+                                                                            Position locationposition = await _getGeoLocationPosition();
                                                                             setState(() {
                                                                               context.loaderOverlay.show();
                                                                             });
-                                                                            Position locationposition = await _getGeoLocationPosition();
-
                                                                             List<Placemark> placemarks = await placemarkFromCoordinates(locationposition.latitude, locationposition.longitude);
                                                                             Placemark place = placemarks[0];
                                                                             address= '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';

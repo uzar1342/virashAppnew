@@ -1148,126 +1148,128 @@ class _checktaskState extends State<checktask> {
                               fontWeight: FontWeight.bold),
                         ),
                         content:  Container(
-                          height: h*0.6,
-                          child: Column(
-                              children: [
-                                const Text("Please Enter Remark",
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.bold)),
-                                SizedBox(
-                                  height: h * 0.01,
-                                ),
-                                Container(
-                                  //  height: h * 0.07,
-                                  width: w * 0.95,
-                                  child: Card(
-                                    elevation: 3.0,
-                                    child: TextFormField(
-                                      controller: edtask,
-                                      maxLines: 8,
-                                      cursorColor: primaryColor,
-                                      decoration: InputDecoration(
-                                          suffixIcon: GestureDetector(
-                                            onTap: (){
+                          height: h*0.4,
+                          child: SingleChildScrollView(
+                            child: Column(
+                                children: [
+                                  const Text("Please Enter Remark",
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.bold)),
+                                  SizedBox(
+                                    height: h * 0.01,
+                                  ),
+                                  Container(
+                                    //  height: h * 0.07,
+                                    width: w * 0.95,
+                                    child: Card(
+                                      elevation: 3.0,
+                                      child: TextFormField(
+                                        controller: edtask,
+                                        maxLines: 8,
+                                        cursorColor: primaryColor,
+                                        decoration: InputDecoration(
+                                            suffixIcon: GestureDetector(
+                                              onTap: (){
 
-                                            },
-                                            child: Icon(
-                                              Icons.assignment,
-                                              color: Colors.red.shade200,
+                                              },
+                                              child: Icon(
+                                                Icons.assignment,
+                                                color: Colors.red.shade200,
+                                              ),
                                             ),
-                                          ),
-                                          hintText: "Task",
-                                          hintStyle: const TextStyle(
-                                            color: Colors.black26,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14.0,
-                                          ),
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                          border: const OutlineInputBorder(
-                                            gapPadding: 9,
-                                            borderSide: BorderSide.none,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(12.0)),
-                                          ),
-                                          contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 20.0,
-                                              vertical: 16.0)),
+                                            hintText: "Task",
+                                            hintStyle: const TextStyle(
+                                              color: Colors.black26,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14.0,
+                                            ),
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            border: const OutlineInputBorder(
+                                              gapPadding: 9,
+                                              borderSide: BorderSide.none,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(12.0)),
+                                            ),
+                                            contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 20.0,
+                                                vertical: 16.0)),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: h * 0.04,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        setState(() {
-                                          reject=false;
-                                        });
-                                      },
-                                      child: const Text(
-                                        "Cancel",
-                                        style: TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold,
-                                          decoration:
-                                          TextDecoration.underline,
-                                        ),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: ()  {
-                                        if(edtask.value.text.trim()!="")
-                                        {
+                                  SizedBox(
+                                    height: h * 0.04,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () {
                                           Navigator.pop(context);
-                                          rejectid[widget.position] = {
-                                            "id": widget.id,
-                                            "remark": edtask.value.text
-                                          };
-                                          print(rejectid);
-                                          setState(() {});
-                                        }
-                                        else
-                                          {
-                                            Flushbar(
-                                              backgroundColor: Colors.red,
-                                              message: "Kindly Provide Remark",
-                                              duration: Duration(seconds: 3),
-                                            ).show(context);
-
-                                          }
-                                      },
-                                      child: Container(
-                                        height: h * 0.04,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0),
-                                        decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.all(
-                                              Radius.circular(6.0),
-                                            ),
-                                            color: primaryColor),
-                                        child: const Center(
-                                          child: Text(
-                                            "Apply",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15.0),
+                                          setState(() {
+                                            reject=false;
+                                          });
+                                        },
+                                        child: const Text(
+                                          "Cancel",
+                                          style: TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                            TextDecoration.underline,
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
+                                      InkWell(
+                                        onTap: ()  {
+                                          if(edtask.value.text.trim()!="")
+                                          {
+                                            Navigator.pop(context);
+                                            rejectid[widget.position] = {
+                                              "id": widget.id,
+                                              "remark": edtask.value.text
+                                            };
+                                            print(rejectid);
+                                            setState(() {});
+                                          }
+                                          else
+                                            {
+                                              Flushbar(
+                                                backgroundColor: Colors.red,
+                                                message: "Kindly Provide Remark",
+                                                duration: Duration(seconds: 3),
+                                              ).show(context);
+
+                                            }
+                                        },
+                                        child: Container(
+                                          height: h * 0.04,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
+                                          decoration: BoxDecoration(
+                                              borderRadius: const BorderRadius.all(
+                                                Radius.circular(6.0),
+                                              ),
+                                              color: primaryColor),
+                                          child: const Center(
+                                            child: Text(
+                                              "Apply",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15.0),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                          ),
                         ),
 
                       ));

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:Virash/taskimg.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' as ge;
 import 'package:get/get_core/src/get_main.dart';
@@ -233,7 +234,70 @@ class _pickerImageState extends State<pickerImage> {
                 gall? Expanded(
                   child: GestureDetector(
                     onTap: (){
-                      picimg();
+                      widget.cartItem.trim()==""||widget.cartItem.trim()=="N/A"?
+                      picimg():  {
+                        showDialog(
+                            context: context,
+                            builder: (context) =>
+                                AlertDialog(
+                                  title: Text(
+                                    "View Image",
+                                    style: TextStyle(
+                                        color: primaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  content: Container(
+                                    child: SingleChildScrollView(
+                                      child: Form(
+                                        child: Column(
+                                          children: [
+                                            !_validURL?Image.memory(base64Decode(widget.cartItem)):Image.network(widget.cartItem),
+                                            SizedBox(
+                                              height: h * 0.04,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: [
+                                                InkWell(
+                                                  onTap: ()  {
+                                                    Navigator.pop(context);
+                                                    setState(() {
+                                                      _validURL = false;
+                                                      gall=true;cam=true;
+                                                      widget.cartItem="";
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    height: h * 0.04,
+                                                    width: w*0.5,
+                                                    padding: const EdgeInsets.symmetric(
+                                                        horizontal: 10.0),
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: const BorderRadius.all(
+                                                          Radius.circular(6.0),
+                                                        ),
+                                                        color: primaryColor),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Cancle",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight: FontWeight.bold,
+                                                            fontSize: 15.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ))
+                      };;
                     },
                     child:  Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
@@ -975,21 +1039,21 @@ var data;
                                                                                                     color: Colors.red.shade200,
                                                                                                   ),
                                                                                                   hintText: "2,3 Done",
-                                                                                                  hintStyle: TextStyle(
+                                                                                                  hintStyle: const TextStyle(
                                                                                                     color: Colors.black26,
                                                                                                     fontWeight: FontWeight.bold,
                                                                                                     fontSize: 14.0,
                                                                                                   ),
                                                                                                   filled: true,
                                                                                                   fillColor: Colors.white,
-                                                                                                  border: OutlineInputBorder(
+                                                                                                  border: const OutlineInputBorder(
                                                                                                     gapPadding: 9,
                                                                                                     borderSide: BorderSide.none,
                                                                                                     borderRadius: BorderRadius.all(
                                                                                                         Radius.circular(12.0)),
                                                                                                   ),
                                                                                                   contentPadding:
-                                                                                                  EdgeInsets.symmetric(
+                                                                                                  const EdgeInsets.symmetric(
                                                                                                       horizontal: 20.0,
                                                                                                       vertical: 16.0)),
                                                                                             ),
@@ -1103,7 +1167,7 @@ var data;
                                                                             ),
                                                                             content: SingleChildScrollView(
                                                                               child: Container(
-                                                                                height: h*0.6,
+                                                                                height: h*0.5,
                                                                                 child: Column(
                                                                                   children: [
                                                                                     Expanded(
@@ -1224,13 +1288,20 @@ var data;
                                                                                           InkWell(
                                                                                             onTap: ()  {
 
-                                                                                              Navigator.pop(context);
-                                                                                              Edittask(data["data"][position]["task_id"].toString(),edtask.value.text,
-                                                                                                  data["data"][position]["emp_id"].toString(),
-                                                                                                  taskimg,
-                                                                                                  _value);
+                                                                                                if(edtask.value.text.trim()!="") {
+                                                                                                            Navigator.pop(context);
+                                                                                                            Edittask(data["data"][position]["task_id"].toString(), edtask.value.text, data["data"][position]["emp_id"].toString(), taskimg, _value);
+                                                                                                          }
+                                                                                                else
+                                                                                                  {
+                                                                                                    Flushbar(
+                                                                                                      backgroundColor: Colors.red,
+                                                                                                      message: "Kindly Provide Task",
+                                                                                                      duration: Duration(seconds: 3),
+                                                                                                    ).show(context);
 
-                                                                                            },
+                                                                                                  }
+                                                                                                        },
                                                                                             child: Container(
                                                                                               height: h * 0.04,
                                                                                               padding: const EdgeInsets.symmetric(
