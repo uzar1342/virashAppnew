@@ -109,6 +109,9 @@ class _CalendarPageState extends State<CalendarPage> {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
+    setState(() {
+      context.loaderOverlay.show();
+    });
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
@@ -749,11 +752,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
                                                                           ElevatedButton(onPressed: () async {
                                                                             Navigator.pop(context);
-
                                                                             Position locationposition = await _getGeoLocationPosition();
-                                                                            setState(() {
-                                                                              context.loaderOverlay.show();
-                                                                            });
                                                                             List<Placemark> placemarks = await placemarkFromCoordinates(locationposition.latitude, locationposition.longitude);
                                                                             Placemark place = placemarks[0];
                                                                             address= '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
@@ -800,8 +799,8 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                             } else {
                                                                               hideloader();
                                                                               print(response.statusCode);
-                                                                              final snackBar = SnackBar(
-                                                                                content: const Text('Please try again later'),
+                                                                              final snackBar = const SnackBar(
+                                                                                content: Text('Please try again later'),
                                                                                 backgroundColor: (Colors.red),
                                                                               );
                                                                               ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(snackBar);

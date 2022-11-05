@@ -361,6 +361,9 @@ var address;
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
+    setState(() {
+      context.loaderOverlay.show();
+    });
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
@@ -1201,12 +1204,12 @@ var address;
                                                                                                     obscureText: false,
                                                                                                     decoration: InputDecoration(
                                                                                                       hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                                                                                                      enabledBorder: OutlineInputBorder(
+                                                                                                      enabledBorder: const OutlineInputBorder(
                                                                                                         borderSide: BorderSide(
                                                                                                           color: Color(0xFF504B4B),
                                                                                                           width: 1,
                                                                                                         ),
-                                                                                                        borderRadius: const BorderRadius.only(
+                                                                                                        borderRadius: BorderRadius.only(
                                                                                                           topLeft: Radius.circular(4.0),
                                                                                                           topRight: Radius.circular(4.0),
                                                                                                         ),
@@ -1262,9 +1265,6 @@ var address;
 
                                                                                       ElevatedButton(onPressed: () async {
                                                                                         Navigator.pop(context);
-                                                                                         setState(() {
-                                                                                           context.loaderOverlay.show();
-                                                                                         });
                                                                                         Position position = await _getGeoLocationPosition();
                                                                                        var df =  DateFormat("h:mma");
                                                                                         String? h=textController1?.value.text;
