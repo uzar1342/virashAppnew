@@ -4,9 +4,8 @@ import 'dart:io' as Io;
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'flutter_flow/flutter_flow_drop_down.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
@@ -60,7 +59,7 @@ class _TaskState extends State<Task> {
           color: FlutterFlowTheme.of(context).primaryBtnText,
         ),
         child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+          padding: const EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
           child: Card(
             elevation: 3,
             child: TextFormField(
@@ -88,14 +87,14 @@ class _TaskState extends State<Task> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0x00000000),
                     width: 0,
                   ),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0x00000000),
                     width: 0,
                   ),
@@ -125,7 +124,6 @@ class _PrioretyState extends State<Priorety> {
   @override
   void initState() {
     super.initState();
-    print(widget.cartItem.itemName);
     _value= widget.cartItem.itemName!=""?widget.cartItem.itemName:"Low";
     widget.cartItem.itemName=_value;
   }
@@ -143,7 +141,7 @@ class _PrioretyState extends State<Priorety> {
     return Container(
       child:
       Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+        padding: const EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
         child: FlutterFlowDropDown(
           initialOption: _value,
           options:  item,
@@ -190,8 +188,9 @@ class CartItem {
   String flavor;
   String img;
   bool cam;
+  String expdate;
 
-  CartItem({required this.productType, required this.itemName, required this.flavor,required this.img,required this.cam,});
+  CartItem({required this.productType,required this.expdate, required this.itemName, required this.flavor,required this.img,required this.cam,});
 }
 
 
@@ -209,7 +208,6 @@ class _pickerImageState extends State<pickerImage> {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery ,imageQuality: 15);
     final bytes = await Io.File(image!.path.toString()).readAsBytes();
     String img64 = base64Encode(bytes);
-    print(img64);
     widget.cartItem.img=img64;
     widget.cartItem.cam=false;
     setState(() {
@@ -222,7 +220,6 @@ class _pickerImageState extends State<pickerImage> {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera,imageQuality: 15);
     final bytes = await Io.File(image!.path.toString()).readAsBytes();
     String img64 = base64Encode(bytes);
-    print(img64);
     widget.cartItem.img=img64;
     widget.cartItem.cam=true;
     setState(() {
@@ -252,7 +249,7 @@ class _pickerImageState extends State<pickerImage> {
       children: [
         Expanded(
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -327,7 +324,7 @@ class _pickerImageState extends State<pickerImage> {
                       };
                       },
                     child:  Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
                       child: Center(
                         child: Card(
                           elevation: 3,
@@ -420,10 +417,10 @@ class _pickerImageState extends State<pickerImage> {
                                     ),
                                   ),
                                 ))
-                      }; ;
+                      };
                     },
                     child:  Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                       child: Center(
                         child: Card(
                           elevation: 3,
@@ -467,7 +464,7 @@ class CartWidget extends StatefulWidget {
   int index;
   VoidCallback callback;
 
-  CartWidget({required this.cart, required this.index, required this.callback});
+  CartWidget({Key? key, required this.cart, required this.index, required this.callback}) : super(key: key);
   @override
   _CartWidgetState createState() => _CartWidgetState();
 }
@@ -483,7 +480,7 @@ class _CartWidgetState extends State<CartWidget> {
         children: [
           Expanded(
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+              padding: const EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
               child: Card(
                 clipBehavior: Clip.antiAliasWithSaveLayer,
                 color: FlutterFlowTheme.of(context).primaryBtnText,
@@ -512,10 +509,9 @@ class _CartWidgetState extends State<CartWidget> {
                           widget.index!=0? Expanded(
                                       flex: 1,
                                       child: IconButton(
-                                        icon: Icon(Icons.delete,color: Colors.black,),
+                                        icon: const Icon(Icons.delete,color: Colors.black,),
                                         onPressed: () {
                                           setState(() {
-                                            print(widget.index);
                                             widget.cart.removeAt(widget.index);
                                             widget.callback();
                                           });
@@ -525,6 +521,7 @@ class _CartWidgetState extends State<CartWidget> {
                         ),
                       ],
                     ),
+                    expdate(cartItem: widget.cart[widget.index],),
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -535,7 +532,7 @@ class _CartWidgetState extends State<CartWidget> {
                               color: FlutterFlowTheme.of(context).primaryBtnText,
                             ),
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                              padding: const EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
                               child:  Task(cartItem: widget.cart[widget.index]),
                             ),
                           ),
@@ -584,6 +581,95 @@ class _CartWidgetState extends State<CartWidget> {
   }
 }
 
+
+class expdate extends StatefulWidget {
+   expdate({Key? key,required this.cartItem}) : super(key: key);
+   CartItem cartItem;
+  @override
+  State<expdate> createState() => _expdateState();
+}
+
+class _expdateState extends State<expdate> {
+
+  String data="";
+
+
+  Future<void> date()
+  async {
+    DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        //DateTime.now() - not to allow to choose before today.
+        lastDate: DateTime(2100));
+
+    if (pickedDate != null) {
+      //pickedDate output format => 2021-03-10 00:00:00.000
+      String formattedDate =
+      DateFormat('yyyy-MM-dd').format(pickedDate);
+      //formatted date output using intl package =>  2021-03-16
+      setState(() {
+        data =
+            formattedDate;
+        widget.cartItem.expdate=data;//set output date to TextField value.
+      });
+    } else {}
+  }
+@override
+  void initState() {
+    data=widget.cartItem.expdate;
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 8, 0),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.44,
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: const Color(0xFFCFD4DB),
+            width: 1,
+          ),
+        ),
+        child: GestureDetector(
+          onTap: (){
+            date();
+          },
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(12, 5, 12, 5),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  data!=""?data:'Exp Date',
+                  style: FlutterFlowTheme.of(context).subtitle2.override(
+                    fontFamily: 'Lexend Deca',
+                    color: const Color(0xFF57636C),
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                const Icon(
+                  Icons.date_range_outlined,
+                  color: Color(0xFF57636C),
+                  size: 24,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
 class _MyHomePageState extends State<MyHomePage> {
   List<CartItem> cart = [];
 
@@ -596,38 +682,52 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {
           context.loaderOverlay.show();
         });
-        Dio dio=Dio();
-        var response = await dio.post('http://training.virash.in/provide_task', data: task);
-        if (response.statusCode == 200) {
-          setState(() {
-            cart.clear();
-            cart.add(CartItem(
-                productType: "",
-                itemName: "",
-                flavor: "",
-                img:"",
-                cam: false
-            ));
-            context.loaderOverlay.hide();
-          });
-          print(response.data.length);
-          final snackBar = SnackBar(
-            content: const Text('Sucessfull Send'),
-            backgroundColor: (primaryColor),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        try {
+          Dio dio = Dio();
+          var response = await dio.post(
+              'http://training.virash.in/provide_task', data: task);
+          if (response.statusCode == 200) {
+            setState(() {
+              cart.clear();
+              cart.add(CartItem(
+                  productType: "",
+                  itemName: "",
+                  flavor: "",
+                  img: "",
+                  cam: false,
+                  expdate: ''
+              ));
+              context.loaderOverlay.hide();
+            });
+
+            final snackBar = SnackBar(
+              content: const Text('Sucessfull Send'),
+              backgroundColor: (primaryColor),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+          else {
+            setState(() {
+              context.loaderOverlay.hide();
+            });
+            const snackBar = SnackBar(
+              content: Text('Unable to send task',),
+              backgroundColor: (Colors.red),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
 
         }
-        else {
+        catch(e)
+        {
           setState(() {
             context.loaderOverlay.hide();
           });
-          final snackBar = SnackBar(
-            content: const Text('Unable to send task',),
+          const snackBar = SnackBar(
+            content: Text('Unable to send task',),
             backgroundColor: (Colors.red),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
         }
   }
 
@@ -637,7 +737,9 @@ class _MyHomePageState extends State<MyHomePage> {
         productType: "",
         itemName: "",
         flavor: "",
-        img:"", cam: false
+        img:"", 
+        cam: false, 
+        expdate: ''
     ));
     setState(() {
     });
@@ -651,22 +753,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var h=MediaQuery.of(context).size.height;
-    var w=MediaQuery.of(context).size.width;
+   // var w=MediaQuery.of(context).size.width;
     setState(() {
     });
     return Scaffold(
       bottomSheet: Container(
         color: Colors.transparent,
         child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+          padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
           child: FFButtonWidget(
             onPressed: () {
               var count=0;
               var data=[];
-              cart.forEach((element) {
-                if(element.flavor.trim()!="")
+              for (var element in cart) {
+                if(element.flavor.trim()!=""&&element.expdate.trim()!="")
                 {
-                  var item={"task":element.flavor,"priority":element.itemName,"task_img": element.img};
+                  var item={"task":element.flavor,"priority":element.itemName,"task_img": element.img,"expected_date": element.expdate};
                   data.add(item);
                 }
                 else
@@ -674,20 +776,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   count++;
                 }
 
-              });
+              }
               log(data.toString());
               if(count==0)
               {
-                if(data.length>0) {
+                if(data.isNotEmpty) {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: new Text('Are you sure?'),
-                      content: new Text('Do you want ADD Task'),
+                      title: const Text('Are you sure?'),
+                      content: const Text('Do you want ADD Task'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(false),
-                          child: new Text('No'),
+                          child: const Text('No'),
                         ),
                         TextButton(
                           onPressed: () => {
@@ -698,7 +800,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               "tasks": data
                             })
                           },
-                          child: new Text('Yes'),
+                          child: const Text('Yes'),
                         ),
                       ],
                     ),
@@ -713,8 +815,8 @@ class _MyHomePageState extends State<MyHomePage> {
               }
               else
               {
-                final snackBar = SnackBar(
-                  content: const Text('Fill Task'),
+                const snackBar = SnackBar(
+                  content: Text('Fill Task'),
                   backgroundColor: (Colors.red),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -724,7 +826,7 @@ class _MyHomePageState extends State<MyHomePage> {
             options: FFButtonOptions(
               width: double.infinity,
               height: 40,
-              color: Color(0xFF398DEF),
+              color: const Color(0xFF398DEF),
               textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                 fontFamily: 'Poppins',
                 color: Colors.white,
@@ -790,7 +892,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Column(
                   children: [
                     ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                         key: UniqueKey(),
                         itemCount: cart.length,
@@ -813,7 +915,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 productType: "",
                                 itemName: "",
                                 flavor: "",
-                                img:"", cam: false
+                                img:"", cam: false, 
+                                expdate: ''
                             ));
                             setState(() {
                             });
@@ -821,12 +924,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
                           },
                           backgroundColor: Colors.blueAccent,
-                          child: Icon(Icons.add),
+                          child: const Icon(Icons.add),
                         ),
                       ),
                     )
                     ,
-                    SizedBox(height: 60,)
+                    const SizedBox(height: 60,)
                   ],
                 ),
 

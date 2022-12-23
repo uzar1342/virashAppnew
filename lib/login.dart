@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                           width: 80,
                           height: 150,
                           child:  Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage('assets/images/light-2.png')
                                 )

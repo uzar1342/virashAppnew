@@ -91,11 +91,6 @@ class _CalendarPageState extends State<CalendarPage> {
     LocationPermission permission;
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      return Future.error('Location services are disabled.');
-    }
-
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -109,9 +104,7 @@ class _CalendarPageState extends State<CalendarPage> {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    setState(() {
-      context.loaderOverlay.show();
-    });
+
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
@@ -541,6 +534,10 @@ class _CalendarPageState extends State<CalendarPage> {
                                                       child:
                                                       GestureDetector(
                                                         onTap: (){
+
+
+
+
                                                           if(data["data"][position]
                                                           [
                                                           "out_time"] ==
@@ -549,6 +546,8 @@ class _CalendarPageState extends State<CalendarPage> {
                                                               [
                                                               "in_time"] !=
                                                                   "N/A") {
+                                                            _getGeoLocationPosition();
+
                                                             showDialog(
                                                                 context: context,
                                                                 builder: (context) => AlertDialog(
@@ -751,12 +750,17 @@ class _CalendarPageState extends State<CalendarPage> {
                                                                           ),
 
                                                                           ElevatedButton(onPressed: () async {
+                                                                            setState(() {
+                                                                              context.loaderOverlay.show();
+                                                                            });
                                                                             Navigator.pop(context);
                                                                             Position locationposition = await _getGeoLocationPosition();
                                                                             List<Placemark> placemarks = await placemarkFromCoordinates(locationposition.latitude, locationposition.longitude);
+
                                                                             Placemark place = placemarks[0];
                                                                             address= '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
                                                                             print(address);
+
                                                                             var df =  DateFormat("h:mma");
                                                                             String? h=textController1?.value.text;
                                                                             var da=h?.split(" ");

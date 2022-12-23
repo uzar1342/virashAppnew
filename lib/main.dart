@@ -2,8 +2,11 @@ import 'dart:async';
 import 'package:Virash/shared_prefs_keys.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -11,12 +14,113 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'virash_app_home_screen.dart';
 import 'globals.dart';
 import 'login.dart';
-void main() {
+
+
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title// description
+    importance: Importance.high,
+
+    playSound: true,
+    sound: RawResourceAndroidNotificationSound('notification')
+);
+
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('A bg message just showed up :  ${message.messageId}');
+}
+
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
   runApp( MyApp());
 }
 
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+
+  gettoken()
+  async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    print(fcmToken);
+  }
+
+  @override
+  void initState() {
+
+
+    gettoken();
+
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                color: Colors.blue,
+                playSound: true,
+                importance: Importance.max,
+                icon: '@mipmap/ic_launcher',
+              ),
+            ));
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null) {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                title: Text(notification.title.toString()),
+                content: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [Text(notification.body.toString())],
+                  ),
+                ),
+              );
+            });
+      }
+    });
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -111,9 +215,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     }
     else {
-
-      final snackBar = SnackBar(
-        content: const Text('Fail to load Priority'),
+      const snackBar = SnackBar(
+        content: Text('Fail to load Priority'),
         backgroundColor: (Colors.red),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -153,35 +256,40 @@ class _MyHomePageState extends State<MyHomePage> {
 
   acess()
   async {
-    Dio dio=Dio();
-    var formData = FormData.fromMap({
-      'emp_id': userId,
-    });
-    final url = Uri.parse('http://training.virash.in/check_access');
-    var response = await dio.post(url.toString(), data: formData);
-    if(response.statusCode==200)
-      {
+    try{
+      Dio dio = Dio();
+      var formData = FormData.fromMap({
+        'emp_id': userId,
+      });
+      final url = Uri.parse('http://training.virash.in/check_access');
+      var response = await dio.post(url.toString(), data: formData);
+      if (response.statusCode == 200) {
         String jsonsDataString = response.data.toString();
-        List as=jsonsDataString.split(",");
-        String sucess=response.data["success"];
+        List as = jsonsDataString.split(",");
+        String sucess = response.data["success"];
         print(sucess);
-        if(sucess.trim()=="1")
-          {
-            attendence=response.data["attendance_flag"].toString().trim();
-            print(attendence);
-            check();
-          }
-        else
-          {
-            final snackBar = SnackBar(
-              content: const Text('Acess Dineid'),
-              backgroundColor: (Colors.red),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
-
+        if (sucess.trim() == "1") {
+          attendence = response.data["attendance_flag"].toString().trim();
+          print(attendence);
+          check();
+        } else {
+          final snackBar = SnackBar(
+            content: const Text('Acess Dineid'),
+            backgroundColor: (Colors.red),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
       }
     }
+    catch(c)
+    {
+      const snackBar = SnackBar(
+        content: Text('Acess Dineid'),
+        backgroundColor: (Colors.red),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
 
   check()
   {
@@ -189,10 +297,10 @@ class _MyHomePageState extends State<MyHomePage> {
     if(isUserLoggedIn)
       {
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder:
-          (context) =>
-              VirashAppHomeScreen()
-              ));
+            MaterialPageRoute(builder:
+            (context) =>
+                VirashAppHomeScreen()
+                ));
       }
       else
         {

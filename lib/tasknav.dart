@@ -164,9 +164,9 @@ class _TaskNavState extends State<TaskNav>
                             text: 'Add',
                           ),
                            const GButton(
-                            iconActiveColor: Color(0xff343BA8),
-                            textColor: Color(0xff343BA8),
-                            backgroundColor: Color(0xff99CCC8),
+                            iconActiveColor: Color(0xffd16506),
+                            textColor: Color(0xffd16506),
+                            backgroundColor: Color(0xfff7d7b5),
                             icon: Icons.pending,
                             text: 'Pending',
 
@@ -174,7 +174,7 @@ class _TaskNavState extends State<TaskNav>
                           GButton(
                             iconActiveColor: Color(0xff1B632A),
                             textColor: Color(0xff1B632A),
-                            backgroundColor: Color(0xff99CCC8),
+                            backgroundColor: Color(0xffa6ffb5),
                             onPressed: (){
                               d.isLoading=true;
                             },
@@ -189,9 +189,9 @@ class _TaskNavState extends State<TaskNav>
                             text: 'Rejected',
                           ),
                            GButton(
-                             iconActiveColor: Color(0xff1B632A),
-                             textColor: Color(0xff1B632A),
-                             backgroundColor: Color(0xff99CCC8),
+                             iconActiveColor: Color(0xff0550b5),
+                             textColor: Color(0xff0550b5),
+                             backgroundColor: Color(0xffa6ccff),
                              onPressed: (){
                                d.isLoading=true;
                              },

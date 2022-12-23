@@ -19,6 +19,8 @@ import 'OuttimeForm.dart';
 import 'emptask.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 
+TextEditingController? textController1;
+TextEditingController? textController2;
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 class MonthCalendarPage extends StatefulWidget {
   MonthCalendarPage({Key? key ,required this.name, required  this.id}) : super(key: key);
@@ -33,8 +35,6 @@ class _MonthCalendarPageState extends State<MonthCalendarPage> {
   bool monthloader=true;
    int day=1;
    int month=9;
-   TextEditingController? textController1;
-   TextEditingController? textController2;
    final scaffoldKey = GlobalKey<ScaffoldState>();
 
    @override
@@ -330,7 +330,7 @@ static Widget _holidayIcon = new Container(
     }
   }
 var address;
-  getLat()
+   getLat()
   async {
     Position position = await _getGeoLocationPosition();
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
@@ -343,10 +343,6 @@ var address;
     LocationPermission permission;
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      return Future.error('Location services are disabled.');
-    }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -361,9 +357,6 @@ var address;
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    setState(() {
-      context.loaderOverlay.show();
-    });
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
@@ -383,6 +376,9 @@ var address;
   }
 @override
   void dispose() {
+  textController1?.clear;
+  textController2?.clear;
+
   subscription.cancel;
     super.dispose();
   }
@@ -393,6 +389,8 @@ var address;
       context.loaderOverlay.hide();
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -1060,64 +1058,152 @@ var address;
                                                                   child: Padding(
                                                                     padding: const EdgeInsets.all(8.0),
                                                                     child: InkWell(
-                                                                      onTap: () {
-
-                                                                        showDialog(
-                                                                            context: context,
-                                                                            builder: (context) => AlertDialog(
-                                                                              content:
-                                                                              // Generated code for this HomePage Widget...
-                                                                              Container(
-                                                                                child: Column(
-                                                                                    mainAxisSize: MainAxisSize.min,
-                                                                                    children: [
-                                                                                      Row(
-                                                                                        mainAxisSize: MainAxisSize.max,
-                                                                                        children: [
-                                                                                          Padding(
-                                                                                            padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                                                                            child: Icon(
-                                                                                              Icons.calendar_today,
-                                                                                              color: Colors.black,
-                                                                                              size: 24,
-                                                                                            ),
-                                                                                          ),
-                                                                                          Text(
-                                                                                              DateFormat("dd ,MMMM yyyy").format(DateTime.parse("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}")),
-                                                                                            style: FlutterFlowTheme.of(context).bodyText1,
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                      Padding(
-                                                                                        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                                                                                        child: Row(
+                                                                      onTap: () async {
+                                                                        setState(() {
+                                                                          context.loaderOverlay.show();
+                                                                        });
+                                                                        try {
+                                                                          Position position = await _getGeoLocationPosition();
+                                                                          hideloader();
+                                                                          showDialog(
+                                                                              context: context,
+                                                                              builder: (context) => AlertDialog(
+                                                                                  content:
+                                                                                  // Generated code for this HomePage Widget...
+                                                                                  Container(
+                                                                                    child: Column(
+                                                                                      mainAxisSize: MainAxisSize.min,
+                                                                                      children: [
+                                                                                        Row(
                                                                                           mainAxisSize: MainAxisSize.max,
                                                                                           children: [
                                                                                             const Padding(
                                                                                               padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                                                                              child: FaIcon(
-                                                                                                FontAwesomeIcons.clock,
+                                                                                              child: Icon(
+                                                                                                Icons.calendar_today,
                                                                                                 color: Colors.black,
                                                                                                 size: 24,
                                                                                               ),
                                                                                             ),
-                                                                                            Expanded(
-                                                                                              child: GestureDetector(
-                                                                                                onTap: (){
-                                                                                                  _selectTime(context);
-                                                                                                },
+                                                                                            Text(
+                                                                                              DateFormat("dd ,MMMM yyyy").format(DateTime.parse("${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}")),
+                                                                                              style: FlutterFlowTheme.of(context).bodyText1,
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                        Padding(
+                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                                                                          child: Row(
+                                                                                            mainAxisSize: MainAxisSize.max,
+                                                                                            children: [
+                                                                                              const Padding(
+                                                                                                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                                                                                child: FaIcon(
+                                                                                                  FontAwesomeIcons.clock,
+                                                                                                  color: Colors.black,
+                                                                                                  size: 24,
+                                                                                                ),
+                                                                                              ),
+                                                                                              Expanded(
+                                                                                                child: GestureDetector(
+                                                                                                  onTap: (){
+                                                                                                    _selectTime(context);
+                                                                                                  },
+                                                                                                  child: Padding(
+                                                                                                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 20, 0),
+                                                                                                    child: Container(
+                                                                                                      decoration: BoxDecoration(
+                                                                                                          color: FlutterFlowTheme.of(context).secondaryBackground,
+                                                                                                          border: Border.all(
+                                                                                                            width: 1,
+                                                                                                          )),
+                                                                                                      width: 100,
+                                                                                                      child: TextFormField(
+                                                                                                        controller: textController1,
+                                                                                                        enabled: false,
+                                                                                                        obscureText: false,
+                                                                                                        decoration: InputDecoration(
+                                                                                                          hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                                                                                          enabledBorder: const OutlineInputBorder(
+                                                                                                            borderSide: BorderSide(
+                                                                                                              color: Color(0xFF504B4B),
+                                                                                                              width: 1,
+                                                                                                            ),
+                                                                                                            borderRadius: BorderRadius.only(
+                                                                                                              topLeft: Radius.circular(4.0),
+                                                                                                              topRight: Radius.circular(4.0),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          focusedBorder: const OutlineInputBorder(
+                                                                                                            borderSide: BorderSide(
+                                                                                                              color: Color(0xFF504B4B),
+                                                                                                              width: 1,
+                                                                                                            ),
+                                                                                                            borderRadius: BorderRadius.only(
+                                                                                                              topLeft: Radius.circular(4.0),
+                                                                                                              topRight: Radius.circular(4.0),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          errorBorder: OutlineInputBorder(
+                                                                                                            borderSide: BorderSide(
+                                                                                                              color: Color(0x00000000),
+                                                                                                              width: 1,
+                                                                                                            ),
+                                                                                                            borderRadius: const BorderRadius.only(
+                                                                                                              topLeft: Radius.circular(4.0),
+                                                                                                              topRight: Radius.circular(4.0),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          focusedErrorBorder: OutlineInputBorder(
+                                                                                                            borderSide: BorderSide(
+                                                                                                              color: Color(0x00000000),
+                                                                                                              width: 1,
+                                                                                                            ),
+                                                                                                            borderRadius: const BorderRadius.only(
+                                                                                                              topLeft: Radius.circular(4.0),
+                                                                                                              topRight: Radius.circular(4.0),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          filled: true,
+                                                                                                          fillColor: Color(0x00FFFFFF),
+                                                                                                          contentPadding:
+                                                                                                          EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
+                                                                                                        ),
+                                                                                                        style:
+                                                                                                        FlutterFlowTheme.of(context).bodyText1.override(
+                                                                                                          fontFamily: 'Poppins',
+                                                                                                          lineHeight: 1,
+                                                                                                        ),
+                                                                                                        maxLines: 1,
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        ),
+                                                                                        Padding(
+                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                                                                          child: Row(
+                                                                                            mainAxisSize: MainAxisSize.max,
+                                                                                            children: [
+                                                                                              const Padding(
+                                                                                                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                                                                                child: Icon(
+                                                                                                  Icons.text_snippet_outlined,
+                                                                                                  color: Colors.black,
+                                                                                                  size: 24,
+                                                                                                ),
+                                                                                              ),
+                                                                                              Expanded(
                                                                                                 child: Padding(
                                                                                                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 20, 0),
                                                                                                   child: Container(
-                                                                                                    decoration: BoxDecoration(
-                                                                                                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                                                                                                      border: Border.all(
-                                                                                                        width: 1,
-                                                                                                      )),
                                                                                                     width: 100,
                                                                                                     child: TextFormField(
-                                                                                                      controller: textController1,
-                                                                                                      enabled: false,
+                                                                                                      controller: textController2,
+                                                                                                      autofocus: true,
                                                                                                       obscureText: false,
                                                                                                       decoration: InputDecoration(
                                                                                                         hintStyle: FlutterFlowTheme.of(context).bodyText2,
@@ -1141,22 +1227,22 @@ var address;
                                                                                                             topRight: Radius.circular(4.0),
                                                                                                           ),
                                                                                                         ),
-                                                                                                        errorBorder: OutlineInputBorder(
+                                                                                                        errorBorder: const OutlineInputBorder(
                                                                                                           borderSide: BorderSide(
                                                                                                             color: Color(0x00000000),
                                                                                                             width: 1,
                                                                                                           ),
-                                                                                                          borderRadius: const BorderRadius.only(
+                                                                                                          borderRadius: BorderRadius.only(
                                                                                                             topLeft: Radius.circular(4.0),
                                                                                                             topRight: Radius.circular(4.0),
                                                                                                           ),
                                                                                                         ),
-                                                                                                        focusedErrorBorder: OutlineInputBorder(
+                                                                                                        focusedErrorBorder: const OutlineInputBorder(
                                                                                                           borderSide: BorderSide(
                                                                                                             color: Color(0x00000000),
                                                                                                             width: 1,
                                                                                                           ),
-                                                                                                          borderRadius: const BorderRadius.only(
+                                                                                                          borderRadius: BorderRadius.only(
                                                                                                             topLeft: Radius.circular(4.0),
                                                                                                             topRight: Radius.circular(4.0),
                                                                                                           ),
@@ -1176,148 +1262,76 @@ var address;
                                                                                                   ),
                                                                                                 ),
                                                                                               ),
-                                                                                            ),
-                                                                                          ],
+                                                                                            ],
+                                                                                          ),
                                                                                         ),
-                                                                                      ),
-                                                                                      Padding(
-                                                                                        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                                                                                        child: Row(
-                                                                                          mainAxisSize: MainAxisSize.max,
-                                                                                          children: [
-                                                                                            Padding(
-                                                                                              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                                                                                              child: Icon(
-                                                                                                Icons.text_snippet_outlined,
-                                                                                                color: Colors.black,
-                                                                                                size: 24,
-                                                                                              ),
-                                                                                            ),
-                                                                                            Expanded(
-                                                                                              child: Padding(
-                                                                                                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 20, 0),
-                                                                                                child: Container(
-                                                                                                  width: 100,
-                                                                                                  child: TextFormField(
-                                                                                                    controller: textController2,
-                                                                                                    autofocus: true,
-                                                                                                    obscureText: false,
-                                                                                                    decoration: InputDecoration(
-                                                                                                      hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                                                                                                      enabledBorder: const OutlineInputBorder(
-                                                                                                        borderSide: BorderSide(
-                                                                                                          color: Color(0xFF504B4B),
-                                                                                                          width: 1,
-                                                                                                        ),
-                                                                                                        borderRadius: BorderRadius.only(
-                                                                                                          topLeft: Radius.circular(4.0),
-                                                                                                          topRight: Radius.circular(4.0),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      focusedBorder: const OutlineInputBorder(
-                                                                                                        borderSide: BorderSide(
-                                                                                                          color: Color(0xFF504B4B),
-                                                                                                          width: 1,
-                                                                                                        ),
-                                                                                                        borderRadius: BorderRadius.only(
-                                                                                                          topLeft: Radius.circular(4.0),
-                                                                                                          topRight: Radius.circular(4.0),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      errorBorder: const OutlineInputBorder(
-                                                                                                        borderSide: BorderSide(
-                                                                                                          color: Color(0x00000000),
-                                                                                                          width: 1,
-                                                                                                        ),
-                                                                                                        borderRadius: BorderRadius.only(
-                                                                                                          topLeft: Radius.circular(4.0),
-                                                                                                          topRight: Radius.circular(4.0),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      focusedErrorBorder: const OutlineInputBorder(
-                                                                                                        borderSide: BorderSide(
-                                                                                                          color: Color(0x00000000),
-                                                                                                          width: 1,
-                                                                                                        ),
-                                                                                                        borderRadius: BorderRadius.only(
-                                                                                                          topLeft: Radius.circular(4.0),
-                                                                                                          topRight: Radius.circular(4.0),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      filled: true,
-                                                                                                      fillColor: Color(0x00FFFFFF),
-                                                                                                      contentPadding:
-                                                                                                      EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
-                                                                                                    ),
-                                                                                                    style:
-                                                                                                    FlutterFlowTheme.of(context).bodyText1.override(
-                                                                                                      fontFamily: 'Poppins',
-                                                                                                      lineHeight: 1,
-                                                                                                    ),
-                                                                                                    maxLines: 1,
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        ),
-                                                                                      ),
 
-                                                                                      ElevatedButton(onPressed: () async {
-                                                                                        Navigator.pop(context);
-                                                                                        Position position = await _getGeoLocationPosition();
-                                                                                       var df =  DateFormat("h:mma");
-                                                                                        String? h=textController1?.value.text;
-                                                                                        var da=h?.split(" ");
-                                                                                        var dt = df.parse(da!.first+""+da!.last);
-                                                                                        print(DateFormat('HH:mm').format(dt));
-                                                                                        Dio dio=Dio();
-                                                                                        var formData = FormData.fromMap({
-                                                                                          'emp_id':widget.id,
-                                                                                          "atte_date": "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",
-                                                                                          "out_time":DateFormat('HH:mm').format(dt)+":00",
-                                                                                          "admin_id":userId,
-                                                                                          "remark":textController2?.value.text,
-                                                                                          "out_longitude":position.longitude,
-                                                                                          "out_latitude":position.latitude,
-                                                                                          "out_location":address.toString()
-                                                                                        });
-                                                                                        print(formData.fields);
-                                                                                        var response = await dio.post('http://training.virash.in/outTimeByAdmin', data:formData);
-                                                                                        if (response.statusCode == 200) {
-                                                                                          print(response.data);
-                                                                                          if(response.data["success"]=="1") {
-                                                                                          hideloader();
+                                                                                        ElevatedButton(onPressed: () async {
+                                                                                           getLat();
+                                                                                          Navigator.pop(context);
+                                                                                          var df =  DateFormat("h:mma");
+                                                                                          String? h=textController1?.value.text;
+                                                                                          var da=h?.split(" ");
+                                                                                          var dt = df.parse(da!.first+""+da!.last);
+                                                                                          print(DateFormat('HH:mm').format(dt));
+                                                                                          Dio dio=Dio();
+                                                                                          var formData = FormData.fromMap({
+                                                                                            'emp_id':widget.id,
+                                                                                            "atte_date": "${year}-${month>=10?month.toString():"0"+month.toString()}-${day>=10?day.toString():"0"+day.toString()}",
+                                                                                            "out_time":DateFormat('HH:mm').format(dt)+":00",
+                                                                                            "admin_id":userId,
+                                                                                            "remark":textController2?.value.text,
+                                                                                            "out_longitude":position.longitude,
+                                                                                            "out_latitude":position.latitude,
+                                                                                            "out_location":address.toString()
+                                                                                          });
+                                                                                          print(formData.fields);
+                                                                                          var response = await dio.post('http://training.virash.in/outTimeByAdmin', data:formData);
+                                                                                          if (response.statusCode == 200) {
+                                                                                            print(response.data);
+                                                                                            if(response.data["success"]=="1") {
+                                                                                              hideloader();
 
+                                                                                            } else {
+                                                                                              hideloader();
+                                                                                              final snackBar = SnackBar(
+                                                                                                content:  Text(response.data["message"]),
+                                                                                                backgroundColor: (primaryColor),
+                                                                                              );
+                                                                                              ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(snackBar);
+
+                                                                                            }
                                                                                           } else {
                                                                                             hideloader();
-                                                                                            final snackBar = SnackBar(
-                                                                                              content:  Text(response.data["message"]),
-                                                                                              backgroundColor: (primaryColor),
+                                                                                            print(response.statusCode);
+                                                                                            final snackBar = const SnackBar(
+                                                                                              content: Text('Please try again later'),
+                                                                                              backgroundColor: (Colors.red),
                                                                                             );
                                                                                             ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(snackBar);
 
                                                                                           }
-                                                                                        } else {
-                                                                                          hideloader();
-                                                                                          print(response.statusCode);
-                                                                                          final snackBar = SnackBar(
-                                                                                            content: const Text('Please try again later'),
-                                                                                            backgroundColor: (Colors.red),
-                                                                                          );
-                                                                                     ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(snackBar);
 
-                                                                                        }
-
-                                                                                      }, child: Text("MARK OUTTIME"))
+                                                                                        }, child: Text("MARK OUTTIME"))
 
 
-                                                                                    ],
-                                                                                  ),
+                                                                                      ],
+                                                                                    ),
 
-                                                                              )
+                                                                                  )
 
-                                                                            ));
+                                                                              ));
+                                                                        } on Exception catch (exception) {
+                                                                          setState(() {
+                                                                            context.loaderOverlay.hide();
+                                                                          });
+                                                                        } catch (error) {
+                                                                          setState(() {
+                                                                            context.loaderOverlay.hide();
+                                                                          }); // executed for errors of all types other than Exception
+                                                                        }
+
+
 
                                                                         // Navigator.push(
                                                                         //     context,

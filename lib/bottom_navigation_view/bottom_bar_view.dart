@@ -192,10 +192,11 @@ class _BottomBarViewState extends State<BottomBarView>
                           splashColor: Colors.white.withOpacity(0.1),
                           highlightColor: Colors.transparent,
                           focusColor: Colors.transparent,
-                          onTap: ()=>{
+                          onTap: () async =>{
                             if(net)
                               {
-                          camra(),
+
+                            camra(),
                           }
                               else
                                 {
@@ -231,27 +232,34 @@ class _BottomBarViewState extends State<BottomBarView>
   Future<Position> _getGeoLocationPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      return Future.error('Location services are disabled.');
-    }
+
+      permission = await Geolocator.checkPermission();
+
+
+
 
     permission = await Geolocator.checkPermission();
+
+    // Test if location services are enabled.
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
+
       // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    widget.addClick?.call();
+
+
     return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
@@ -261,17 +269,31 @@ class _BottomBarViewState extends State<BottomBarView>
   Future<void> camra()
   async {
     final cameras = await availableCameras();
-    final firstCamera = cameras.last;
-    Position position = await _getGeoLocationPosition();
-    if(attendence=="False")
+    final firstCamera = cameras[1];
+    widget.addClick?.call();
+    try {
+      Position position = await _getGeoLocationPosition();
+      if(attendence=="False")
       {
+
         Get.offAll(() => (TakePictureScreen(camera: firstCamera,latitude: position.latitude.toString(),longitude: position.longitude.toString(),title: "Mark Intime",position: position)));
       }
-    else
+      else
       {
+        widget.addClick?.call();
         Get.offAll(() => (TakePictureScreen(camera: firstCamera,latitude: position.latitude.toString(),longitude: position.longitude.toString(),title: "Mark Outtime",position:position)));
       }
+    } on Exception catch (exception) {
+      widget.addClick?.call();
+    } catch (error) {
+      widget.addClick?.call();// executed for errors of all types other than Exception
     }
+
+
+
+
+
+  }
 
   void setRemoveAllSelection(TabIconData? tabIconData) {
     if (!mounted) return;
