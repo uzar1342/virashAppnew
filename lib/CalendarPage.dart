@@ -232,7 +232,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       });
                       return Future<void>.delayed(const Duration(seconds: 3));
                     },
-                    child: Container(
+                    child: data["data"]!=null?Container(
                       child: data["data"].length>0?ListView.builder(
                         itemCount: data["data"].length,
                         itemBuilder: (context, position) {
@@ -858,7 +858,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             return  Container();
                         },
                       ):Container(child: Center(child: Image.asset("assets/no_data.png")),),
-                    ),
+                    ):Container(child: Center(child: Image.asset("assets/no_data.png")),),
                   ),
                 ),
               ],
